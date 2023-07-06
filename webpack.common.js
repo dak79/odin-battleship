@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
@@ -49,12 +48,6 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html',
       minify: true
-    }),
-    new FaviconsWebpackPlugin({
-      logo: '.src/assets/imgs/favicon/',
-      prefix: '',
-      publicPath: 'assets/favicons',
-      outputPath: 'assets/favicons'
     }),
     new MiniCSSExtractPlugin({
       filename: 'style/style.css',
