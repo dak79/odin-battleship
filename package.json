@@ -13,11 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/dak79/odin-battleship.git"
   },
-  "keywords": [
-    "battleship",
-    "test",
-    "jest"
-  ],
+  "keywords": ["battleship", "test", "jest"],
   "author": "Daniele Campari",
   "license": "MIT",
   "bugs": {
@@ -30,6 +26,8 @@
     "babel-loader": "^8.0.6",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
     "favicons-webpack-plugin": "^6.0.0",
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^2.7.6",
