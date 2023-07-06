@@ -1,5 +1,4 @@
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -13,6 +12,16 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+          },
+        },
+      },
       {
         test: /\.css$/i,
         use: [MiniCSSExtractPlugin.loader, "css-loader"],
@@ -40,7 +49,6 @@ module.exports = {
       filename: "./index.html",
       minify: true,
     }),
-    new CleanWebpackPlugin(),
     new FaviconsWebpackPlugin({
       logo: ".src/assets/imgs/favicon/",
       prefix: "",
@@ -53,6 +61,7 @@ module.exports = {
     }),
   ],
   optimization: {
+    minimize: true,
     minimizer: [new CssMinimizerPlugin()],
   },
 };
