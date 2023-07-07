@@ -16,11 +16,16 @@ export const Ship = (l) => {
   const validateLength = (input) => (Number.isFinite(input) ? input : false);
 
   /**
+   * Check if the length is between 1 and 4.
+   * @param {*} input - length
+   * @returns input|false
+   */
+  const validShip = (input) => (input > 4 || input < 1 ? false : input);
+
+  /**
    * Get the length of ship.
    */
-  const getLength = pipe(parseLength, validateLength);
-
-  const length = getLength();
+  const getLength = pipe(parseLength, validateLength, validShip);
 
   return {
     getLength
