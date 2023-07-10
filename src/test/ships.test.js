@@ -42,21 +42,38 @@ describe('Ships', () => {
     expect(shipFive.getLength()).toBe(false);
   });
 
-  it('has no damage when is new', () => {
+  it('is not sunked if there are no damage', () => {
     const ship = Ship(4);
-    expect(ship.damage.length).toBe(0);
+    expect(ship.isSunked()).toBe(false);
   });
 
-  it('increase damage by one if hit once', () => {
+  it('has length 3 and is not sunked if it has been hit once', () => {
     const ship = Ship(3);
     ship.hit();
-    expect(ship.damage.length).toBe(1);
+    expect(ship.isSunked()).toBe(false);
   });
 
-  it('increase damage by two if hit twice', () => {
+  it('has length 3 and is not sunked if it has been hit twice', () => {
     const ship = Ship(3);
     ship.hit();
     ship.hit();
-    expect(ship.damage.length).toBe(2);
+    expect(ship.isSunked()).toBe(false);
+  });
+
+  it('has length 3 and is sunked if it has been hit three times', () => {
+    const ship = Ship(3);
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunked()).toBe(true);
+  });
+
+  it('has length 4 and is sunked if it has been hit four times', () => {
+    const ship = Ship(4);
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunked()).toBe(true);
   });
 });

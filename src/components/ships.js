@@ -27,13 +27,26 @@ export const Ship = (l) => {
    */
   const getLength = pipe(parseLength, validateLength, validShip);
 
-  const damage = [];
+  const length = getLength();
 
-  const hit = (dmg = damage) => dmg.push('x');
+  let hits = 0;
+
+  /**
+   * Hit on ship
+   * @returns increase number of hit by 0ne
+   */
+  const hit = () => hits++;
+
+  /**
+   * Ship is sunked?
+   * @param {Number} health - Length of the ship
+   * @returns true|false
+   */
+  const isSunked = (health = length) => hits === health;
 
   return {
     getLength,
-    damage,
-    hit
+    hit,
+    isSunked
   };
 };
