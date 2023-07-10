@@ -35,18 +35,38 @@ export const Ship = (l) => {
    * Hit on ship
    * @returns increase number of hit by 0ne
    */
-  const hit = () => hits++;
+  const setHits = () => (hits += 1);
+
+  let sunked = false;
 
   /**
-   * Ship is sunked?
-   * @param {Number} health - Length of the ship
+   * Check if the ship is sunked.
+   * @param {Number} damage - Quantity of hits
+   * @param {Number} health - Length of ship
+   * @returns
+   */
+  const isSunked = (damage, health = length) => damage === health;
+
+  /**
+   * Set sunked for the ship
+   * @param {boolean} bool
    * @returns true|false
    */
-  const isSunked = (health = length) => hits === health;
+  const setSunked = (value) => (sunked = value);
 
+  /**
+   * Get the sunked variable.
+   * @returns value of sunked variable.
+   */
+  const getSunked = () => sunked;
+
+  /**
+   * Hit the ship.
+   */
+  const hit = pipe(setHits, isSunked, setSunked);
   return {
     getLength,
     hit,
-    isSunked
+    getSunked
   };
 };
