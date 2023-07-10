@@ -41,4 +41,22 @@ describe('Ships', () => {
     expect(shipFour.getLength()).toBe(4);
     expect(shipFive.getLength()).toBe(false);
   });
+
+  it('has no damage when is new', () => {
+    const ship = Ship(4);
+    expect(ship.damage.length).toBe(0);
+  });
+
+  it('increase damage by one if hit once', () => {
+    const ship = Ship(3);
+    ship.hit();
+    expect(ship.damage.length).toBe(1);
+  });
+
+  it('increase damage by two if hit twice', () => {
+    const ship = Ship(3);
+    ship.hit();
+    ship.hit();
+    expect(ship.damage.length).toBe(2);
+  });
 });

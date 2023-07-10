@@ -27,7 +27,13 @@ export const Ship = (l) => {
    */
   const getLength = pipe(parseLength, validateLength, validShip);
 
+  const damage = [];
+
+  const hit = (dmg = damage) => dmg.push('x');
+
   return {
-    getLength
+    getLength,
+    damage,
+    hit
   };
 };
