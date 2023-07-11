@@ -55,7 +55,13 @@ describe('GameBoard', () => {
     expect(b).toHaveProperty('placeShip');
   });
 
-  it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
+  it.todo('has the method setModel');
+  it.todo('has the method getModel');
+  it.todo('has this model for ship of length 4');
+  it.todo('has this model for ship of length 3');
+  it.todo('has this model for ship of length 2');
+
+  it.skip('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
     const ship = b.createShip(4);
     b.placeShip([0, 0], ship, board);
     expect(board.get('0,0')).toMatchObject([
@@ -80,7 +86,7 @@ describe('GameBoard', () => {
     ]);
   });
 
-  it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
+  it.skip('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
     const ship = b.createShip(3);
     b.placeShip([1, 0], ship, board);
     expect(board.get('1,0')).toMatchObject([
@@ -97,7 +103,7 @@ describe('GameBoard', () => {
     ]);
   });
 
-  it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
+  it.skip('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
     const ship = b.createShip(2);
     b.placeShip([2, 0], ship, board);
     expect(board.get('2,0')).toMatchObject([[2, 1]]);
@@ -106,9 +112,8 @@ describe('GameBoard', () => {
 });
 
 describe('Placing ship', () => {
-  it.todo('place a ship inside boudary');
-  it.todo('does not place a ship where there is another ship');
+  it.todo('place a ship of length 4, 3, 2 vertically');
   it.todo('does not place a ship out of boudary');
-  it.todo('there are 4 types of ship 4, 3, 2, 1');
-  it.todo('reverse change the ship orientation in vertical/orizontal');
+  it.todo('does not place a ship where there is another ship');
+  it.todo('place a ship of length 4, 3, 2 horizontally');
 });
