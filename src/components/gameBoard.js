@@ -18,10 +18,10 @@ export const GameBoard = () => {
     let x = 0;
     let y = 0;
     const shipModel = [
-      [x, y - 2],
-      [x, y - 1],
       [x, y],
-      [x, y + 1]
+      [x, y + 1],
+      [x, y + 2],
+      [x, y + 3]
     ];
 
     let square = shipCenter.toString();
@@ -35,7 +35,12 @@ export const GameBoard = () => {
     });
 
     console.log(shipCoord);
-    // TODO: ORA CHE ABBIAMO SHIP COORD ITERIAMO: prediamo le prime coordinate
+    shipCoord.forEach((coord) => {
+      board.get(coord.toString()).push(...shipCoord.filter((f) => f !== coord));
+    });
+
+    console.log(board);
+    // ORA CHE ABBIAMO SHIP COORD ITERIAMO: prediamo le prime coordinate
     // accediamo a board quelle coordinate, facciamo un push di tutte le altre
     // coordinate che non siano quelle usate per accedere all'array coordinate
     // board. Questo per tutte le coordiante nell'array.

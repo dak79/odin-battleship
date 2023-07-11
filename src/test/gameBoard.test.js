@@ -51,22 +51,57 @@ describe('GameBoard', () => {
     expect(ship.getLength()).toBe(2);
   });
 
-  it('create a length 1 ship', () => {
-    const ship = b.createShip(1);
-    expect(ship.getLength()).toBe(1);
-  });
-
   it('has the method placeShip', () => {
     expect(b).toHaveProperty('placeShip');
   });
 
-  it('place a ship of length 4 in [0, 0][0, 1][0, 2][0, 3]', () => {
+  it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
     const ship = b.createShip(4);
-    b.placeShip([0, 2], ship, board);
-    expect(board.get('0,0')[0]).toBe([0, 1]);
-    expect(board.get('0,1')[0]).toBe([0, 2]);
-    expect(board.get('0,2')[0]).toBe([0, 3]);
-    expect(board.get('0,3')[0]).toBe([0, 2]);
+    b.placeShip([0, 0], ship, board);
+    expect(board.get('0,0')).toMatchObject([
+      [0, 1],
+      [0, 2],
+      [0, 3]
+    ]);
+    expect(board.get('0,1')).toMatchObject([
+      [0, 0],
+      [0, 2],
+      [0, 3]
+    ]);
+    expect(board.get('0,2')).toMatchObject([
+      [0, 0],
+      [0, 1],
+      [0, 3]
+    ]);
+    expect(board.get('0,3')).toMatchObject([
+      [0, 0],
+      [0, 1],
+      [0, 2]
+    ]);
+  });
+
+  it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
+    const ship = b.createShip(3);
+    b.placeShip([1, 0], ship, board);
+    expect(board.get('1,0')).toMatchObject([
+      [1, 1],
+      [1, 2]
+    ]);
+    expect(board.get('1,1')).toMatchObject([
+      [1, 0],
+      [1, 2]
+    ]);
+    expect(board.get('1,2')).toMatchObject([
+      [1, 0],
+      [1, 1]
+    ]);
+  });
+
+  it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
+    const ship = b.createShip(2);
+    b.placeShip([2, 0], ship, board);
+    expect(board.get('2,0')).toMatchObject([[2, 1]]);
+    expect(board.get('2,1')).toMatchObject([[2, 0]]);
   });
 });
 
