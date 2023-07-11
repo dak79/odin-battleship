@@ -1,13 +1,39 @@
 import { GameBoard } from '../components/gameBoard';
 
 describe('GameBoard', () => {
-  it.todo('has 10 column');
-  it.todo('has 10 row');
-  it.todo('index in boudary');
-  it.todo('index out of boudary');
+  const b = GameBoard();
+  const board = b.init();
+
+  it('has a method called init', () => {
+    expect(b).toHaveProperty('init');
+  });
+
+  it('is creating a board with 10 x 10', () => {
+    expect(board.size).toBe(100);
+  });
+
+  it('has square [0, 9]', () => {
+    expect(board.get('0,9')).toBeDefined();
+  });
+
+  it('has square [4, 7]', () => {
+    expect(board.get('4,7')).toBeDefined();
+  });
+
+  it('has not square [-1, -4]', () => {
+    expect(board.get('-1,-4')).toBeUndefined();
+  });
+
+  it('has not square [10, 0]', () => {
+    expect(board.get('10,0')).toBeUndefined();
+  });
+
+  it('has not square [4, 11]', () => {
+    expect(board.get('4,11')).toBeUndefined();
+  });
 });
 
-describe('GameBoard is', () => {
+describe('Create a ship', () => {
   it.todo('able to create a ship');
 });
 
