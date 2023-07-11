@@ -44,20 +44,20 @@ describe('Ships', () => {
 
   it('is not sunked if there are no damage', () => {
     const ship = Ship(4);
-    expect(ship.getSunked()).toBe(false);
+    expect(ship.isSunk()).toBe(false);
   });
 
   it('has length 3 and is not sunked if it has been hit once', () => {
     const ship = Ship(3);
     ship.hit();
-    expect(ship.getSunked()).toBe(false);
+    expect(ship.isSunk()).toBe(false);
   });
 
   it('has length 3 and is not sunked if it has been hit twice', () => {
     const ship = Ship(3);
     ship.hit();
     ship.hit();
-    expect(ship.getSunked()).toBe(false);
+    expect(ship.isSunk()).toBe(false);
   });
 
   it('has length 3 and is sunked if it has been hit three times', () => {
@@ -65,7 +65,7 @@ describe('Ships', () => {
     ship.hit();
     ship.hit();
     ship.hit();
-    expect(ship.getSunked()).toBe(true);
+    expect(ship.isSunk()).toBe(true);
   });
 
   it('has length 4 and is sunked if it has been hit four times', () => {
@@ -74,6 +74,6 @@ describe('Ships', () => {
     ship.hit();
     ship.hit();
     ship.hit();
-    expect(ship.getSunked()).toBe(true);
+    expect(ship.isSunk()).toBe(true);
   });
 });
