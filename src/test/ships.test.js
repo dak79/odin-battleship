@@ -27,7 +27,7 @@ describe('Ships', () => {
     expect(nu.getLength()).toBe(false);
   });
 
-  it('can have length between 1 and 4', () => {
+  it('can have length between 2 and 4', () => {
     const shipZero = Ship(0);
     const shipOne = Ship(1);
     const shipTwo = Ship(2);
@@ -35,7 +35,7 @@ describe('Ships', () => {
     const shipFour = Ship(4);
     const shipFive = Ship(5);
     expect(shipZero.getLength()).toBe(false);
-    expect(shipOne.getLength()).toBe(1);
+    expect(shipOne.getLength()).toBe(false);
     expect(shipTwo.getLength()).toBe(2);
     expect(shipThree.getLength()).toBe(3);
     expect(shipFour.getLength()).toBe(4);

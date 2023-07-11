@@ -20,7 +20,7 @@ export const Ship = (l) => {
    * @param {*} input - length
    * @returns input|false
    */
-  const validShip = (input) => (input > 4 || input < 1 ? false : input);
+  const validShip = (input) => (input > 4 || input < 2 ? false : input);
 
   /**
    * Get the length of ship.
