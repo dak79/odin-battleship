@@ -3,18 +3,9 @@ import { GameBoard } from '../components/gameBoard';
 describe('GameBoard', () => {
   const b = GameBoard();
   const board = b.init();
-  const shipFourVer = b.createShip(4);
-  b.placeShip([0, 0], shipFourVer.getLength(), board, true);
-  const shipThreeVer = b.createShip(3);
-  b.placeShip([1, 0], shipThreeVer.getLength(), board, true);
-  const shipTwoVer = b.createShip(2);
-  b.placeShip([2, 0], shipTwoVer.getLength(), board, true);
-  const shipFourHor = b.createShip(4);
-  b.placeShip([3, 0], shipFourHor.getLength(), board, false);
-  const shipThreeHor = b.createShip(3);
-  b.placeShip([2, 2], shipThreeHor.getLength(), board, false);
-  const shipTwoHor = b.createShip(2);
-  b.placeShip([3, 4], shipTwoHor.getLength(), board, false);
+  const shipFour = b.createShip(4);
+  const shipThree = b.createShip(3);
+  const shipTwo = b.createShip(2);
 
   it('has a method called init', () => {
     expect(b).toHaveProperty('init');
@@ -49,21 +40,39 @@ describe('GameBoard', () => {
   });
 
   it('create a length 4 ship', () => {
-    expect(shipFourVer.getLength()).toBe(4);
+    expect(shipFour.getLength()).toBe(4);
   });
 
   it('create a length 3 ship', () => {
-    expect(shipThreeVer.getLength()).toBe(3);
+    expect(shipThree.getLength()).toBe(3);
   });
 
   it('create a length 2 ship', () => {
-    expect(shipTwoVer.getLength()).toBe(2);
+    expect(shipTwo.getLength()).toBe(2);
   });
 
   it('has the method placeShip', () => {
     expect(b).toHaveProperty('placeShip');
   });
 
+  it('does not place a ship out of the board', () => {
+    expect(b.placeShip([9, 0], shipThree.getLength(), board, false)).toBe(
+      false
+    );
+    expect(b.placeShip([0, 9], shipThree.getLength(), board, true)).toBe(false);
+    expect(b.placeShip([-1, 0], shipThree.getLength(), board, false)).toBe(
+      false
+    );
+    expect(b.placeShip([0, -1], shipThree.getLength(), board, true)).toBe(
+      false
+    );
+    expect(b.placeShip([8, 5], shipThree.getLength(), board, false)).toBe(
+      false
+    );
+    expect(b.placeShip([5, 8], shipThree.getLength(), board, true)).toBe(false);
+  });
+
+  b.placeShip([0, 0], shipFour.getLength(), board, true);
   it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
     expect(board.get('0,0')).toMatchObject([
       [0, 1],
@@ -87,26 +96,7 @@ describe('GameBoard', () => {
     ]);
   });
 
-  it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
-    expect(board.get('1,0')).toMatchObject([
-      [1, 1],
-      [1, 2]
-    ]);
-    expect(board.get('1,1')).toMatchObject([
-      [1, 0],
-      [1, 2]
-    ]);
-    expect(board.get('1,2')).toMatchObject([
-      [1, 0],
-      [1, 1]
-    ]);
-  });
-
-  it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
-    expect(board.get('2,0')).toMatchObject([[2, 1]]);
-    expect(board.get('2,1')).toMatchObject([[2, 0]]);
-  });
-
+  b.placeShip([3, 0], shipFour.getLength(), board, false);
   it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
     expect(board.get('3,0')).toMatchObject([
       [4, 0],
@@ -130,6 +120,23 @@ describe('GameBoard', () => {
     ]);
   });
 
+  b.placeShip([1, 0], shipThree.getLength(), board, true);
+  it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
+    expect(board.get('1,0')).toMatchObject([
+      [1, 1],
+      [1, 2]
+    ]);
+    expect(board.get('1,1')).toMatchObject([
+      [1, 0],
+      [1, 2]
+    ]);
+    expect(board.get('1,2')).toMatchObject([
+      [1, 0],
+      [1, 1]
+    ]);
+  });
+
+  b.placeShip([2, 2], shipThree.getLength(), board, false);
   it('place a ship of length 3 horizontally in [2, 2][3, 2][4, 2]', () => {
     expect(board.get('2,2')).toMatchObject([
       [3, 2],
@@ -145,313 +152,25 @@ describe('GameBoard', () => {
     ]);
   });
 
+  b.placeShip([2, 0], shipTwo.getLength(), board, true);
+  it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
+    expect(board.get('2,0')).toMatchObject([[2, 1]]);
+    expect(board.get('2,1')).toMatchObject([[2, 0]]);
+  });
+
+  b.placeShip([3, 4], shipTwo.getLength(), board, false);
   it('place a ship of length 2 horizontally in [3, 4][4, 4]', () => {
     expect(board.get('3,4')).toMatchObject([[4, 4]]);
     expect(board.get('4,4')).toMatchObject([[3, 4]]);
   });
 
-  it('does not place a ship out of the board', () => {
-    expect(
-      b.isValidShipPlacement(
-        [
-          [9, 0],
-          [10, 0],
-          [11, 0]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [0, 9],
-          [0, 10],
-          [0, 11]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [-1, 0],
-          [0, 0],
-          [1, 0]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [0, -1],
-          [0, 0],
-          [0, 1]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [8, 5],
-          [9, 5],
-          [10, 5]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [5, 8],
-          [5, 9],
-          [5, 10]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [4, 0],
-          [4, -1],
-          [4, 1]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [2, 7],
-          [1, 7],
-          [-1, 7]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [7, 2],
-          [7, 1],
-          [7, -1]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [0, 4],
-          [-1, 4],
-          [1, 4]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [7, 2],
-          [7, 1],
-          [7, -1]
-        ],
-        board
-      )
-    ).toBe(false);
-  });
-
-  it('allow place a ship inside the board', () => {
-    expect(
-      b.isValidShipPlacement(
-        [
-          [0, 4],
-          [0, 5],
-          [0, 6]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [5, 1],
-          [5, 2],
-          [5, 3]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [3, 5],
-          [4, 5],
-          [5, 5]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [9, 7],
-          [9, 8],
-          [9, 9]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [8, 9],
-          [7, 9],
-          [6, 9]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [7, 0],
-          [8, 0],
-          [9, 0]
-        ],
-        board
-      )
-    ).toBe(true);
-  });
-
   it('does not place a ship where the space is occupy from another ship', () => {
-    expect(b.isValidShipPlacement([[0, 2]], board)).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [0, 2],
-          [0, 3]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [1, 2],
-          [1, 3]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [2, 2],
-          [2, 3]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [1, 9],
-          [2, 0]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [3, 3],
-          [3, 4],
-          [3, 5]
-        ],
-        board
-      )
-    ).toBe(false);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [4, 8],
-          [4, 9],
-          [5, 0],
-          [5, 1]
-        ],
-        board
-      )
-    ).toBe(false);
+    expect(b.placeShip([0, 2], shipThree.getLength(), board, true)).toBe(false);
+    expect(b.placeShip([1, 2], shipTwo.getLength(), board, true)).toBe(false);
+    expect(b.placeShip([2, 2], shipTwo.getLength(), board, true)).toBe(false);
+    expect(b.placeShip([3, 0], shipTwo.getLength(), board, true)).toBe(false);
+    expect(b.placeShip([2, 0], shipTwo.getLength(), board, false)).toBe(false);
+    expect(b.placeShip([4, 2], shipFour.getLength(), board, false)).toBe(false);
+    expect(b.placeShip([3, 3], shipThree.getLength(), board, true)).toBe(false);
   });
-
-  it('allow to place a ship if the space is available', () => {
-    expect(b.isValidShipPlacement([[3, 3]], board)).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [5, 2],
-          [5, 3]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [3, 7],
-          [4, 7]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [1, 9],
-          [2, 3]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [1, 9],
-          [1, 8]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [3, 5],
-          [4, 5],
-          [5, 5],
-          [6, 5]
-        ],
-        board
-      )
-    ).toBe(true);
-    expect(
-      b.isValidShipPlacement(
-        [
-          [8, 0],
-          [8, 1],
-          [8, 2],
-          [8, 3]
-        ],
-        board
-      )
-    ).toBe(true);
-  });
-});
-
-describe('Placing ship', () => {
-  it.todo(
-    'todo put together is valid ship placement with placeShip, mix some false relevant cases, and place ship when is possible.'
-  );
 });
