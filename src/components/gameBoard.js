@@ -25,17 +25,35 @@ export const GameBoard = () => {
   const createShip = (length) => Ship(length);
 
   /**
+   * Define if a ship is placed horizontally or vertically
+   * @param {Boolean} isVertical
+   * @param {Number} x
+   * @param {Number} y
+   * @returns Model for vertical/horizontal ship.
+   */
+  const shipOrientation = (isVertical, x = 0, y = 0) =>
+    isVertical ? (_, i) => [x, y + i] : (_, i) => [x + i, y];
+
+  /**
    * Create coordinates for ship according to its length
    * @param {Number} shipLength
-   * @param {0} x
-   * @param {0} y
+   * @param {Boolean} orientation - true vertical, false horizontal
    * @returns An array of coordinate of a ship of given length
    */
-  const getShipModel = (shipLength, orientation, x = 0, y = 0) =>
-    Array.from(
-      { length: shipLength },
-      orientation ? (_, i) => [x, y + i] : (_, i) => [x + i, y]
-    );
+  const shipModel = (shipLength, orientation) =>
+    Array.from({ length: shipLength }, orientation);
+
+  /**
+   * Get the coordinate model for the ship
+   * @param {Number} shipLength
+   * @param {Boolean} isVertical
+   * @returns An array.
+   */
+  const getShipModel = (shipLength, isVertical) =>
+    pipe(
+      () => shipOrientation(isVertical),
+      (orientation) => shipModel(shipLength, orientation)
+    )(shipLength);
 
   /**
    * Attualize the coordinate of ship starting from ship head
@@ -47,7 +65,7 @@ export const GameBoard = () => {
     model.map(([dx, dy]) => [dx + x, dy + y]);
 
   /**
-   * Deploy ship on board
+   * Add ship on board graph
    * @param {Map} board - Map representing the board
    * @param {Array[Array]} coords - Array of coordinates
    * @returns
