@@ -1,20 +1,30 @@
 import { GameBoard } from '../components/gameBoard';
 
-describe('GameBoard', () => {
-  const b = GameBoard();
-  const board = b.init();
-  const shipFour = b.createShip(4);
-  const shipThree = b.createShip(3);
-  const shipTwo = b.createShip(2);
+const b = GameBoard();
+const board = b.init();
+const shipFour = b.createShip(4);
+const shipThree = b.createShip(3);
+const shipTwo = b.createShip(2);
 
-  it('has a method called init', () => {
+describe('GameBoard', () => {
+  it('has init() method', () => {
     expect(b).toHaveProperty('init');
   });
 
-  it('is creating a board with 10 x 10', () => {
+  it('create a board with 10 x 10', () => {
     expect(board.size).toBe(100);
   });
 
+  it('has createShip() method', () => {
+    expect(b).toHaveProperty('createShip');
+  });
+
+  it('has placeShip() method', () => {
+    expect(b).toHaveProperty('placeShip');
+  });
+});
+
+describe('The board', () => {
   it('has square [0, 9]', () => {
     expect(board.get('0,9')).toBeDefined();
   });
@@ -34,11 +44,9 @@ describe('GameBoard', () => {
   it('has not square [4, 11]', () => {
     expect(board.get('4,11')).toBeUndefined();
   });
+});
 
-  it('has createShip method', () => {
-    expect(b).toHaveProperty('createShip');
-  });
-
+describe('The method gameBoard.createShip()', () => {
   it('create a length 4 ship', () => {
     expect(shipFour.getLength()).toBe(4);
   });
@@ -50,11 +58,9 @@ describe('GameBoard', () => {
   it('create a length 2 ship', () => {
     expect(shipTwo.getLength()).toBe(2);
   });
+});
 
-  it('has the method placeShip', () => {
-    expect(b).toHaveProperty('placeShip');
-  });
-
+describe('The method gameBoard.placeShip()', () => {
   it('does not place a ship out of the board', () => {
     expect(b.placeShip([9, 0], shipThree.getLength(), board, false)).toBe(
       false
