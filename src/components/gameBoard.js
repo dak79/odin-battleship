@@ -31,8 +31,11 @@ export const GameBoard = () => {
    * @param {0} y
    * @returns An array of coordinate of a ship of given length
    */
-  const getShipModel = (shipLength, x = 0, y = 0) =>
-    Array.from({ length: shipLength }, (_, i) => [x, y + i]);
+  const getShipModel = (shipLength, orientation, x = 0, y = 0) =>
+    Array.from(
+      { length: shipLength },
+      orientation ? (_, i) => [x, y + i] : (_, i) => [x + i, y]
+    );
 
   /**
    * Attualize the coordinate of ship starting from ship head
@@ -63,9 +66,9 @@ export const GameBoard = () => {
    * @param {Map} board
    * @returns
    */
-  const placeShip = (shipHead, shipLength, board) =>
+  const placeShip = (shipHead, shipLength, board, orientation) =>
     pipe(
-      (length) => getShipModel(length),
+      (length) => getShipModel(length, orientation),
       (model) => shipCoord(shipHead, model),
       (coords) => addToBoard(board, coords)
     )(shipLength);
