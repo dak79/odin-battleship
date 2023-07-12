@@ -78,6 +78,30 @@ export const GameBoard = () => {
     );
 
   /**
+   * Check if the coordinates of ship are on board
+   * @param {Array} array
+   * @returns true|false
+   */
+  const isShipInBoard = (array) =>
+    !array.some(([x, y]) => x < 0 || x > 9 || y < 0 || y > 9);
+
+  /**
+   * Check if the space is available for a ship
+   * @param {Array} array - New ship coordinate
+   * @param {Map} board
+   * @returns
+   */
+  const isSpaceEmpty = (onBoard, array, board) =>
+    onBoard
+      ? ![...array].some((coord) => board.get(coord.toString()).length !== 0)
+      : onBoard;
+
+  const isValidShipPlacement = (array, board) =>
+    pipe(
+      () => isShipInBoard(array),
+      (onBoard) => isSpaceEmpty(onBoard, array, board)
+    )();
+  /**
    * Place ship on board
    * @param {Array} shipHead - Coordinate of ship head.
    * @param {Number} shipLength
@@ -94,6 +118,7 @@ export const GameBoard = () => {
   return {
     init,
     createShip,
-    placeShip
+    placeShip,
+    isValidShipPlacement
   };
 };

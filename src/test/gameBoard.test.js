@@ -107,7 +107,7 @@ describe('GameBoard', () => {
     expect(board.get('2,1')).toMatchObject([[2, 0]]);
   });
 
-  it('place a ship of length 4 horizzontally in [3, 0][4, 0][5, 0][6, 0]', () => {
+  it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
     expect(board.get('3,0')).toMatchObject([
       [4, 0],
       [5, 0],
@@ -145,13 +145,313 @@ describe('GameBoard', () => {
     ]);
   });
 
-  it('place a ship of length 2 horizzontally in [3, 4][4, 4]', () => {
+  it('place a ship of length 2 horizontally in [3, 4][4, 4]', () => {
     expect(board.get('3,4')).toMatchObject([[4, 4]]);
     expect(board.get('4,4')).toMatchObject([[3, 4]]);
+  });
+
+  it('does not place a ship out of the board', () => {
+    expect(
+      b.isValidShipPlacement(
+        [
+          [9, 0],
+          [10, 0],
+          [11, 0]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [0, 9],
+          [0, 10],
+          [0, 11]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [-1, 0],
+          [0, 0],
+          [1, 0]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [0, -1],
+          [0, 0],
+          [0, 1]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [8, 5],
+          [9, 5],
+          [10, 5]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [5, 8],
+          [5, 9],
+          [5, 10]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [4, 0],
+          [4, -1],
+          [4, 1]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [2, 7],
+          [1, 7],
+          [-1, 7]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [7, 2],
+          [7, 1],
+          [7, -1]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [0, 4],
+          [-1, 4],
+          [1, 4]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [7, 2],
+          [7, 1],
+          [7, -1]
+        ],
+        board
+      )
+    ).toBe(false);
+  });
+
+  it('allow place a ship inside the board', () => {
+    expect(
+      b.isValidShipPlacement(
+        [
+          [0, 4],
+          [0, 5],
+          [0, 6]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [5, 1],
+          [5, 2],
+          [5, 3]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [3, 5],
+          [4, 5],
+          [5, 5]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [9, 7],
+          [9, 8],
+          [9, 9]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [8, 9],
+          [7, 9],
+          [6, 9]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [7, 0],
+          [8, 0],
+          [9, 0]
+        ],
+        board
+      )
+    ).toBe(true);
+  });
+
+  it('does not place a ship where the space is occupy from another ship', () => {
+    expect(b.isValidShipPlacement([[0, 2]], board)).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [0, 2],
+          [0, 3]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [1, 2],
+          [1, 3]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [2, 2],
+          [2, 3]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [1, 9],
+          [2, 0]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [3, 3],
+          [3, 4],
+          [3, 5]
+        ],
+        board
+      )
+    ).toBe(false);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [4, 8],
+          [4, 9],
+          [5, 0],
+          [5, 1]
+        ],
+        board
+      )
+    ).toBe(false);
+  });
+
+  it('allow to place a ship if the space is available', () => {
+    expect(b.isValidShipPlacement([[3, 3]], board)).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [5, 2],
+          [5, 3]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [3, 7],
+          [4, 7]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [1, 9],
+          [2, 3]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [1, 9],
+          [1, 8]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [3, 5],
+          [4, 5],
+          [5, 5],
+          [6, 5]
+        ],
+        board
+      )
+    ).toBe(true);
+    expect(
+      b.isValidShipPlacement(
+        [
+          [8, 0],
+          [8, 1],
+          [8, 2],
+          [8, 3]
+        ],
+        board
+      )
+    ).toBe(true);
   });
 });
 
 describe('Placing ship', () => {
-  it.todo('does not place a ship out of boudary');
-  it.todo('does not place a ship where there is another ship');
+  it.todo(
+    'todo put together is valid ship placement with placeShip, mix some false relevant cases, and place ship when is possible.'
+  );
 });
