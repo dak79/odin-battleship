@@ -144,7 +144,6 @@ export const GameBoard = () => {
   return {
     init,
     createShip,
-    placeShip,
-    isValidShipPlacement
+    placeShip
   };
 };
