@@ -180,3 +180,12 @@ describe('The method gameBoard.placeShip()', () => {
     expect(b.placeShip([3, 3], shipThree.getLength(), board, true)).toBe(false);
   });
 });
+
+describe('The receiveAttack() method', () => {
+  it.todo('has a receiveAttack() method');
+  it.todo('takes a pair of coordinates');
+  it.todo('determine if a ship is hit');
+  it.todo('if hit, find the right ship');
+  it.todo('send an hit() method to the right ship');
+  it.todo('if miss, record the coordinate of missed shot');
+});
