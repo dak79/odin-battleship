@@ -1,22 +1,11 @@
 import { GameBoard } from '../components/gameBoard';
+import { Ship } from '../components/ships';
 
 const b = GameBoard();
-const board = b.init();
-const shipFour = b.createShip(4);
-const shipThree = b.createShip(3);
-const shipTwo = b.createShip(2);
 
 describe('GameBoard', () => {
-  it('has init() method', () => {
-    expect(b).toHaveProperty('init');
-  });
-
-  it('create a board with 10 x 10', () => {
-    expect(board.size).toBe(100);
-  });
-
-  it('has createShip() method', () => {
-    expect(b).toHaveProperty('createShip');
+  it('has board propriety', () => {
+    expect(b).toHaveProperty('board');
   });
 
   it('has placeShip() method', () => {
@@ -25,178 +14,172 @@ describe('GameBoard', () => {
 });
 
 describe('The board', () => {
+  it('has board 10 row', () => {
+    expect(b.board.length).toBe(10);
+  });
+
+  it('has board 10 col in row 0', () => {
+    expect(b.board[0].length).toBe(10);
+  });
+
+  it('has board 10 col in row 1', () => {
+    expect(b.board[1].length).toBe(10);
+  });
+  it('has board 10 col in row 2', () => {
+    expect(b.board[2].length).toBe(10);
+  });
+  it('has board 10 col in row 3', () => {
+    expect(b.board[3].length).toBe(10);
+  });
+  it('has board 10 col in row 4', () => {
+    expect(b.board[4].length).toBe(10);
+  });
+  it('has board 10 col in row 5', () => {
+    expect(b.board[5].length).toBe(10);
+  });
+  it('has board 10 col in row 6', () => {
+    expect(b.board[6].length).toBe(10);
+  });
+  it('has board 10 col in row 7', () => {
+    expect(b.board[7].length).toBe(10);
+  });
+  it('has board 10 col in row 8', () => {
+    expect(b.board[8].length).toBe(10);
+  });
+  it('has board 10 col in row 9', () => {
+    expect(b.board[9].length).toBe(10);
+  });
+
   it('has square [0, 9]', () => {
-    expect(board.get('0,9')).toBeDefined();
+    expect(b.board[0][9]).toBeNull();
   });
 
   it('has square [4, 7]', () => {
-    expect(board.get('4,7')).toBeDefined();
-  });
-
-  it('has not square [-1, -4]', () => {
-    expect(board.get('-1,-4')).toBeUndefined();
-  });
-
-  it('has not square [10, 0]', () => {
-    expect(board.get('10,0')).toBeUndefined();
-  });
-
-  it('has not square [4, 11]', () => {
-    expect(board.get('4,11')).toBeUndefined();
-  });
-});
-
-describe('The method gameBoard.createShip()', () => {
-  it('create a length 4 ship', () => {
-    expect(shipFour.getLength()).toBe(4);
-  });
-
-  it('create a length 3 ship', () => {
-    expect(shipThree.getLength()).toBe(3);
-  });
-
-  it('create a length 2 ship', () => {
-    expect(shipTwo.getLength()).toBe(2);
+    expect(b.board[4][7]).toBeNull();
   });
 });
 
 describe('The method gameBoard.placeShip()', () => {
-  it('does not place a ship out of the board', () => {
-    expect(b.placeShip([9, 0], shipThree.getLength(), board, false)).toBe(
-      false
-    );
-    expect(b.placeShip([0, 9], shipThree.getLength(), board, true)).toBe(false);
-    expect(b.placeShip([-1, 0], shipThree.getLength(), board, false)).toBe(
-      false
-    );
-    expect(b.placeShip([0, -1], shipThree.getLength(), board, true)).toBe(
-      false
-    );
-    expect(b.placeShip([8, 5], shipThree.getLength(), board, false)).toBe(
-      false
-    );
-    expect(b.placeShip([5, 8], shipThree.getLength(), board, true)).toBe(false);
-  });
-
-  b.placeShip([0, 0], shipFour.getLength(), board, true);
   it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
-    expect(board.get('0,0')).toMatchObject([
-      [0, 1],
-      [0, 2],
-      [0, 3]
-    ]);
-    expect(board.get('0,1')).toMatchObject([
-      [0, 0],
-      [0, 2],
-      [0, 3]
-    ]);
-    expect(board.get('0,2')).toMatchObject([
-      [0, 0],
-      [0, 1],
-      [0, 3]
-    ]);
-    expect(board.get('0,3')).toMatchObject([
-      [0, 0],
-      [0, 1],
-      [0, 2]
-    ]);
+    const ship = Ship(4);
+    expect(b.isEmpty(ship, 0, 0, true)).toBe(true);
+    expect(b.isInBoard(ship, 0, 0, true)).toBe(true);
+    b.placeShip(ship, 0, 0, true);
+    expect(b.board[0][0]).not.toBeNull();
+    expect(b.board[0][1]).not.toBeNull();
+    expect(b.board[0][2]).not.toBeNull();
+    expect(b.board[0][3]).not.toBeNull();
   });
 
-  b.placeShip([3, 0], shipFour.getLength(), board, false);
-  it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
-    expect(board.get('3,0')).toMatchObject([
-      [4, 0],
-      [5, 0],
-      [6, 0]
-    ]);
-    expect(board.get('4,0')).toMatchObject([
-      [3, 0],
-      [5, 0],
-      [6, 0]
-    ]);
-    expect(board.get('5,0')).toMatchObject([
-      [3, 0],
-      [4, 0],
-      [6, 0]
-    ]);
-    expect(board.get('6,0')).toMatchObject([
-      [3, 0],
-      [4, 0],
-      [5, 0]
-    ]);
-  });
-
-  b.placeShip([1, 0], shipThree.getLength(), board, true);
   it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
-    expect(board.get('1,0')).toMatchObject([
-      [1, 1],
-      [1, 2]
-    ]);
-    expect(board.get('1,1')).toMatchObject([
-      [1, 0],
-      [1, 2]
-    ]);
-    expect(board.get('1,2')).toMatchObject([
-      [1, 0],
-      [1, 1]
-    ]);
+    const ship = Ship(3);
+    expect(b.isEmpty(ship, 1, 0, true)).toBe(true);
+    expect(b.isInBoard(ship, 1, 0, true)).toBe(true);
+    b.placeShip(ship, 1, 0, true);
+    expect(b.board[1][0]).not.toBeNull();
+    expect(b.board[1][1]).not.toBeNull();
+    expect(b.board[1][2]).not.toBeNull();
   });
 
-  b.placeShip([2, 2], shipThree.getLength(), board, false);
-  it('place a ship of length 3 horizontally in [2, 2][3, 2][4, 2]', () => {
-    expect(board.get('2,2')).toMatchObject([
-      [3, 2],
-      [4, 2]
-    ]);
-    expect(board.get('3,2')).toMatchObject([
-      [2, 2],
-      [4, 2]
-    ]);
-    expect(board.get('4,2')).toMatchObject([
-      [2, 2],
-      [3, 2]
-    ]);
-  });
-
-  b.placeShip([2, 0], shipTwo.getLength(), board, true);
   it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
-    expect(board.get('2,0')).toMatchObject([[2, 1]]);
-    expect(board.get('2,1')).toMatchObject([[2, 0]]);
+    const ship = Ship(2);
+    expect(b.isEmpty(ship, 2, 0, true)).toBe(true);
+    expect(b.isInBoard(ship, 2, 0, true)).toBe(true);
+    b.placeShip(ship, 2, 0, true);
+    expect(b.board[2][0]).not.toBeNull();
+    expect(b.board[2][1]).not.toBeNull();
   });
 
-  b.placeShip([3, 4], shipTwo.getLength(), board, false);
+  it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
+    const ship = Ship(4);
+    expect(b.isEmpty(ship, 3, 0, false)).toBe(true);
+    expect(b.isInBoard(ship, 3, 0, false)).toBe(true);
+    b.placeShip(ship, 3, 0, false);
+    expect(b.board[3][0]).not.toBeNull();
+    expect(b.board[4][0]).not.toBeNull();
+    expect(b.board[5][0]).not.toBeNull();
+    expect(b.board[6][0]).not.toBeNull();
+  });
+
+  it('place a ship of length 3 horizontally in [2, 2][3, 2][4, 2]', () => {
+    const ship = Ship(3);
+    expect(b.isEmpty(ship, 2, 2, false)).toBe(true);
+    expect(b.isInBoard(ship, 2, 2, false)).toBe(true);
+    b.placeShip(ship, 2, 2, false);
+    expect(b.board[2][2]).not.toBeNull();
+    expect(b.board[3][2]).not.toBeNull();
+    expect(b.board[4][2]).not.toBeNull();
+  });
+
   it('place a ship of length 2 horizontally in [3, 4][4, 4]', () => {
-    expect(board.get('3,4')).toMatchObject([[4, 4]]);
-    expect(board.get('4,4')).toMatchObject([[3, 4]]);
+    const ship = Ship(2);
+    expect(b.isEmpty(ship, 3, 4, false)).toBe(true);
+    expect(b.isInBoard(ship, 3, 4, false)).toBe(true);
+    b.placeShip(ship, 3, 4, false);
+    expect(b.board[3][4]).not.toBeNull();
+    expect(b.board[4][4]).not.toBeNull();
   });
 
-  it('does not place a ship where the space is occupy from another ship', () => {
-    expect(b.placeShip([0, 2], shipThree.getLength(), board, true)).toBe(false);
-    expect(b.placeShip([1, 2], shipTwo.getLength(), board, true)).toBe(false);
-    expect(b.placeShip([2, 2], shipTwo.getLength(), board, true)).toBe(false);
-    expect(b.placeShip([3, 0], shipTwo.getLength(), board, true)).toBe(false);
-    expect(b.placeShip([2, 0], shipTwo.getLength(), board, false)).toBe(false);
-    expect(b.placeShip([4, 2], shipFour.getLength(), board, false)).toBe(false);
-    expect(b.placeShip([3, 3], shipThree.getLength(), board, true)).toBe(false);
+  it('is finding collisions between ship at the head of ship', () => {
+    const ship = Ship(3);
+    expect(b.isEmpty(ship, 3, 1, true)).toBe(false);
+  });
+
+  it('is finding collisions between ship in the middle of ship', () => {
+    const ship = Ship(2);
+    expect(b.isEmpty(ship, 4, 1, true)).toBe(false);
+  });
+
+  it('is finding collisions between ship at end of ship', () => {
+    const ship = Ship(4);
+    expect(b.isEmpty(ship, 6, 0, true)).toBe(false);
+  });
+
+  it('is finding multiple collisions between ship', () => {
+    const ship = Ship(4);
+    expect(b.isEmpty(ship, 2, 4, false)).toBe(false);
+  });
+
+  it('does not place a ship with head out from x axis limits', () => {
+    const ship = Ship(2);
+    expect(b.isInBoard(ship, 10, 1, false)).toBe(false);
+    expect(b.isInBoard(ship, -3, 1, false)).toBe(false);
+  });
+
+  it('does not place a ship with bottom  out from x axis limits', () => {
+    const ship = Ship(4);
+    expect(b.isInBoard(ship, 8, 6, false)).toBe(false);
+  });
+
+  it('does not place a ship vertically if out from x axis limits', () => {
+    const ship = Ship(4);
+    expect(b.isInBoard(ship, -1, 8, true)).toBe(false);
+    expect(b.isInBoard(ship, 11, 6, true)).toBe(false);
+  });
+
+  it('does not place a ship with head out from y axis limits', () => {
+    const ship = Ship(2);
+    expect(b.isInBoard(ship, 1, 10, true)).toBe(false);
+    expect(b.isInBoard(ship, 1, -3, true)).toBe(false);
+  });
+
+  it('does not place a ship with bottom  out from y axis limits', () => {
+    const ship = Ship(4);
+    expect(b.isInBoard(ship, 8, 7, true)).toBe(false);
+  });
+
+  it('does not place a ship horizontally if out from y axis limits', () => {
+    const ship = Ship(4);
+    expect(b.isInBoard(ship, 8, -1, false)).toBe(false);
+    expect(b.isInBoard(ship, 8, 11, false)).toBe(false);
   });
 });
 
 describe('The receiveAttack() method', () => {
-  it('has a receiveAttack() method', () => {
-    expect(b).toHaveProperty('receiveAttack');
-  });
-
-  it.todo(
-    'takes a pair of coordinates. accept an array of integer or two string-number. the coordinates should be inside the board.'
-  );
-  it.todo(
-    'determine if a ship is hit. I can check the adiacency list. I should allow loop in adiacency list to have the complete shape of ship. How to represent a miss?'
-  );
-  it.todo(
-    'if hit, find the right shipi by coordinates. Should store all ship placement in an array oof object? Should I add position property to ship factor? Should i add a loop connection in the board so i have complete ship rapresentation in adjacenty list? From adjacenty list i can retrive by coordinate the ship'
-  );
+  it.todo('has a receiveAttack() method');
+  it.todo('takes a pair of coordinates.');
+  it.todo('determine if a ship is hit.');
+  it.todo('if hit, find the right ship');
   it.todo('send an hit() method to the right ship and check if it is sunked');
-  it.todo(
-    'if miss, record the coordinate of missed shot. How to represent the missed shoot in adijacency list?, How i store this coordinate?'
-  );
+  it.todo('if miss, record the coordinate of missed shot.');
 });
