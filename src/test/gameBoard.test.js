@@ -71,49 +71,49 @@ describe('The method gameBoard.placeShip()', () => {
   it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
     const ship = Ship(4);
     b.placeShip(ship, 0, 0, true);
-    expect(b.board[0][0]).not.toBeNull();
-    expect(b.board[0][1]).not.toBeNull();
-    expect(b.board[0][2]).not.toBeNull();
-    expect(b.board[0][3]).not.toBeNull();
+    expect(b.board[0][0]).toBe(ship);
+    expect(b.board[0][1]).toBe(ship);
+    expect(b.board[0][2]).toBe(ship);
+    expect(b.board[0][3]).toBe(ship);
   });
 
   it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
     const ship = Ship(3);
     b.placeShip(ship, 1, 0, true);
-    expect(b.board[1][0]).not.toBeNull();
-    expect(b.board[1][1]).not.toBeNull();
-    expect(b.board[1][2]).not.toBeNull();
+    expect(b.board[1][0]).toBe(ship);
+    expect(b.board[1][1]).toBe(ship);
+    expect(b.board[1][2]).toBe(ship);
   });
 
   it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
     const ship = Ship(2);
     b.placeShip(ship, 2, 0, true);
-    expect(b.board[2][0]).not.toBeNull();
-    expect(b.board[2][1]).not.toBeNull();
+    expect(b.board[2][0]).toBe(ship);
+    expect(b.board[2][1]).toBe(ship);
   });
 
   it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
     const ship = Ship(4);
     b.placeShip(ship, 3, 0, false);
-    expect(b.board[3][0]).not.toBeNull();
-    expect(b.board[4][0]).not.toBeNull();
-    expect(b.board[5][0]).not.toBeNull();
-    expect(b.board[6][0]).not.toBeNull();
+    expect(b.board[3][0]).toBe(ship);
+    expect(b.board[4][0]).toBe(ship);
+    expect(b.board[5][0]).toBe(ship);
+    expect(b.board[6][0]).toBe(ship);
   });
 
   it('place a ship of length 3 horizontally in [2, 2][3, 2][4, 2]', () => {
     const ship = Ship(3);
     b.placeShip(ship, 2, 2, false);
-    expect(b.board[2][2]).not.toBeNull();
-    expect(b.board[3][2]).not.toBeNull();
-    expect(b.board[4][2]).not.toBeNull();
+    expect(b.board[2][2]).toBe(ship);
+    expect(b.board[3][2]).toBe(ship);
+    expect(b.board[4][2]).toBe(ship);
   });
 
   it('place a ship of length 2 horizontally in [3, 4][4, 4]', () => {
     const ship = Ship(2);
     b.placeShip(ship, 3, 4, false);
-    expect(b.board[3][4]).not.toBeNull();
-    expect(b.board[4][4]).not.toBeNull();
+    expect(b.board[3][4]).toBe(ship);
+    expect(b.board[4][4]).toBe(ship);
   });
 
   it('does not place a ship: collision between ships (at the head)', () => {
