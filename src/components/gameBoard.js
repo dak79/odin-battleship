@@ -141,9 +141,12 @@ export const GameBoard = () => {
         )(shipLength)
       : false;
   };
+
+  const receiveAttack = () => {};
   return {
     init,
     createShip,
-    placeShip
+    placeShip,
+    receiveAttack
   };
 };

@@ -182,10 +182,21 @@ describe('The method gameBoard.placeShip()', () => {
 });
 
 describe('The receiveAttack() method', () => {
-  it.todo('has a receiveAttack() method');
-  it.todo('takes a pair of coordinates');
-  it.todo('determine if a ship is hit');
-  it.todo('if hit, find the right ship');
-  it.todo('send an hit() method to the right ship');
-  it.todo('if miss, record the coordinate of missed shot');
+  it('has a receiveAttack() method', () => {
+    expect(b).toHaveProperty('receiveAttack');
+  });
+
+  it.todo(
+    'takes a pair of coordinates. accept an array of integer or two string-number. the coordinates should be inside the board.'
+  );
+  it.todo(
+    'determine if a ship is hit. I can check the adiacency list. I should allow loop in adiacency list to have the complete shape of ship. How to represent a miss?'
+  );
+  it.todo(
+    'if hit, find the right shipi by coordinates. Should store all ship placement in an array oof object? Should I add position property to ship factor? Should i add a loop connection in the board so i have complete ship rapresentation in adjacenty list? From adjacenty list i can retrive by coordinate the ship'
+  );
+  it.todo('send an hit() method to the right ship and check if it is sunked');
+  it.todo(
+    'if miss, record the coordinate of missed shot. How to represent the missed shoot in adijacency list?, How i store this coordinate?'
+  );
 });
