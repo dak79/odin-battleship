@@ -1,3 +1,4 @@
+import { pipe } from '../util/pipe';
 export const GameBoard = () => {
   const board = Array(10)
     .fill(null)
@@ -14,13 +15,27 @@ export const GameBoard = () => {
    * @param {Boolean} direction true Ver | false Hor
    * @returns {Boolean}
    */
+  const isValidCoordinate = (coord) => coord >= 0 && coord <= 9;
+  const shipLength = (ship) => ship.getLength();
+  const xCoord = (length, x, y, direction) => (direction ? x : y + length);
+  const yCoord = (length, x, y, direction) => (direction ? x + length : y);
+
+  const isValidX = (ship, x, y, direction) =>
+    pipe(
+      () => shipLength(ship),
+      (length) => xCoord(length, x, y, direction),
+      (coord) => isValidCoordinate(coord)
+    );
+
+  console.log(isValidX);
   const isInBoard = (ship, x, y, direction) => {
     const length = ship.getLength();
     const isValid = (coord) => coord >= 0 && coord <= 9;
 
-    return direction
-      ? isValid(x) && isValid(y + length)
-      : isValid(x + length) && isValid(y);
+    const xCoord = direction ? x : x + length;
+    const yCoord = direction ? y + length : y;
+
+    return isValid(xCoord) && isValid(yCoord);
   };
 
   const isEmpty = (ship, x, y, direction) => {
