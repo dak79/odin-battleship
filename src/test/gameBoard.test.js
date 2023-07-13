@@ -14,39 +14,47 @@ describe('GameBoard', () => {
 });
 
 describe('The board', () => {
-  it('has board 10 row', () => {
+  it('has 10 row', () => {
     expect(b.board.length).toBe(10);
   });
 
-  it('has board 10 col in row 0', () => {
+  it('has 10 col in row 0', () => {
     expect(b.board[0].length).toBe(10);
   });
 
-  it('has board 10 col in row 1', () => {
+  it('has 10 col in row 1', () => {
     expect(b.board[1].length).toBe(10);
   });
-  it('has board 10 col in row 2', () => {
+
+  it('has 10 col in row 2', () => {
     expect(b.board[2].length).toBe(10);
   });
-  it('has board 10 col in row 3', () => {
+
+  it('has 10 col in row 3', () => {
     expect(b.board[3].length).toBe(10);
   });
-  it('has board 10 col in row 4', () => {
+
+  it('has 10 col in row 4', () => {
     expect(b.board[4].length).toBe(10);
   });
-  it('has board 10 col in row 5', () => {
+
+  it('has 10 col in row 5', () => {
     expect(b.board[5].length).toBe(10);
   });
-  it('has board 10 col in row 6', () => {
+
+  it('has 10 col in row 6', () => {
     expect(b.board[6].length).toBe(10);
   });
-  it('has board 10 col in row 7', () => {
+
+  it('has 10 col in row 7', () => {
     expect(b.board[7].length).toBe(10);
   });
-  it('has board 10 col in row 8', () => {
+
+  it('has 10 col in row 8', () => {
     expect(b.board[8].length).toBe(10);
   });
-  it('has board 10 col in row 9', () => {
+
+  it('has 10 col in row 9', () => {
     expect(b.board[9].length).toBe(10);
   });
 
