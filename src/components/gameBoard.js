@@ -3,19 +3,24 @@ export const GameBoard = () => {
     .fill(null)
     .map(() => Array(10).fill(null));
 
-  // TODO: refactor isInBoard, isEmpty, placeShip.
+  // TODO: refactor isEmpty, placeShip.
   // TODO: functional composition
   // TODO: refactor tests
-
+  /**
+   * Check if ship coordinates are inside the board.
+   * @param {Object} ship - From Ship factory.
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Boolean} direction true Ver | false Hor
+   * @returns {Boolean}
+   */
   const isInBoard = (ship, x, y, direction) => {
-    for (let i = 0; i < ship.getLength(); i++) {
-      if (direction) {
-        if (x > 9 || x < 0 || y + i > 9 || y + i < 0) return false;
-      } else {
-        if (x + i > 9 || x + i < 0 || y > 9 || y < 0) return false;
-      }
-    }
-    return true;
+    const length = ship.getLength();
+    const isValid = (coord) => coord >= 0 && coord <= 9;
+
+    return direction
+      ? isValid(x) && isValid(y + length)
+      : isValid(x + length) && isValid(y);
   };
 
   const isEmpty = (ship, x, y, direction) => {
