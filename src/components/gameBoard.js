@@ -1,33 +1,14 @@
-import { pipe } from '../util/pipe';
 export const GameBoard = () => {
-  const board = Array(10)
-    .fill(null)
-    .map(() => Array(10).fill(null));
+  const board = Array.from({ length: 10 }, () => Array(10).fill(null));
 
-  // TODO: refactor isEmpty, placeShip.
-  // TODO: functional composition
-  // TODO: refactor tests
   /**
    * Check if ship coordinates are inside the board.
-   * @param {Object} ship - From Ship factory.
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Boolean} direction true Ver | false Hor
+   * @param {Object} ship - The ship object.
+   * @param {Number} x - x coord of ship starting position.
+   * @param {Number} y - y coord of ship starting position.
+   * @param {Boolean} direction true Ver | false Hor.
    * @returns {Boolean}
    */
-  const isValidCoordinate = (coord) => coord >= 0 && coord <= 9;
-  const shipLength = (ship) => ship.getLength();
-  const xCoord = (length, x, y, direction) => (direction ? x : y + length);
-  const yCoord = (length, x, y, direction) => (direction ? x + length : y);
-
-  const isValidX = (ship, x, y, direction) =>
-    pipe(
-      () => shipLength(ship),
-      (length) => xCoord(length, x, y, direction),
-      (coord) => isValidCoordinate(coord)
-    );
-
-  console.log(isValidX);
   const isInBoard = (ship, x, y, direction) => {
     const length = ship.getLength();
     const isValid = (coord) => coord >= 0 && coord <= 9;
@@ -38,31 +19,74 @@ export const GameBoard = () => {
     return isValid(xCoord) && isValid(yCoord);
   };
 
-  const isEmpty = (ship, x, y, direction) => {
-    for (let i = 0; i < ship.getLength(); i++) {
-      if (direction) {
-        if (board[x][y + i]) return false;
-      } else {
-        if (board[x + i][y]) return false;
-      }
+  /**
+   * Check if there is enough space on board for a ship.
+   * @param {Object} ship - The ship object.
+   * @param {Number} x - x coord of ship starting position.
+   * @param {Number} y - y coord of ship starting position.
+   * @param {Boolean} direction true Ver | false Hor
+   * @returns {Boolean}
+   */
+  const isSpaceAvailable = (ship, x, y, direction) => {
+    const length = ship.getLength();
+    const isCellEmpty = (x, y) => !board[x][y];
+
+    for (let i = 0; i < length; i++) {
+      const xCoord = direction ? x : x + i;
+      const yCoord = direction ? y + i : y;
+
+      if (!isCellEmpty(xCoord, yCoord)) return false;
     }
     return true;
   };
 
-  const placeShip = (ship, x, y, direction) => {
-    for (let i = 0; i < ship.getLength(); i++) {
-      if (direction) {
-        board[x][y + i] = ship;
-      } else {
-        board[x + i][y] = ship;
-      }
+  /**
+   * Check if a ship placement is valid on board.
+   * @param {Object} ship - The ship object.
+   * @param {Number} x - x coord of ship starting position.
+   * @param {Number} y - y coord of ship starting position.
+   * @param {Boolean} direction true Ver | false Hor
+   * @returns {Boolean}
+   */
+  const isValidPlacement = (ship, x, y, direction) =>
+    isInBoard(ship, x, y, direction) && isSpaceAvailable(ship, x, y, direction);
+
+  /**
+   * Add ship on the board.
+   * @param {Object} ship - The ship object.
+   * @param {Number} x - x coord of ship starting position.
+   * @param {Number} y - y coord of ship starting position.
+   * @param {Boolean} direction true Ver | false Hor
+   */
+  const addShipToBoard = (ship, x, y, direction) => {
+    const length = ship.getLength();
+
+    const updateBoardCell = (i) => {
+      const xCoord = direction ? x : x + i;
+      const yCoord = direction ? y + i : y;
+      board[xCoord][yCoord] = ship;
+    };
+
+    for (let i = 0; i < length; i++) {
+      updateBoardCell(i);
     }
   };
 
+  /**
+   * Try to place a ship on bord
+   * @param {Object} ship - The ship object.
+   * @param {Number} x - x coord of ship starting position.
+   * @param {Number} y - y coord of ship starting position.
+   * @param {Boolean} direction true Ver | false Hor
+   * @returns A ship on board or false
+   */
+  const placeShip = (ship, x, y, direction) =>
+    isValidPlacement(ship, x, y, direction)
+      ? addShipToBoard(ship, x, y, direction)
+      : false;
+
   return {
     board,
-    placeShip,
-    isEmpty,
-    isInBoard
+    placeShip
   };
 };

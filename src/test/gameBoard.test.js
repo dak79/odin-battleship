@@ -62,8 +62,6 @@ describe('The board', () => {
 describe('The method gameBoard.placeShip()', () => {
   it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
     const ship = Ship(4);
-    expect(b.isEmpty(ship, 0, 0, true)).toBe(true);
-    expect(b.isInBoard(ship, 0, 0, true)).toBe(true);
     b.placeShip(ship, 0, 0, true);
     expect(b.board[0][0]).not.toBeNull();
     expect(b.board[0][1]).not.toBeNull();
@@ -73,8 +71,6 @@ describe('The method gameBoard.placeShip()', () => {
 
   it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
     const ship = Ship(3);
-    expect(b.isEmpty(ship, 1, 0, true)).toBe(true);
-    expect(b.isInBoard(ship, 1, 0, true)).toBe(true);
     b.placeShip(ship, 1, 0, true);
     expect(b.board[1][0]).not.toBeNull();
     expect(b.board[1][1]).not.toBeNull();
@@ -83,8 +79,6 @@ describe('The method gameBoard.placeShip()', () => {
 
   it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
     const ship = Ship(2);
-    expect(b.isEmpty(ship, 2, 0, true)).toBe(true);
-    expect(b.isInBoard(ship, 2, 0, true)).toBe(true);
     b.placeShip(ship, 2, 0, true);
     expect(b.board[2][0]).not.toBeNull();
     expect(b.board[2][1]).not.toBeNull();
@@ -92,8 +86,6 @@ describe('The method gameBoard.placeShip()', () => {
 
   it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
     const ship = Ship(4);
-    expect(b.isEmpty(ship, 3, 0, false)).toBe(true);
-    expect(b.isInBoard(ship, 3, 0, false)).toBe(true);
     b.placeShip(ship, 3, 0, false);
     expect(b.board[3][0]).not.toBeNull();
     expect(b.board[4][0]).not.toBeNull();
@@ -103,8 +95,6 @@ describe('The method gameBoard.placeShip()', () => {
 
   it('place a ship of length 3 horizontally in [2, 2][3, 2][4, 2]', () => {
     const ship = Ship(3);
-    expect(b.isEmpty(ship, 2, 2, false)).toBe(true);
-    expect(b.isInBoard(ship, 2, 2, false)).toBe(true);
     b.placeShip(ship, 2, 2, false);
     expect(b.board[2][2]).not.toBeNull();
     expect(b.board[3][2]).not.toBeNull();
@@ -113,65 +103,63 @@ describe('The method gameBoard.placeShip()', () => {
 
   it('place a ship of length 2 horizontally in [3, 4][4, 4]', () => {
     const ship = Ship(2);
-    expect(b.isEmpty(ship, 3, 4, false)).toBe(true);
-    expect(b.isInBoard(ship, 3, 4, false)).toBe(true);
     b.placeShip(ship, 3, 4, false);
     expect(b.board[3][4]).not.toBeNull();
     expect(b.board[4][4]).not.toBeNull();
   });
 
-  it('is finding collisions between ship at the head of ship', () => {
+  it('does not place a ship: collision between ships (at the head)', () => {
     const ship = Ship(3);
-    expect(b.isEmpty(ship, 3, 1, true)).toBe(false);
+    expect(b.placeShip(ship, 3, 1, true)).toBe(false);
   });
 
-  it('is finding collisions between ship in the middle of ship', () => {
+  it('does not place a ship: collision between ships (at the middle)', () => {
     const ship = Ship(2);
-    expect(b.isEmpty(ship, 4, 1, true)).toBe(false);
+    expect(b.placeShip(ship, 4, 1, true)).toBe(false);
   });
 
-  it('is finding collisions between ship at end of ship', () => {
+  it('does not place a ship: collision between ship (at the end)', () => {
     const ship = Ship(4);
-    expect(b.isEmpty(ship, 6, 0, true)).toBe(false);
+    expect(b.placeShip(ship, 6, 0, true)).toBe(false);
   });
 
-  it('is finding multiple collisions between ship', () => {
+  it('does not place a ship: multiple collisions between ship', () => {
     const ship = Ship(4);
-    expect(b.isEmpty(ship, 2, 4, false)).toBe(false);
+    expect(b.placeShip(ship, 2, 4, false)).toBe(false);
   });
 
-  it('does not place a ship with head out from x axis limits', () => {
+  it('does not place a ship: starting point out of board (x)', () => {
     const ship = Ship(2);
-    expect(b.isInBoard(ship, 10, 1, false)).toBe(false);
-    expect(b.isInBoard(ship, -3, 1, false)).toBe(false);
+    expect(b.placeShip(ship, -3, 1, false)).toBe(false);
+    expect(b.placeShip(ship, 10, 1, false)).toBe(false);
   });
 
-  it('does not place a ship with bottom  out from x axis limits', () => {
+  it('does not place a ship: ending part out of board (x)', () => {
     const ship = Ship(4);
-    expect(b.isInBoard(ship, 8, 6, false)).toBe(false);
+    expect(b.placeShip(ship, 8, 6, false)).toBe(false);
   });
 
-  it('does not place a ship vertically if out from x axis limits', () => {
+  it('does not place a ship: x out of board (y placement)', () => {
     const ship = Ship(4);
-    expect(b.isInBoard(ship, -1, 8, true)).toBe(false);
-    expect(b.isInBoard(ship, 11, 6, true)).toBe(false);
+    expect(b.placeShip(ship, -1, 8, true)).toBe(false);
+    expect(b.placeShip(ship, 11, 6, true)).toBe(false);
   });
 
-  it('does not place a ship with head out from y axis limits', () => {
+  it('does not place a ship: starting point out of board (y)', () => {
     const ship = Ship(2);
-    expect(b.isInBoard(ship, 1, 10, true)).toBe(false);
-    expect(b.isInBoard(ship, 1, -3, true)).toBe(false);
+    expect(b.placeShip(ship, 1, 10, true)).toBe(false);
+    expect(b.placeShip(ship, 1, -3, true)).toBe(false);
   });
 
-  it('does not place a ship with bottom  out from y axis limits', () => {
+  it('does not place a ship: ending point out of board (y)', () => {
     const ship = Ship(4);
-    expect(b.isInBoard(ship, 8, 7, true)).toBe(false);
+    expect(b.placeShip(ship, 8, 7, true)).toBe(false);
   });
 
-  it('does not place a ship horizontally if out from y axis limits', () => {
+  it('does not place a ship: y out of board (x placement)', () => {
     const ship = Ship(4);
-    expect(b.isInBoard(ship, 8, -1, false)).toBe(false);
-    expect(b.isInBoard(ship, 8, 11, false)).toBe(false);
+    expect(b.placeShip(ship, 8, -1, false)).toBe(false);
+    expect(b.placeShip(ship, 8, -11, false)).toBe(false);
   });
 });
 
