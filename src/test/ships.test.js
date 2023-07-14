@@ -1,20 +1,19 @@
 import { Ship } from '../components/ships.js';
 
-const shipTwo = Ship(2);
-const shipThree = Ship('3');
-const shipFour = Ship(4);
-
 describe('Ship', () => {
   it('has the method .getLength()', () => {
-    expect(shipTwo).toHaveProperty('getLength');
+    const ship = Ship(2);
+    expect(ship).toHaveProperty('getLength');
   });
 
   it('has method .hit()', () => {
-    expect(shipThree).toHaveProperty('hit');
+    const ship = Ship(3);
+    expect(ship).toHaveProperty('hit');
   });
 
   it('has method .isSunk()', () => {
-    expect(shipFour).toHaveProperty('isSunk');
+    const ship = Ship(4);
+    expect(ship).toHaveProperty('isSunk');
   });
 });
 
@@ -44,6 +43,9 @@ describe('The .getLength() method', () => {
   it('returns a value inside min and max length (between 2 and 4)', () => {
     const shipZero = Ship(0);
     const shipOne = Ship(1);
+    const shipTwo = Ship(2);
+    const shipThree = Ship(3);
+    const shipFour = Ship(4);
     const shipFive = Ship(5);
     expect(shipZero.getLength()).toBe(false);
     expect(shipOne.getLength()).toBe(false);
@@ -56,29 +58,37 @@ describe('The .getLength() method', () => {
 
 describe('The method .isSunk()', () => {
   it('returns false, no damage on ship', () => {
-    shipFour.hit();
-    expect(shipFour.isSunk()).toBe(false);
+    const ship = Ship(4);
+    expect(ship.isSunk()).toBe(false);
   });
 
   it('returns false: it has been hit once and has length 4', () => {
-    shipFour.hit();
-    expect(shipFour.isSunk()).toBe(false);
+    const ship = Ship(4);
+    ship.hit();
+    expect(ship.isSunk()).toBe(false);
   });
 
   it('has length 3 and it is not sunked: it has been only hit twice', () => {
-    shipThree.hit();
-    shipThree.hit();
-    expect(shipThree.isSunk()).toBe(false);
+    const ship = Ship(3);
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBe(false);
   });
 
   it('has length 3 and it is sunked: it has been hit three times', () => {
-    shipThree.hit();
-    expect(shipThree.isSunk()).toBe(true);
+    const ship = Ship(3);
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBe(true);
   });
 
   it('has length 4 and it is sunked: it has been hit four times', () => {
-    shipFour.hit();
-    shipFour.hit();
-    expect(shipFour.isSunk()).toBe(true);
+    const ship = Ship(4);
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBe(true);
   });
 });
