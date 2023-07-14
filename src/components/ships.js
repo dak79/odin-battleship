@@ -13,54 +13,72 @@ export const Ship = (len) => {
    * @param {*} input - length
    * @returns {Number|false}
    */
-  const validateLength = (input) => (Number.isFinite(input) ? input : false);
+  const validateIntegerLength = (input) =>
+    Number.isFinite(input) ? input : false;
 
   /**
    * Check if the length is between 1 and 4.
    * @param {Number|false} input - length
    * @returns {Number|false}
    */
-  const validShip = (input) => (input > 4 || input < 2 ? false : input);
+  const validateShipLength = (input) =>
+    input > 4 || input < 2 ? false : input;
 
   /**
-   * Get the length of ship.
+   * Set the length of ship.
    */
-  const getLength = () =>
+  const setLength = () =>
     pipe(
       () => parseLength(len),
-      (parsed) => validateLength(parsed),
-      (int) => validShip(int)
+      (parsed) => validateIntegerLength(parsed),
+      (int) => validateShipLength(int)
     )(len);
 
-  const length = getLength();
-
-  let hits = 0;
-
-  let sunk = false;
-
-  /**
-   * Increment hits on a ship.
-   * @returns {Number}
-   */
-  const addHit = () => hits++;
+  const init = {
+    len: setLength(),
+    hits: 0,
+    sunked: false
+  };
 
   /**
-   * setSunk state
-   * @returns {Boolean} New value for variable sunk
-   *
+   * Add an hit.
+   * @param {Object} obj
+   * @returns {Object} With hits updated.
    */
-  const setSunk = () => (hits === length ? (sunk = true) : (sunk = false));
+  const addHit = (obj) => ({ ...obj, hits: ++obj.hits });
 
   /**
-   * Hit a ship and set sunk state.
+   * Set sunked property
+   * @param {Object} obj
+   * @returns {Object} with sunked updated.
    */
-  const hit = pipe(addHit, setSunk);
+  const setSunk = (obj) => ({
+    ...obj,
+    sunked: (obj.sunked = obj.len === obj.hits)
+  });
 
   /**
-   * Check if the ship is sunked.
+   * Hit the ship
+   * @param {Object} obj
    */
-  const isSunk = () => sunk;
+  const hit = (obj = init) => {
+    addHit(obj);
+    setSunk(obj);
+  };
 
+  /**
+   * Get the length of ship init.
+   * @param {Object} obj
+   * @returns
+   */
+  const getLength = (obj = init) => obj.len;
+
+  /**
+   * Get sunked from ship init.
+   * @param {Object} obj
+   * @returns
+   */
+  const isSunk = (obj = init) => obj.sunked;
   return {
     getLength,
     hit,

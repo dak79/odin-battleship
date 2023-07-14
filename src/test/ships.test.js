@@ -56,12 +56,13 @@ describe('The .getLength() method', () => {
 
 describe('The method .isSunk()', () => {
   it('returns false, no damage on ship', () => {
+    shipFour.hit();
     expect(shipFour.isSunk()).toBe(false);
   });
 
   it('returns false: it has been hit once and has length 4', () => {
     shipFour.hit();
-    expect(shipThree.isSunk()).toBe(false);
+    expect(shipFour.isSunk()).toBe(false);
   });
 
   it('has length 3 and it is not sunked: it has been only hit twice', () => {
@@ -76,7 +77,6 @@ describe('The method .isSunk()', () => {
   });
 
   it('has length 4 and it is sunked: it has been hit four times', () => {
-    shipFour.hit();
     shipFour.hit();
     shipFour.hit();
     expect(shipFour.isSunk()).toBe(true);
