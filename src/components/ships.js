@@ -45,7 +45,7 @@ export const Ship = (len) => {
    * @param {Object} obj
    * @returns {Object} With hits updated.
    */
-  const addHit = (obj) => ({ ...obj, hits: ++obj.hits });
+  const addHit = (obj) => ({ ...obj, hits: obj.hits + 1 });
 
   /**
    * Set sunked property
@@ -54,18 +54,14 @@ export const Ship = (len) => {
    */
   const setSunk = (obj) => ({
     ...obj,
-    sunked: (obj.sunked = obj.len === obj.hits)
+    sunked: obj.len === obj.hits
   });
 
   /**
    * Hit the ship
    * @param {Object} obj
    */
-  const hit = (obj = init) => {
-    addHit(obj);
-    setSunk(obj);
-  };
-
+  const hit = (obj = init) => pipe(addHit, setSunk)(obj);
   /**
    * Get the length of ship init.
    * @param {Object} obj

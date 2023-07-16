@@ -64,31 +64,31 @@ describe('The method .isSunk()', () => {
 
   it('returns false: it has been hit once and has length 4', () => {
     const ship = Ship(4);
-    ship.hit();
-    expect(ship.isSunk()).toBe(false);
+    const firstHit = ship.hit();
+    expect(ship.isSunk(firstHit)).toBe(false);
   });
 
   it('has length 3 and it is not sunked: it has been only hit twice', () => {
     const ship = Ship(3);
-    ship.hit();
-    ship.hit();
-    expect(ship.isSunk()).toBe(false);
+    const firstHit = ship.hit();
+    const secondHit = ship.hit(firstHit);
+    expect(ship.isSunk(secondHit)).toBe(false);
   });
 
   it('has length 3 and it is sunked: it has been hit three times', () => {
     const ship = Ship(3);
-    ship.hit();
-    ship.hit();
-    ship.hit();
-    expect(ship.isSunk()).toBe(true);
+    const firstHit = ship.hit();
+    const secondHit = ship.hit(firstHit);
+    const thirdHit = ship.hit(secondHit);
+    expect(ship.isSunk(thirdHit)).toBe(true);
   });
 
   it('has length 4 and it is sunked: it has been hit four times', () => {
     const ship = Ship(4);
-    ship.hit();
-    ship.hit();
-    ship.hit();
-    ship.hit();
-    expect(ship.isSunk()).toBe(true);
+    const firstHit = ship.hit();
+    const secondHit = ship.hit(firstHit);
+    const thirdHit = ship.hit(secondHit);
+    const fourthHit = ship.hit(thirdHit);
+    expect(ship.isSunk(fourthHit)).toBe(true);
   });
 });
