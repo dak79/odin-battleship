@@ -1,21 +1,6 @@
 import { pipe } from '../util/pipe';
+import { parseInput, validateInputInt } from '../util/input';
 export const Ship = (len) => {
-  /**
-   * Check if the input is a string that can be parsed in a valid integer.
-   * @param {*} input - length
-   * @returns {*} input
-   */
-  const parseLength = (input) =>
-    typeof input === 'string' ? parseInt(input) : input;
-
-  /**
-   * Check if input is a valid integer.
-   * @param {*} input - length
-   * @returns {Number|false}
-   */
-  const validateIntegerLength = (input) =>
-    Number.isFinite(input) ? input : false;
-
   /**
    * Check if the length is between 1 and 4.
    * @param {Number|false} input - length
@@ -29,8 +14,8 @@ export const Ship = (len) => {
    */
   const setLength = () =>
     pipe(
-      () => parseLength(len),
-      (parsed) => validateIntegerLength(parsed),
+      () => parseInput(len),
+      (parsed) => validateInputInt(parsed),
       (int) => validateShipLength(int)
     )(len);
 
