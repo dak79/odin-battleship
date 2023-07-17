@@ -205,8 +205,39 @@ describe('The method gameBoard.placeShip()', () => {
 });
 
 describe('The receiveAttack() method', () => {
-  it.todo('has a receiveAttack() method');
-  it.todo('takes a pair of coordinates.');
+  it('has a receiveAttack() method', () => {
+    expect(b).toHaveProperty('receiveAttack');
+  });
+
+  it('must have 2 arguments', () => {
+    expect(b.validAttack()).toBe(false);
+    expect(b.validAttack(1)).toBe(false);
+  });
+
+  it('takes valid integer', () => {
+    expect(b.validAttack(9, 0)).toStrictEqual([9, 0]);
+    expect(b.validAttack({}, 4)).toBe(false);
+    expect(b.validAttack(4, [1])).toBe(false);
+    expect(b.validAttack(NaN, 5)).toBe(false);
+    expect(b.validAttack(9, 'n')).toBe(false);
+    expect(b.validAttack(undefined, 7)).toBe(false);
+    expect(b.validAttack(false, 8)).toBe(false);
+    expect(b.validAttack(7, true)).toBe(false);
+  });
+
+  it('takes strings that can be parsed in integer', () => {
+    expect(b.validAttack('0', 8)).toStrictEqual([0, 8]);
+    expect(b.validAttack(2, '4')).toStrictEqual([2, 4]);
+    expect(b.validAttack('5', '7')).toStrictEqual([5, 7]);
+  });
+
+  it('takes only coordinate inside the board', () => {
+    expect(b.validAttack(3, 12)).toBe(false);
+    expect(b.validAttack(12, 3)).toBe(false);
+    expect(b.validAttack(-3, 1)).toBe(false);
+    expect(b.validAttack(1, -3)).toBe(false);
+  });
+
   it.todo('determine if a ship is hit.');
   it.todo('if hit, find the right ship');
   it.todo('send an hit() method to the right ship and check if it is sunked');
