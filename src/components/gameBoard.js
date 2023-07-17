@@ -1,5 +1,5 @@
 export const GameBoard = () => {
-  const board = Array.from({ length: 10 }, () => Array(10).fill(null));
+  const initialBoard = Array.from({ length: 10 }, () => Array(10).fill(null));
 
   /**
    * Check if ship coordinates are inside the board.
@@ -13,10 +13,13 @@ export const GameBoard = () => {
     const length = ship.getLength();
     const isValid = (coord) => coord >= 0 && coord <= 9;
 
-    const xCoord = direction ? x : x + length;
-    const yCoord = direction ? y + length : y;
+    if (isValid(x) && isValid(y)) {
+      const xCoord = direction ? x : x + length;
+      const yCoord = direction ? y + length : y;
+      return isValid(xCoord) && isValid(yCoord);
+    }
 
-    return isValid(xCoord) && isValid(yCoord);
+    return false;
   };
 
   /**
@@ -49,7 +52,9 @@ export const GameBoard = () => {
    * @returns {Boolean}
    */
   const isValidPlacement = (ship, x, y, direction) =>
-    isInBoard(ship, x, y, direction) && isSpaceAvailable(ship, x, y, direction);
+    isInBoard(ship, x, y, direction)
+      ? isSpaceAvailable(ship, x, y, direction)
+      : false;
 
   /**
    * Add ship on the board.
@@ -61,10 +66,12 @@ export const GameBoard = () => {
   const addShipToBoard = (ship, x, y, direction) => {
     const length = ship.getLength();
 
+    const newBoard = [...board];
+
     const updateBoardCell = (i) => {
       const xCoord = direction ? x : x + i;
       const yCoord = direction ? y + i : y;
-      board[xCoord][yCoord] = ship;
+      newBoard[xCoord][yCoord] = ship;
     };
 
     for (let i = 0; i < length; i++) {
@@ -83,10 +90,13 @@ export const GameBoard = () => {
   const placeShip = (ship, x, y, direction) =>
     isValidPlacement(ship, x, y, direction)
       ? addShipToBoard(ship, x, y, direction)
-      : false;
+      : [...board];
+
+  const board = initialBoard;
 
   return {
     board,
+    isInBoard,
     placeShip
   };
 };

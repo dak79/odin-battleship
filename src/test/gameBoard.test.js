@@ -102,11 +102,12 @@ describe('The method gameBoard.placeShip()', () => {
   });
 
   it('place a ship of length 3 horizontally in [2, 2][3, 2][4, 2]', () => {
-    const ship = Ship(3);
+    const ship = Ship(4);
     b.placeShip(ship, 2, 2, false);
     expect(b.board[2][2]).toBe(ship);
     expect(b.board[3][2]).toBe(ship);
     expect(b.board[4][2]).toBe(ship);
+    expect(b.board[5][2]).toBe(ship);
   });
 
   it('place a ship of length 2 horizontally in [3, 4][4, 4]', () => {
@@ -116,58 +117,90 @@ describe('The method gameBoard.placeShip()', () => {
     expect(b.board[4][4]).toBe(ship);
   });
 
-  it('does not place a ship: collision between ships (at the head)', () => {
-    const ship = Ship(3);
-    expect(b.placeShip(ship, 3, 1, true)).toBe(false);
-  });
-
-  it('does not place a ship: collision between ships (at the middle)', () => {
+  it('does not place a ship: collision between ships (at the head at [3, 0])', () => {
     const ship = Ship(2);
-    expect(b.placeShip(ship, 4, 1, true)).toBe(false);
+    const oldShip = b.board[3][0];
+    b.placeShip(ship, 3, 0, true);
+    expect(b.board[3][0]).toBe(oldShip);
+    expect(b.board[3][1]).toBe(null);
   });
 
-  it('does not place a ship: collision between ship (at the end)', () => {
-    const ship = Ship(4);
-    expect(b.placeShip(ship, 6, 0, true)).toBe(false);
+  it('does not place a ship: collision between ships (at the middle at [4, 2])', () => {
+    const ship = Ship(3);
+    b.placeShip(ship, 4, 1, true);
+    const oldShip = b.board[4][2];
+    expect(b.board[4][1]).toBe(null);
+    expect(b.board[4][2]).toBe(oldShip);
+    expect(b.board[4][3]).toBe(null);
   });
 
-  it('does not place a ship: multiple collisions between ship', () => {
+  it('does not place a ship: collision between ship (at the end [4, 4])', () => {
+    const ship = Ship(2);
+    b.placeShip(ship, 4, 3, true);
+    const oldShip = b.board[4][4];
+    expect(b.board[4][3]).toBe(null);
+    expect(b.board[4][4]).toBe(oldShip);
+  });
+
+  it('does not place a ship: multiple collisions between shipi [3,4][4,4]', () => {
     const ship = Ship(4);
-    expect(b.placeShip(ship, 2, 4, false)).toBe(false);
+    const oldShip = b.board[3][4];
+    b.placeShip(ship, 2, 4, false);
+    expect(b.board[2][4]).toBe(null);
+    expect(b.board[3][4]).toBe(oldShip);
+    expect(b.board[4][4]).toBe(oldShip);
+    expect(b.board[5][4]).toBe(null);
   });
 
   it('does not place a ship: starting point out of board (x)', () => {
-    const ship = Ship(2);
-    expect(b.placeShip(ship, -3, 1, false)).toBe(false);
-    expect(b.placeShip(ship, 10, 1, false)).toBe(false);
+    const ship = Ship(4);
+    const boardPre = b.board;
+    b.placeShip(ship, -3, 5, false);
+    const boardPost = b.board;
+    expect(boardPre).toStrictEqual(boardPost);
   });
 
   it('does not place a ship: ending part out of board (x)', () => {
     const ship = Ship(4);
-    expect(b.placeShip(ship, 8, 6, false)).toBe(false);
+    const boardPre = b.board;
+    b.placeShip(ship, 8, 6, false);
+    const boardPost = b.board;
+    expect(boardPre).toStrictEqual(boardPost);
   });
 
   it('does not place a ship: x out of board (y placement)', () => {
     const ship = Ship(4);
-    expect(b.placeShip(ship, -1, 8, true)).toBe(false);
-    expect(b.placeShip(ship, 11, 6, true)).toBe(false);
+    const boardPre = b.board;
+    b.placeShip(ship, -1, 8, true);
+    b.placeShip(ship, 11, 6, true);
+    const boardPost = b.board;
+    expect(boardPre).toStrictEqual(boardPost);
   });
 
   it('does not place a ship: starting point out of board (y)', () => {
     const ship = Ship(2);
-    expect(b.placeShip(ship, 1, 10, true)).toBe(false);
-    expect(b.placeShip(ship, 1, -3, true)).toBe(false);
+    const boardPre = b.board;
+    b.placeShip(ship, 1, 10, true);
+    b.placeShip(ship, 1, -3, true);
+    const boardPost = b.board;
+    expect(boardPre).toStrictEqual(boardPost);
   });
 
   it('does not place a ship: ending point out of board (y)', () => {
     const ship = Ship(4);
-    expect(b.placeShip(ship, 8, 7, true)).toBe(false);
+    const boardPre = b.board;
+    b.placeShip(ship, 8, 7, true);
+    const boardPost = b.board;
+    expect(boardPre).toStrictEqual(boardPost);
   });
 
   it('does not place a ship: y out of board (x placement)', () => {
     const ship = Ship(4);
-    expect(b.placeShip(ship, 8, -1, false)).toBe(false);
-    expect(b.placeShip(ship, 8, -11, false)).toBe(false);
+    const boardPre = b.board;
+    b.placeShip(ship, 8, -1, false);
+    b.placeShip(ship, 8, -11, false);
+    const boardPost = b.board;
+    expect(boardPre).toStrictEqual(boardPost);
   });
 });
 
