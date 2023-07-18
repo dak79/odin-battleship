@@ -16,13 +16,10 @@ export const GameBoard = () => {
   const isInBoard = (ship, x, y, direction) => {
     const length = ship.getLength();
 
-    if (isValidCoord(x) && isValidCoord(y)) {
-      const xCoord = direction ? x : x + length;
-      const yCoord = direction ? y + length : y;
-      return isValidCoord(xCoord) && isValidCoord(yCoord);
-    }
+    const xCoord = direction ? x : x + length;
+    const yCoord = direction ? y + length : y;
 
-    return false;
+    return isValidCoord(x) && isValidCoord(y) && isValidCoord(xCoord) && isValidCoord(yCoord)
   };
 
   /**
@@ -33,7 +30,7 @@ export const GameBoard = () => {
    * @param {Boolean} direction true Ver | false Hor
    * @returns {Boolean}
    */
-  const isSpaceAvailable = (ship, x, y, direction) => {
+  const isSpaceAvailable = (board, ship, x, y, direction) => {
     const length = ship.getLength();
     const isCellEmpty = (x, y) => !board[x][y];
 
@@ -43,6 +40,7 @@ export const GameBoard = () => {
 
       if (!isCellEmpty(xCoord, yCoord)) return false;
     }
+
     return true;
   };
 
@@ -54,9 +52,9 @@ export const GameBoard = () => {
    * @param {Boolean} direction true Ver | false Hor.
    * @returns {Boolean}
    */
-  const isValidPlacement = (ship, x, y, direction) =>
+  const isValidPlacement = (board, ship, x, y, direction) =>
     isInBoard(ship, x, y, direction)
-      ? isSpaceAvailable(ship, x, y, direction)
+      ? isSpaceAvailable(board, ship, x, y, direction)
       : false;
 
    /**
@@ -67,19 +65,22 @@ export const GameBoard = () => {
     * @param {Boolean} direction - true Ver | false Hor.
     * @returns {Array[]} - New board with new Ship.
     */
-  const addShipToBoard = (ship, x, y, direction) => {
+  const addShipToBoard = (board, ship, x, y, direction) => {
     const length = ship.getLength();
+
+
+    const updateBoardCell = (i, newBoard) => {
+      const xCoord = direction ? x : x + i;
+      const yCoord = direction ? y + i : y;
+      const updatedRow = [...newBoard[xCoord]]
+      updatedRow[yCoord] = ship
+      newBoard[xCoord] = updatedRow;
+    };
 
     const newBoard = [...board];
 
-    const updateBoardCell = (i) => {
-      const xCoord = direction ? x : x + i;
-      const yCoord = direction ? y + i : y;
-      newBoard[xCoord][yCoord] = ship;
-    };
-
     for (let i = 0; i < length; i++) {
-      updateBoardCell(i);
+      updateBoardCell(i, board);
     }
 
     return newBoard
@@ -93,12 +94,10 @@ export const GameBoard = () => {
    * @param {Boolean} direction true Ver | false Hor
    * @returns A ship on board or false
    */
-  const placeShip = (ship, x, y, direction) =>
-    isValidPlacement(ship, x, y, direction)
-      ? addShipToBoard(ship, x, y, direction)
+  const placeShip = (board, ship, x, y, direction) =>
+    isValidPlacement(board, ship, x, y, direction)
+      ? addShipToBoard(board, ship, x, y, direction)
       : [...board];
-
-  const board = initialBoard;
 
  /**
   * Check if is possible to parse the input.
@@ -111,29 +110,35 @@ export const GameBoard = () => {
    /**
     * Check if attack input is a valid integer
     * @param {Array} - Parsed input | input
-    * @returns {Array} Valid integers or up to two false value. 
+    * @returns {Array} Valid integers or up to two false value.
     */
   const validAttackCoord = ([x, y]) => [validateInputInt(x),  validateInputInt(y)];
- 
+
    /**
     * Check if the attack is inside the board.
     * @param {Array} - Valid integers or up to two false value.
     * @returns {Array|false} - Attack coordinate | false.
     */
-  const attackInBoard = ([x, y]) => [x, y].some(value => value === false) || !(isValidCoord(x) && isValidCoord(y)) ? false : [x, y]
-    
+  const attackInBoard = ([x, y]) => [x, y].some(value => value === false) || !(isValidCoord(x) && isValidCoord(y)) ? false : true
+
+
   const validAttack = (x, y) => pipe(
     () => parseAttackCoord(x, y),
     (parsedCoord) =>  validAttackCoord(parsedCoord),
     (validInput) => attackInBoard(validInput)
     )(x, y);
 
-  const receiveAttack = () => {};
+  const receiveAttack = (board, x, y) => {
+
+  if (validAttack(x, y)) {
+
+    return board[x][y]
+  }
+  }
 
   return {
-    board,
+    board: initialBoard,
     placeShip,
     receiveAttack,
-    validAttack
   };
 };
