@@ -205,46 +205,64 @@ describe('The method gameBoard.placeShip()', () => {
 });
 
 describe('The receiveAttack() method', () => {
-  it.skip('has a receiveAttack() method', () => {
+  it('has a receiveAttack() method', () => {
     expect(b).toHaveProperty('receiveAttack');
   });
 
-  it.skip('must have 2 arguments', () => {
-    expect(b.receiveAttack()).toBe(false);
-    expect(b.receiveAttack(1)).toBe(false);
+  it('must have 2 arguments', () => {
+    expect(b.validAttack()).toBe(false);
+    expect(b.validAttack(1)).toBe(false);
   });
 
-  it.skip('takes valid integer', () => {
-    expect(b.receiveAttack(9, 0)).toStrictEqual(true);
-    expect(b.receiveAttack({}, 4)).toBe(false);
-    expect(b.receiveAttack(4, [1])).toBe(false);
-    expect(b.receiveAttack(NaN, 5)).toBe(false);
-    expect(b.receiveAttack(9, 'n')).toBe(false);
-    expect(b.receiveAttack(undefined, 7)).toBe(false);
-    expect(b.receiveAttack(false, 8)).toBe(false);
-    expect(b.receiveAttack(7, true)).toBe(false);
+  it('takes valid integer', () => {
+    expect(b.validAttack(9, 0)).toStrictEqual(true);
+    expect(b.validAttack({}, 4)).toBe(false);
+    expect(b.validAttack(4, [1])).toBe(false);
+    expect(b.validAttack(NaN, 5)).toBe(false);
+    expect(b.validAttack(9, 'n')).toBe(false);
+    expect(b.validAttack(undefined, 7)).toBe(false);
+    expect(b.validAttack(false, 8)).toBe(false);
+    expect(b.validAttack(7, true)).toBe(false);
   });
 
-  it.skip('takes strings that can be parsed in integer', () => {
-    expect(b.receiveAttack('0', 8)).toStrictEqual(true);
-    expect(b.receiveAttack(2, '4')).toStrictEqual(true);
-    expect(b.receiveAttack('5', '7')).toStrictEqual(true);
+  it('takes strings that can be parsed in integer', () => {
+    expect(b.validAttack('0', 8)).toStrictEqual(true);
+    expect(b.validAttack(2, '4')).toStrictEqual(true);
+    expect(b.validAttack('5', '7')).toStrictEqual(true);
   });
 
-  it.skip('takes only coordinate inside the board', () => {
-    expect(b.receiveAttack(3, 12)).toBe(false);
-    expect(b.receiveAttack(12, 3)).toBe(false);
-    expect(b.receiveAttack(-3, 1)).toBe(false);
-    expect(b.receiveAttack(1, -3)).toBe(false);
+  it('takes only coordinate inside the board', () => {
+    expect(b.validAttack(3, 12)).toBe(false);
+    expect(b.validAttack(12, 3)).toBe(false);
+    expect(b.validAttack(-3, 1)).toBe(false);
+    expect(b.validAttack(1, -3)).toBe(false);
   });
 
-  it.skip('determine if a ship is hit.', () => {
-    console.log(b.board);
-    const ship = Ship(4);
-    expect(b.receiveAttack(b.board, 0, 0)).toBe(ship)
-    expect(b.receiveAttack(b.board, 3, 0)).toBe(ship)
+  it('if hit, send an hit() method to the right ship', () => {
+    const ship = b.board[0][0]
+    b.hitShip(b.board, 0, 0)
+    expect(ship.init.hits).toBe(1)
+    b.hitShip(b.board, 0, 1)
+    expect(ship.init.hits).toBe(2)
+    b.hitShip(b.board, 0, 2)
+    expect(ship.init.hits).toBe(3)
+    b.hitShip(b.board, 0, 3)
+    expect(ship.init.hits).toBe(4)
   });
-  it.todo('if hit, find the right ship');
-  it.todo('send an hit() method to the right ship and check if it is sunked');
+
+  it('if hit, does not effect other ships', () => {
+    const ship = b.board[3][4]
+    expect(ship.init.hits).toBe(0)
+  })
+
+  it('if hit enough times, ship is sunked', () => {
+    const ship = b.board[0][0]
+    expect(ship.init.sunked).toBe(true)
+  })
+
   it.todo('if miss, record the coordinate of missed shot.');
+  it.todo('you cant attack two times the same square')
 });
+
+// TODO: Test for missing shot, attack same square in valid attack, piping in
+// receiveAttack, comments, code review and functional style review.

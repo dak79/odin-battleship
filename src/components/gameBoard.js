@@ -1,5 +1,5 @@
-import { parseInput, validateInputInt } from "../util/input";
-import { pipe } from "../util/pipe";
+import { parseInput, validateInputInt } from '../util/input';
+import { pipe } from '../util/pipe';
 
 export const GameBoard = () => {
   const initialBoard = Array.from({ length: 10 }, () => Array(10).fill(null));
@@ -19,7 +19,12 @@ export const GameBoard = () => {
     const xCoord = direction ? x : x + length;
     const yCoord = direction ? y + length : y;
 
-    return isValidCoord(x) && isValidCoord(y) && isValidCoord(xCoord) && isValidCoord(yCoord)
+    return (
+      isValidCoord(x) &&
+      isValidCoord(y) &&
+      isValidCoord(xCoord) &&
+      isValidCoord(yCoord)
+    );
   };
 
   /**
@@ -57,23 +62,24 @@ export const GameBoard = () => {
       ? isSpaceAvailable(board, ship, x, y, direction)
       : false;
 
-   /**
-    * Add a new ship on the board.
-    * @param {Object} ship - The ship object
-    * @param {Number} x - x coord of ship starting position.
-    * @param {Number} y - y coord of ship starting positionk.
-    * @param {Boolean} direction - true Ver | false Hor.
-    * @returns {Array[]} - New board with new Ship.
-    */
+  /**
+   * Add a new ship on the board.
+   * @param {Object} ship - The ship object
+   * @param {Number} x - x coord of ship starting position.
+   * @param {Number} y - y coord of ship starting positionk.
+   * @param {Boolean} direction - true Ver | false Hor.
+   * @returns {Array[]} - New board with new Ship.
+   */
   const addShipToBoard = (board, ship, x, y, direction) => {
     const length = ship.getLength();
-
+    ship.position = [x, y];
+    ship.isVertical = direction;
 
     const updateBoardCell = (i, newBoard) => {
       const xCoord = direction ? x : x + i;
       const yCoord = direction ? y + i : y;
-      const updatedRow = [...newBoard[xCoord]]
-      updatedRow[yCoord] = ship
+      const updatedRow = [...newBoard[xCoord]];
+      updatedRow[yCoord] = ship;
       newBoard[xCoord] = updatedRow;
     };
 
@@ -83,7 +89,7 @@ export const GameBoard = () => {
       updateBoardCell(i, board);
     }
 
-    return newBoard
+    return newBoard;
   };
 
   /**
@@ -99,46 +105,74 @@ export const GameBoard = () => {
       ? addShipToBoard(board, ship, x, y, direction)
       : [...board];
 
- /**
-  * Check if is possible to parse the input.
-  * @param {*} x - x coordinate for attack
-  * @param {*} y - y coordinate for attack
-  * @returns {Array}
-  */
+  /**
+   * Check if is possible to parse the input.
+   * @param {*} x - x coordinate for attack
+   * @param {*} y - y coordinate for attack
+   * @returns {Array}
+   */
   const parseAttackCoord = (x, y) => [parseInput(x), parseInput(y)];
 
-   /**
-    * Check if attack input is a valid integer
-    * @param {Array} - Parsed input | input
-    * @returns {Array} Valid integers or up to two false value.
-    */
-  const validAttackCoord = ([x, y]) => [validateInputInt(x),  validateInputInt(y)];
+  /**
+   * Check if attack input is a valid integer
+   * @param {Array} - Parsed input | input
+   * @returns {Array} Valid integers or up to two false value.
+   */
+  const validAttackCoord = ([x, y]) => [
+    validateInputInt(x),
+    validateInputInt(y)
+  ];
 
-   /**
-    * Check if the attack is inside the board.
-    * @param {Array} - Valid integers or up to two false value.
-    * @returns {Array|false} - Attack coordinate | false.
-    */
-  const attackInBoard = ([x, y]) => [x, y].some(value => value === false) || !(isValidCoord(x) && isValidCoord(y)) ? false : true
+  /**
+   * Check if the attack is inside the board.
+   * @param {Array} - Valid integers or up to two false value.
+   * @returns {Array|false} - Attack coordinate | false.
+   */
+  const attackInBoard = ([x, y]) =>
+    [x, y].some((value) => value === false) ||
+    !(isValidCoord(x) && isValidCoord(y))
+      ? false
+      : true;
 
-
-  const validAttack = (x, y) => pipe(
-    () => parseAttackCoord(x, y),
-    (parsedCoord) =>  validAttackCoord(parsedCoord),
-    (validInput) => attackInBoard(validInput)
+  const validAttack = (x, y) =>
+    pipe(
+      () => parseAttackCoord(x, y),
+      (parsedCoord) => validAttackCoord(parsedCoord),
+      (validInput) => attackInBoard(validInput)
     )(x, y);
 
+  const hitShip = (board, x, y) => {
+    const ship = board[x][y];
+    const [xShip, yShip] = ship.position;
+    const direction = ship.isVertical;
+    const newShip = ship.hit();
+    Object.assign(ship.init, newShip);
+    return placeShip(board, ship, xShip, yShip, direction);
+  };
+
+  const missedShot = [];
+  const missShip = (shot, x, y) => [...shot, [x, y]];
+
+  const getMissedShot = () => missedShot;
+
   const receiveAttack = (board, x, y) => {
-
-  if (validAttack(x, y)) {
-
-    return board[x][y]
-  }
-  }
+    if (validAttack(x, y)) {
+      if (board[x][y] !== null) {
+        return hitShip(board, x, y);
+      } else {
+        return missShip(missedShot, x, y);
+      }
+    }
+    return false;
+  };
 
   return {
     board: initialBoard,
     placeShip,
     receiveAttack,
+    validAttack,
+    hitShip,
+    missShip,
+    getMissedShot
   };
 };
