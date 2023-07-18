@@ -61,6 +61,7 @@ export const Ship = (len) => {
    */
   const isSunk = (obj = init) => obj.sunked;
   return {
+    init,
     getLength,
     hit,
     isSunk
