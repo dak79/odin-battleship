@@ -209,60 +209,85 @@ describe('The receiveAttack() method', () => {
     expect(b).toHaveProperty('receiveAttack');
   });
 
-  it('must have 2 arguments', () => {
-    expect(b.validAttack()).toBe(false);
-    expect(b.validAttack(1)).toBe(false);
+  it('must have 3 arguments', () => {
+    expect(b.receiveAttack()).toBe(false);
+    expect(b.receiveAttack(1)).toBe(false);
+    expect(b.receiveAttack(1, 2)).toBe(false);
+    expect(b.receiveAttack(b.board, 1)).toBe(false);
   });
 
   it('takes valid integer', () => {
-    expect(b.validAttack(9, 0)).toStrictEqual(true);
-    expect(b.validAttack({}, 4)).toBe(false);
-    expect(b.validAttack(4, [1])).toBe(false);
-    expect(b.validAttack(NaN, 5)).toBe(false);
-    expect(b.validAttack(9, 'n')).toBe(false);
-    expect(b.validAttack(undefined, 7)).toBe(false);
-    expect(b.validAttack(false, 8)).toBe(false);
-    expect(b.validAttack(7, true)).toBe(false);
+    expect(b.receiveAttack(b.board, 4, 6)).toBe(true);
+    expect(b.receiveAttack(b.board, {}, 4)).toBe(false);
+    expect(b.receiveAttack(b.board, 4, [1])).toBe(false);
+    expect(b.receiveAttack(b.board, NaN, 5)).toBe(false);
+    expect(b.receiveAttack(b.board, 9, 'n')).toBe(false);
+    expect(b.receiveAttack(b.board, undefined, 7)).toBe(false);
+    expect(b.receiveAttack(b.board, false, 8)).toBe(false);
+    expect(b.receiveAttack(b.board, 7, true)).toBe(false);
   });
 
   it('takes strings that can be parsed in integer', () => {
-    expect(b.validAttack('0', 8)).toStrictEqual(true);
-    expect(b.validAttack(2, '4')).toStrictEqual(true);
-    expect(b.validAttack('5', '7')).toStrictEqual(true);
+    expect(b.receiveAttack(b.board, '0', 8)).toStrictEqual(true);
+    expect(b.receiveAttack(b.board, 2, '4')).toStrictEqual(true);
+    expect(b.receiveAttack(b.board, '5', '7')).toStrictEqual(true);
   });
 
   it('takes only coordinate inside the board', () => {
-    expect(b.validAttack(3, 12)).toBe(false);
-    expect(b.validAttack(12, 3)).toBe(false);
-    expect(b.validAttack(-3, 1)).toBe(false);
-    expect(b.validAttack(1, -3)).toBe(false);
+    expect(b.receiveAttack(b.board, 3, 12)).toBe(false);
+    expect(b.receiveAttack(b.board, 12, 3)).toBe(false);
+    expect(b.receiveAttack(b.board, -3, 1)).toBe(false);
+    expect(b.receiveAttack(b.board, 1, -3)).toBe(false);
   });
 
   it('if hit, send an hit() method to the right ship', () => {
-    const ship = b.board[0][0]
-    b.hitShip(b.board, 0, 0)
-    expect(ship.init.hits).toBe(1)
-    b.hitShip(b.board, 0, 1)
-    expect(ship.init.hits).toBe(2)
-    b.hitShip(b.board, 0, 2)
-    expect(ship.init.hits).toBe(3)
-    b.hitShip(b.board, 0, 3)
-    expect(ship.init.hits).toBe(4)
+    const ship = b.board[0][0];
+    b.receiveAttack(b.board, 0, 0);
+    expect(ship.init.hits).toBe(1);
+    b.receiveAttack(b.board, 0, 1);
+    expect(ship.init.hits).toBe(2);
+    b.receiveAttack(b.board, 0, 2);
+    expect(ship.init.hits).toBe(3);
+    b.receiveAttack(b.board, 0, 3);
+    expect(ship.init.hits).toBe(4);
   });
 
   it('if hit, does not effect other ships', () => {
-    const ship = b.board[3][4]
-    expect(ship.init.hits).toBe(0)
-  })
+    const ship = b.board[3][4];
+    expect(ship.init.hits).toBe(0);
+  });
 
   it('if hit enough times, ship is sunked', () => {
-    const ship = b.board[0][0]
-    expect(ship.init.sunked).toBe(true)
-  })
+    const ship = b.board[0][0];
+    expect(ship.init.sunked).toBe(true);
+  });
 
-  it.todo('if miss, record the coordinate of missed shot.');
-  it.todo('you cant attack two times the same square')
+  it('if miss, record the coordinate of missed shot.', () => {
+    b.receiveAttack(b.board, 8, 7);
+    expect(b.getMissed()).toStrictEqual([
+      [4, 6],
+      [0, 8],
+      [2, 4],
+      [5, 7],
+      [8, 7]
+    ]);
+    b.receiveAttack(b.board, 9, 0);
+    expect(b.getMissed()).toStrictEqual([
+      [4, 6],
+      [0, 8],
+      [2, 4],
+      [5, 7],
+      [8, 7],
+      [9, 0]
+    ]);
+  });
+
+  it('you cant attack two times the same square', () => {
+    b.receiveAttack(b.board, 0, 0);
+    expect(b.receiveAttack(0, 0)).toBe(false);
+    b.receiveAttack(8, 7);
+    expect(b.receiveAttack(8, 7)).toBe(false);
+  });
 });
 
-// TODO: Test for missing shot, attack same square in valid attack, piping in
-// receiveAttack, comments, code review and functional style review.
+// TODO: code review and functional style review.

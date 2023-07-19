@@ -72,8 +72,8 @@ export const GameBoard = () => {
    */
   const addShipToBoard = (board, ship, x, y, direction) => {
     const length = ship.getLength();
-    ship.position = [x, y];
-    ship.isVertical = direction;
+    // ship.position = [x, y];
+    // ship.isVertical = direction;
 
     const updateBoardCell = (i, newBoard) => {
       const xCoord = direction ? x : x + i;
@@ -132,36 +132,85 @@ export const GameBoard = () => {
     [x, y].some((value) => value === false) ||
     !(isValidCoord(x) && isValidCoord(y))
       ? false
-      : true;
+      : [x, y];
 
-  const validAttack = (x, y) =>
-    pipe(
-      () => parseAttackCoord(x, y),
-      (parsedCoord) => validAttackCoord(parsedCoord),
-      (validInput) => attackInBoard(validInput)
-    )(x, y);
+  const shots = [];
 
-  const hitShip = (board, x, y) => {
-    const ship = board[x][y];
-    const [xShip, yShip] = ship.position;
-    const direction = ship.isVertical;
-    const newShip = ship.hit();
-    Object.assign(ship.init, newShip);
-    return placeShip(board, ship, xShip, yShip, direction);
+  /**
+   * Check if the attack is already done.
+   * @param {Array} arr - x and y coordinates
+   * @returns {Boolean}
+   */
+  const alreadyAttacked = (arr) => {
+    if (arr) {
+      return shots.some((shot) => JSON.stringify(shot) === JSON.stringify(arr))
+        ? false
+        : true;
+    } else {
+      return false;
+    }
   };
 
-  const missedShot = [];
-  const missShip = (shot, x, y) => [...shot, [x, y]];
+  const validAttack = (x, y) => {
+    const pipedValidations = pipe(
+      () => parseAttackCoord(x, y),
+      (parsedCoord) => validAttackCoord(parsedCoord),
+      (validInput) => attackInBoard(validInput),
+      (attack) => alreadyAttacked(attack)
+    )(x, y);
+    return pipedValidations;
+  };
 
-  const getMissedShot = () => missedShot;
+  /**
+   * Attack find a ship
+   * @param {Array[]} board - Board state
+   * @param {*} x - x coordinate of attack
+   * @param {*} y - y coordinate of attack
+   * @returns {Object} - Ship object with updated hits
+   */
+  const hitShip = (board, x, y) => {
+    const ship = board[x][y];
+    // shots.push([x, y]);
+    // const [xShip, yShip] = ship.position;
+    // const direction = ship.isVertical;
+    const hit = ship.hit();
+    const init = Object.assign(ship.init, hit);
+    return Object.assign({}, ship, { init });
 
+    // const newShip = Object.assign({}, ship, { init });
+    // return placeShip(board, newShip, xShip, yShip, direction);
+  };
+
+  const missedShots = [];
+
+  /**
+   * Update miss shot
+   * @param {Number} x - x coordinate of attack
+   * @param {*} y - y coordinate of attack
+   */
+  const missShip = (x, y) => {
+    missedShots.push([x, y]);
+  };
+
+  const getMissed = () => missedShots;
+
+  /**
+   * Square attacked
+   * @param {Array[]} board - Board state.
+   * @param {*} x - x coordinate of attack
+   * @param {*} y - y coordinate of attack
+   * @returns {Boolean}
+   */
   const receiveAttack = (board, x, y) => {
     if (validAttack(x, y)) {
-      if (board[x][y] !== null) {
-        return hitShip(board, x, y);
-      } else {
-        return missShip(missedShot, x, y);
-      }
+      const xShot = parseInput(x);
+      const yShot = parseInput(y);
+      shots.push([xShot, yShot]);
+      board[xShot][yShot] !== null
+        ? hitShip(board, xShot, yShot)
+        : missShip(xShot, yShot);
+
+      return true;
     }
     return false;
   };
@@ -170,9 +219,6 @@ export const GameBoard = () => {
     board: initialBoard,
     placeShip,
     receiveAttack,
-    validAttack,
-    hitShip,
-    missShip,
-    getMissedShot
+    getMissed
   };
 };
