@@ -1,7 +1,7 @@
-import { GameBoard } from '../components/gameBoard';
-import { Ship } from '../components/ships';
+import Gameboard from '../components/gameBoard';
+import Ship from '../components/ships';
 
-const b = GameBoard();
+const b = Gameboard();
 
 describe('GameBoard', () => {
   it('has board propriety', () => {
