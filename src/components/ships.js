@@ -1,21 +1,37 @@
-import { pipe } from '../util/pipe';
-import { parseInput, validateInputInt } from '../util/input';
-export const Ship = (len) => {
-  /**
-   * Check if the length is between 1 and 4.
-   * @param {Number|false} input - length
-   * @returns {Number|false}
-   */
-  const validateShipLength = (input) =>
-    input > 4 || input < 2 ? false : input;
+import pipe from '../util/pipe';
+import validateInput from '../util/input';
 
+/**
+ * Check if the length is between 1 and 4.
+ * @param {Number|false} input - length
+ * @returns {Number|false}
+ */
+const validateShipLength = (input) => (input > 4 || input < 2 ? false : input);
+
+/**
+ * Add an hit.
+ * @param {Object} obj
+ * @returns {Object} With hits updated.
+ */
+const addHit = (obj) => ({ ...obj, hits: obj.hits + 1 });
+
+/**
+ * Set sunked property
+ * @param {Object} obj
+ * @returns {Object} with sunked updated.
+ */
+const setSunk = (obj) => ({
+  ...obj,
+  sunked: obj.len === obj.hits
+});
+
+const Ship = (len) => {
   /**
    * Set the length of ship.
    */
   const setLength = () =>
     pipe(
-      () => parseInput(len),
-      (parsed) => validateInputInt(parsed),
+      () => validateInput(len),
       (int) => validateShipLength(int)
     )(len);
 
@@ -26,27 +42,11 @@ export const Ship = (len) => {
   };
 
   /**
-   * Add an hit.
-   * @param {Object} obj
-   * @returns {Object} With hits updated.
-   */
-  const addHit = (obj) => ({ ...obj, hits: obj.hits + 1 });
-
-  /**
-   * Set sunked property
-   * @param {Object} obj
-   * @returns {Object} with sunked updated.
-   */
-  const setSunk = (obj) => ({
-    ...obj,
-    sunked: obj.len === obj.hits
-  });
-
-  /**
-   * Hit the ship
+   * Hit the ship.
    * @param {Object} obj
    */
   const hit = (obj = init) => pipe(addHit, setSunk)(obj);
+
   /**
    * Get the length of ship init.
    * @param {Object} obj
@@ -60,6 +60,7 @@ export const Ship = (len) => {
    * @returns
    */
   const isSunk = (obj = init) => obj.sunked;
+
   return {
     init,
     getLength,
@@ -67,3 +68,5 @@ export const Ship = (len) => {
     isSunk
   };
 };
+
+export default Ship;
