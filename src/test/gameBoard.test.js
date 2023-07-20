@@ -11,59 +11,26 @@ describe('GameBoard', () => {
   it('has placeShip() method', () => {
     expect(b).toHaveProperty('placeShip');
   });
+
+  it('has a receiveAttack() method', () => {
+    expect(b).toHaveProperty('receiveAttack');
+  });
+
+  it('has a getMissed() method', () => {
+    expect(b).toHaveProperty('getMissed');
+  });
 });
 
 describe('The board', () => {
-  it('has 10 row', () => {
-    expect(b.board.length).toBe(10);
+  it('is initially empty', () => {
+    const board = b.board;
+    board.forEach((row) => row.forEach((cell) => expect(cell).toBeNull()));
   });
 
-  it('has 10 col in row 0', () => {
-    expect(b.board[0].length).toBe(10);
-  });
-
-  it('has 10 col in row 1', () => {
-    expect(b.board[1].length).toBe(10);
-  });
-
-  it('has 10 col in row 2', () => {
-    expect(b.board[2].length).toBe(10);
-  });
-
-  it('has 10 col in row 3', () => {
-    expect(b.board[3].length).toBe(10);
-  });
-
-  it('has 10 col in row 4', () => {
-    expect(b.board[4].length).toBe(10);
-  });
-
-  it('has 10 col in row 5', () => {
-    expect(b.board[5].length).toBe(10);
-  });
-
-  it('has 10 col in row 6', () => {
-    expect(b.board[6].length).toBe(10);
-  });
-
-  it('has 10 col in row 7', () => {
-    expect(b.board[7].length).toBe(10);
-  });
-
-  it('has 10 col in row 8', () => {
-    expect(b.board[8].length).toBe(10);
-  });
-
-  it('has 10 col in row 9', () => {
-    expect(b.board[9].length).toBe(10);
-  });
-
-  it('has square [0, 9]', () => {
-    expect(b.board[0][9]).toBeNull();
-  });
-
-  it('has square [4, 7]', () => {
-    expect(b.board[4][7]).toBeNull();
+  it('has 10 row and 10 column', () => {
+    const board = b.board;
+    expect(board.length).toBe(10);
+    board.forEach((row) => expect(row.length).toBe(10));
   });
 });
 
@@ -205,10 +172,6 @@ describe('The method gameBoard.placeShip()', () => {
 });
 
 describe('The receiveAttack() method', () => {
-  it('has a receiveAttack() method', () => {
-    expect(b).toHaveProperty('receiveAttack');
-  });
-
   it('must have 3 arguments', () => {
     expect(b.receiveAttack()).toBe(false);
     expect(b.receiveAttack(1)).toBe(false);
@@ -289,5 +252,3 @@ describe('The receiveAttack() method', () => {
     expect(b.receiveAttack(8, 7)).toBe(false);
   });
 });
-
-// TODO: code review and functional style review.

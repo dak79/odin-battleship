@@ -1,10 +1,12 @@
 import validateInput from '../util/input';
 import pipe from '../util/pipe';
 
+const BOARD_SIZE = 10;
 const createEmptyBoard = () =>
-  Array.from({ length: 10 }, () => Array(10).fill(null));
+  Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(null));
 
-const isValidCoordinate = (coord) => (coord >= 0 && coord <= 9 ? coord : false);
+const isValidCoordinate = (coord) =>
+  coord >= 0 && coord < BOARD_SIZE ? coord : false;
 
 /**
  * Check if ship coordinates are inside the board.
@@ -28,6 +30,13 @@ const isInBoard = (ship, x, y, direction) => {
 
 const isCellEmpty = (board, x, y) => !board[x][y];
 
+const getCoord = (x, y, length, direction) => {
+  const xCoord = direction ? x : x + length;
+  const yCoord = direction ? y + length : y;
+
+  return [xCoord, yCoord];
+};
+
 /**
  * Check if there is enough space on board for a ship.
  * @param {Object} ship - The ship object.
@@ -40,8 +49,7 @@ const isSpaceAvailable = (board, ship, x, y, direction) => {
   const length = ship.getLength();
 
   for (let i = 0; i < length; i++) {
-    const xCoord = direction ? x : x + i;
-    const yCoord = direction ? y + i : y;
+    const [xCoord, yCoord] = getCoord(x, y, i, direction);
 
     if (!isCellEmpty(board, xCoord, yCoord)) return false;
   }
@@ -58,9 +66,8 @@ const isSpaceAvailable = (board, ship, x, y, direction) => {
  * @returns {Boolean}
  */
 const isValidPlacement = (board, ship, x, y, direction) =>
-  isInBoard(ship, x, y, direction)
-    ? isSpaceAvailable(board, ship, x, y, direction)
-    : false;
+  isInBoard(ship, x, y, direction) &&
+  isSpaceAvailable(board, ship, x, y, direction);
 
 /**
  * Add a new ship on the board.
@@ -73,8 +80,7 @@ const isValidPlacement = (board, ship, x, y, direction) =>
 const addShipToBoard = (board, ship, x, y, direction) => {
   const length = ship.getLength();
   const updateBoardCell = (i, newBoard) => {
-    const xCoord = direction ? x : x + i;
-    const yCoord = direction ? y + i : y;
+    const [xCoord, yCoord] = getCoord(x, y, i, direction);
     const updatedRow = [...newBoard[xCoord]];
     updatedRow[yCoord] = ship;
     newBoard[xCoord] = updatedRow;
@@ -109,14 +115,14 @@ const attackInBoard = ([x, y]) => [isValidCoordinate(x), isValidCoordinate(y)];
  * @param {Array} arr - x and y coordinates
  * @returns {Boolean}
  */
-const alreadyAttacked = (shots, arr) =>
+const isAlreadyAttacked = (shots, arr) =>
   shots.some((shot) => shot === arr) ? [false] : arr;
 
 const validAttack = (x, y, shots) => {
   const validation = pipe(
     () => validAttackCoord(x, y),
     (validInt) => attackInBoard(validInt),
-    (inBoard) => alreadyAttacked(shots, inBoard)
+    (inBoard) => isAlreadyAttacked(shots, inBoard)
   )(x, y);
   return validation.some((value) => value === false) ? false : validation;
 };
