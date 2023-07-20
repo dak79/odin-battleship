@@ -1,4 +1,4 @@
-import { Ship } from '../components/ships.js';
+import Ship from '../components/ships.js';
 
 describe('Ship', () => {
   it('has the method .getLength()', () => {
