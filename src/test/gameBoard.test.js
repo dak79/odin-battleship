@@ -41,51 +41,56 @@ describe('The board', () => {
 describe('The method gameBoard.placeShip()', () => {
   it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
     const ship = Ship(4);
+    const length = ship.getLength();
     gameboard.placeShip(gameboard.board, ship, 0, 0, true);
-    expect(gameboard.board[0][0]).toBe(ship);
-    expect(gameboard.board[0][1]).toBe(ship);
-    expect(gameboard.board[0][2]).toBe(ship);
-    expect(gameboard.board[0][3]).toBe(ship);
+    gameboard.board[0]
+      .slice(0, length)
+      .forEach((square) => expect(square).toBe(ship));
   });
 
   it('place a ship of length 3 vertically in [1, 0][1, 1][1, 2]', () => {
     const ship = Ship(3);
+    const length = ship.getLength();
     gameboard.placeShip(gameboard.board, ship, 1, 0, true);
-    expect(gameboard.board[1][0]).toBe(ship);
-    expect(gameboard.board[1][1]).toBe(ship);
-    expect(gameboard.board[1][2]).toBe(ship);
+    gameboard.board[1]
+      .slice(0, length)
+      .forEach((square) => expect(square).toBe(ship));
   });
 
   it('place a ship of length 2 vertically in [2, 0][2, 1]', () => {
     const ship = Ship(2);
+    const length = ship.getLength();
     gameboard.placeShip(gameboard.board, ship, 2, 0, true);
-    expect(gameboard.board[2][0]).toBe(ship);
-    expect(gameboard.board[2][1]).toBe(ship);
+    gameboard.board[2]
+      .slice(0, length)
+      .forEach((square) => expect(square).toBe(ship));
   });
 
   it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
     const ship = Ship(4);
+    const length = ship.getLength();
     gameboard.placeShip(gameboard.board, ship, 3, 0, false);
-    expect(gameboard.board[3][0]).toBe(ship);
-    expect(gameboard.board[4][0]).toBe(ship);
-    expect(gameboard.board[5][0]).toBe(ship);
-    expect(gameboard.board[6][0]).toBe(ship);
+    gameboard.board
+      .slice(3, 3 + length)
+      .forEach((row) => expect(row[0]).toBe(ship));
   });
 
   it('place a ship of length 3 horizontally in [2, 2][3, 2][4, 2]', () => {
-    const ship = Ship(4);
+    const ship = Ship(3);
+    const length = ship.getLength();
     gameboard.placeShip(gameboard.board, ship, 2, 2, false);
-    expect(gameboard.board[2][2]).toBe(ship);
-    expect(gameboard.board[3][2]).toBe(ship);
-    expect(gameboard.board[4][2]).toBe(ship);
-    expect(gameboard.board[5][2]).toBe(ship);
+    gameboard.board
+      .slice(2, 2 + length)
+      .forEach((row) => expect(row[2]).toBe(ship));
   });
 
   it('place a ship of length 2 horizontally in [3, 4][4, 4]', () => {
     const ship = Ship(2);
+    const length = ship.getLength();
     gameboard.placeShip(gameboard.board, ship, 3, 4, false);
-    expect(gameboard.board[3][4]).toBe(ship);
-    expect(gameboard.board[4][4]).toBe(ship);
+    gameboard.board
+      .slice(3, 3 + length)
+      .forEach((row) => expect(row[4]).toBe(ship));
   });
 
   it('does not place a ship: collision between ships (at the head at [3, 0])', () => {
@@ -176,40 +181,41 @@ describe('The receiveAttack() method', () => {
   });
 
   it('takes valid integer', () => {
-    expect(gameboard.receiveAttack(gameboard.board, 4, 6)).toBe(true);
-    expect(gameboard.receiveAttack(gameboard.board, {}, 4)).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, 4, [1])).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, NaN, 5)).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, 9, 'n')).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, undefined, 7)).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, false, 8)).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, 7, true)).toBe(false);
-  });
+    const values = [
+      [{}, 4],
+      [4, [1]],
+      [NaN, 5],
+      [9, 'n'],
+      [undefined, 7],
+      [false, 8],
+      [7, true]
+    ];
 
-  it('takes strings that can be parsed in integer', () => {
-    expect(gameboard.receiveAttack(gameboard.board, '0', 8)).toStrictEqual(
-      true
-    );
-    expect(gameboard.receiveAttack(gameboard.board, 2, '4')).toStrictEqual(
-      true
-    );
-    expect(gameboard.receiveAttack(gameboard.board, '5', '7')).toStrictEqual(
-      true
+    values.forEach(([xValue, yValue]) =>
+      expect(gameboard.receiveAttack(gameboard.board, xValue, yValue)).toBe(
+        false
+      )
     );
   });
 
   it('takes only coordinate inside the board', () => {
-    expect(gameboard.receiveAttack(gameboard.board, 3, 12)).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, 12, 3)).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, -3, 1)).toBe(false);
-    expect(gameboard.receiveAttack(gameboard.board, 1, -3)).toBe(false);
+    const coord = [
+      [3, 12],
+      [12, 3],
+      [-3, 1],
+      [1, -3]
+    ];
+
+    coord.forEach(([x, y]) =>
+      expect(gameboard.receiveAttack(gameboard.board, x, y)).toBe(false)
+    );
   });
 
   it('if hit, send an hit() method to the right ship', () => {
     const ship = gameboard.board[0][0];
-    gameboard.receiveAttack(gameboard.board, 0, 0);
+    gameboard.receiveAttack(gameboard.board, '0', 0);
     expect(ship.init.hits).toBe(1);
-    gameboard.receiveAttack(gameboard.board, 0, 1);
+    gameboard.receiveAttack(gameboard.board, 0, '1');
     expect(ship.init.hits).toBe(2);
     gameboard.receiveAttack(gameboard.board, 0, 2);
     expect(ship.init.hits).toBe(3);
@@ -229,19 +235,9 @@ describe('The receiveAttack() method', () => {
 
   it('if miss, record the coordinate of missed shot.', () => {
     gameboard.receiveAttack(gameboard.board, 8, 7);
-    expect(gameboard.getMissed()).toStrictEqual([
-      [4, 6],
-      [0, 8],
-      [2, 4],
-      [5, 7],
-      [8, 7]
-    ]);
+    expect(gameboard.getMissed()).toStrictEqual([[8, 7]]);
     gameboard.receiveAttack(gameboard.board, 9, 0);
     expect(gameboard.getMissed()).toStrictEqual([
-      [4, 6],
-      [0, 8],
-      [2, 4],
-      [5, 7],
       [8, 7],
       [9, 0]
     ]);
@@ -259,21 +255,24 @@ describe('The method GameBoard.allShipSunked()', () => {
   });
 
   it('return true when all ship are sunked', () => {
-    gameboard.receiveAttack(gameboard.board, 1, 0);
-    gameboard.receiveAttack(gameboard.board, 1, 1);
-    gameboard.receiveAttack(gameboard.board, 1, 2);
-    gameboard.receiveAttack(gameboard.board, 2, 0);
-    gameboard.receiveAttack(gameboard.board, 2, 1);
-    gameboard.receiveAttack(gameboard.board, 3, 0);
-    gameboard.receiveAttack(gameboard.board, 4, 0);
-    gameboard.receiveAttack(gameboard.board, 5, 0);
-    gameboard.receiveAttack(gameboard.board, 6, 0);
-    gameboard.receiveAttack(gameboard.board, 2, 2);
-    gameboard.receiveAttack(gameboard.board, 3, 2);
-    gameboard.receiveAttack(gameboard.board, 4, 2);
-    gameboard.receiveAttack(gameboard.board, 5, 2);
-    gameboard.receiveAttack(gameboard.board, 3, 4);
-    gameboard.receiveAttack(gameboard.board, 4, 4);
+    const coord = [
+      [1, 0],
+      [1, 1],
+      [1, 2],
+      [2, 0],
+      [2, 1],
+      [3, 0],
+      [4, 0],
+      [5, 0],
+      [6, 0],
+      [2, 2],
+      [3, 2],
+      [4, 2],
+      [3, 4],
+      [4, 4]
+    ];
+
+    coord.forEach(([x, y]) => gameboard.receiveAttack(gameboard.board, x, y));
     expect(gameboard.allShipSunked()).toBe(true);
   });
 });
