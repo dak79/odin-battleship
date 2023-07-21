@@ -19,6 +19,10 @@ describe('GameBoard', () => {
   it('has a getMissed() method', () => {
     expect(gameboard).toHaveProperty('getMissed');
   });
+
+  it('has allShipSunked method', () => {
+    expect(gameboard).toHaveProperty('allShipSunked');
+  });
 });
 
 describe('The board', () => {
@@ -203,7 +207,6 @@ describe('The receiveAttack() method', () => {
 
   it('if hit, send an hit() method to the right ship', () => {
     const ship = gameboard.board[0][0];
-    console.log(gameboard.board);
     gameboard.receiveAttack(gameboard.board, 0, 0);
     expect(ship.init.hits).toBe(1);
     gameboard.receiveAttack(gameboard.board, 0, 1);
@@ -245,9 +248,32 @@ describe('The receiveAttack() method', () => {
   });
 
   it('you cant attack two times the same square', () => {
-    gameboard.receiveAttack(gameboard.board, 0, 0);
-    expect(gameboard.receiveAttack(0, 0)).toBe(false);
-    gameboard.receiveAttack(8, 7);
-    expect(gameboard.receiveAttack(8, 7)).toBe(false);
+    expect(gameboard.receiveAttack(gameboard.board, 0, 0)).toBe(false);
+    expect(gameboard.receiveAttack(gameboard.board, 8, 7)).toBe(false);
+  });
+});
+
+describe('The method GameBoard.allShipSunked()', () => {
+  it('return false if not all ships are sunked', () => {
+    expect(gameboard.allShipSunked()).toBe(false);
+  });
+
+  it('return true when all ship are sunked', () => {
+    gameboard.receiveAttack(gameboard.board, 1, 0);
+    gameboard.receiveAttack(gameboard.board, 1, 1);
+    gameboard.receiveAttack(gameboard.board, 1, 2);
+    gameboard.receiveAttack(gameboard.board, 2, 0);
+    gameboard.receiveAttack(gameboard.board, 2, 1);
+    gameboard.receiveAttack(gameboard.board, 3, 0);
+    gameboard.receiveAttack(gameboard.board, 4, 0);
+    gameboard.receiveAttack(gameboard.board, 5, 0);
+    gameboard.receiveAttack(gameboard.board, 6, 0);
+    gameboard.receiveAttack(gameboard.board, 2, 2);
+    gameboard.receiveAttack(gameboard.board, 3, 2);
+    gameboard.receiveAttack(gameboard.board, 4, 2);
+    gameboard.receiveAttack(gameboard.board, 5, 2);
+    gameboard.receiveAttack(gameboard.board, 3, 4);
+    gameboard.receiveAttack(gameboard.board, 4, 4);
+    expect(gameboard.allShipSunked()).toBe(true);
   });
 });
