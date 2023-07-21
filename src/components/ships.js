@@ -1,12 +1,15 @@
 import pipe from '../util/pipe';
 import validateInput from '../util/input';
 
+const MIN_LENGTH = 2;
+const MAX_LENGTH = 4;
 /**
  * Check if the length is between 1 and 4.
  * @param {Number|false} input - length
  * @returns {Number|false}
  */
-const validateShipLength = (input) => (input > 4 || input < 2 ? false : input);
+const validateShipLength = (input) =>
+  input > MAX_LENGTH || input < MIN_LENGTH ? false : input;
 
 /**
  * Add an hit.
