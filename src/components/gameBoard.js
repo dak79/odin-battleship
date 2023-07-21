@@ -1,13 +1,21 @@
 import validateInput from '../util/input';
 import pipe from '../util/pipe';
 
-const BOARD_SIZE = 10;
+const MAX_BOARD_SIZE = 10;
 const createEmptyBoard = () =>
-  Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(null));
+  Array.from({ length: MAX_BOARD_SIZE }, () =>
+    Array(MAX_BOARD_SIZE).fill(null)
+  );
 
 const isValidCoordinate = (coord) =>
-  coord >= 0 && coord < BOARD_SIZE ? coord : false;
+  coord >= 0 && coord < MAX_BOARD_SIZE ? coord : false;
 
+const getCoord = (x, y, length, direction) => {
+  const xCoord = direction ? x : x + length;
+  const yCoord = direction ? y + length : y;
+
+  return [xCoord, yCoord];
+};
 /**
  * Check if ship coordinates are inside the board.
  * @param {Object} ship - The ship object.
@@ -18,8 +26,8 @@ const isValidCoordinate = (coord) =>
  */
 const isInBoard = (ship, x, y, direction) => {
   const length = ship.getLength();
-  const xCoord = direction ? x : x + length;
-  const yCoord = direction ? y + length : y;
+  const [xCoord, yCoord] = getCoord(x, y, length, direction);
+
   return [
     isValidCoordinate(x),
     isValidCoordinate(y),
@@ -29,13 +37,6 @@ const isInBoard = (ship, x, y, direction) => {
 };
 
 const isCellEmpty = (board, x, y) => !board[x][y];
-
-const getCoord = (x, y, length, direction) => {
-  const xCoord = direction ? x : x + length;
-  const yCoord = direction ? y + length : y;
-
-  return [xCoord, yCoord];
-};
 
 /**
  * Check if there is enough space on board for a ship.
@@ -179,6 +180,7 @@ const Gameboard = () => {
     addShipToShips(ship);
     return newBoard;
   };
+
   /**
    * Square attacked
    * @param {Array[]} board - Board state.
