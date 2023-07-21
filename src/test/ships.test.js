@@ -24,35 +24,21 @@ describe('The .getLength() method', () => {
   });
 
   it('returns false if argument is not an integer or a parsed string', () => {
-    const str = Ship('n');
-    const obj = Ship({});
-    const arr = Ship([]);
-    const bool = Ship(true);
-    const nan = Ship(NaN);
-    const und = Ship(undefined);
-    const nu = Ship(null);
-    expect(str.getLength()).toBe(false);
-    expect(obj.getLength()).toBe(false);
-    expect(arr.getLength()).toBe(false);
-    expect(bool.getLength()).toBe(false);
-    expect(nan.getLength()).toBe(false);
-    expect(und.getLength()).toBe(false);
-    expect(nu.getLength()).toBe(false);
+    const values = ['n', {}, [], true, NaN, undefined, null];
+
+    values.forEach((value) => {
+      const ship = Ship(value);
+      expect(ship.getLength()).toBe(false);
+    });
   });
 
-  it('returns a value inside min and max length (between 2 and 4)', () => {
-    const shipZero = Ship(0);
-    const shipOne = Ship(1);
-    const shipTwo = Ship(2);
-    const shipThree = Ship(3);
-    const shipFour = Ship(4);
-    const shipFive = Ship(5);
-    expect(shipZero.getLength()).toBe(false);
-    expect(shipOne.getLength()).toBe(false);
-    expect(shipTwo.getLength()).toBe(2);
-    expect(shipThree.getLength()).toBe(3);
-    expect(shipFour.getLength()).toBe(4);
-    expect(shipFive.getLength()).toBe(false);
+  it('returns false if length is out of min (2) or max (4)', () => {
+    const values = [0, 1, 5, 10];
+
+    values.forEach((value) => {
+      const ship = Ship(value);
+      expect(ship.getLength()).toBe(false);
+    });
   });
 });
 
