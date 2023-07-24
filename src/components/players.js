@@ -1,4 +1,5 @@
 const isBoolean = (value) => typeof value === 'boolean';
+
 const Player = () => {
   const init = {};
 
@@ -22,13 +23,20 @@ const Player = () => {
       : 'Invalid setting';
 
   const getPlayerTurn = () => init.isPlaying;
+
+  const generateRandomCoordinates = () => [
+    Math.floor(Math.random() * 10),
+    Math.floor(Math.random() * 10)
+  ];
+
   return {
     setIsHuman,
     getIsHuman,
     setPlayerName,
     getPlayerName,
     setPlayerTurn,
-    getPlayerTurn
+    getPlayerTurn,
+    generateRandomCoordinates
   };
 };
 

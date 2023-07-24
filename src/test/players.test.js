@@ -30,6 +30,11 @@ describe('Player', () => {
     const player = Player();
     expect(player).toHaveProperty('getPlayerTurn');
   });
+
+  it('has the property generateRandomCoordinates()', () => {
+    const player = Player();
+    expect(player).toHaveProperty('generateRandomCoordinates');
+  });
 });
 
 describe('The method setIsHuman()', () => {
@@ -232,6 +237,15 @@ describe('The method getPlayerTurn()', () => {
   });
 });
 
-describe('Requirement for player factory', () => {
-  it.todo('create a player computer capable of making random, but valid play');
+describe('The method generateRandomCoordinates()', () => {
+  it('generate coordinates with x and y inside 0 - 9 range', () => {
+    const player = Player();
+    for (let i = 0; i < 100; i++) {
+      let [x, y] = player.generateRandomCoordinates();
+      expect(x).toBeGreaterThanOrEqual(0);
+      expect(x).toBeLessThanOrEqual(9);
+      expect(y).toBeGreaterThanOrEqual(0);
+      expect(y).toBeLessThanOrEqual(9);
+    }
+  });
 });
