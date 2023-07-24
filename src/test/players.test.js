@@ -1,51 +1,237 @@
 import Player from '../components/players';
 
 describe('Player', () => {
-  it.todo('has setPlayerName() method');
-  it.todo('has getPlayerName() method');
-  it.todo('has setIsHuman() method');
-  it.todo('has getIsHuman() method');
-  it.todo('has the getPlayerTurn() method');
-  it.todo('has the setPlayerTurn() method');
-});
+  it('has setIsHuman() method', () => {
+    const player = Player();
+    expect(player).toHaveProperty('setIsHuman');
+  });
 
-describe('The method setPlayerName()', () => {
-  it.todo('set a string as player one name');
-  it.todo(`set 'cpu' as player two name`);
-});
+  it('has getIsHuman() method', () => {
+    const player = Player();
+    expect(player).toHaveProperty('getIsHuman');
+  });
 
-describe('The method getPlayerName()', () => {
-  it.todo('get the name of player one');
-  it.todo(`get 'cpu' as the name of player two`);
+  it('has setPlayerName() method', () => {
+    const player = Player();
+    expect(player).toHaveProperty('setPlayerName');
+  });
+
+  it('has getPlayerName() method', () => {
+    const player = Player();
+    expect(player).toHaveProperty('getPlayerName');
+  });
+
+  it('has setPlayerTurn() method', () => {
+    const player = Player();
+    expect(player).toHaveProperty('setPlayerTurn');
+  });
+
+  it('has getPlayerTurn() method', () => {
+    const player = Player();
+    expect(player).toHaveProperty('getPlayerTurn');
+  });
 });
 
 describe('The method setIsHuman()', () => {
-  it.todo('does not accept empty argument');
-  it.todo(`accept only 'cpu' or 'human' has parameter`);
-  it.todo(`set correctly 'human'`);
-  it.todo(`set correctly 'cpu'`);
+  it('does not accept empty argument', () => {
+    const player = Player();
+    expect(player.setIsHuman()).toBe('Invalid setting');
+  });
+
+  it('accept only true or false has parameter', () => {
+    const player = Player();
+    const values = [
+      'true',
+      'false',
+      0,
+      1,
+      {},
+      [],
+      { isHuman: true },
+      { isHuman: false },
+      [true],
+      [false],
+      NaN,
+      null,
+      undefined
+    ];
+    values.forEach((value) =>
+      expect(player.setIsHuman(value)).toBe('Invalid setting')
+    );
+  });
+
+  it('set correctly true', () => {
+    const player = Player();
+    player.setIsHuman(true);
+    expect(player.getIsHuman()).toBe(true);
+  });
+
+  it('set correctly false', () => {
+    const player = Player();
+    player.setIsHuman(false);
+    expect(player.getIsHuman()).toBe(false);
+  });
 });
 
 describe('The method getIsHuman()', () => {
-  it.todo('get correctly isHuman from player one (human)');
-  it.todo('get correctly isHuman from player two (cpu)');
+  it('get correctly the value of isHuman if is valid', () => {
+    const playerOne = Player();
+    const playerTwo = Player();
+    playerOne.setIsHuman(true);
+    expect(playerOne.getIsHuman()).toBe(true);
+    playerTwo.setIsHuman(false);
+    expect(playerTwo.getIsHuman()).toBe(false);
+  });
+
+  it('get undefined if the value of isHuman property was invalid', () => {
+    const playerOne = Player();
+    const playerTwo = Player();
+    playerOne.setIsHuman();
+    expect(playerOne.getIsHuman()).toBeUndefined();
+    playerTwo.setIsHuman('true');
+    expect(playerTwo.getIsHuman()).toBeUndefined();
+  });
 });
 
-describe('The method getPlayerTurn()', () => {
-  it.todo('get the initial value for player one (true)');
-  it.todo('get the initial value for player two (false)');
-  it.todo('get the correct value after switching turn for player one (false)');
-  it.todo(
-    'get the correct value after switching the turn for player two (true)'
-  );
+describe('The method setPlayerName()', () => {
+  it('set a string as player one name', () => {
+    const player = Player();
+    const values = [
+      'David',
+      true,
+      ['undefined'],
+      { key: 'value' },
+      [],
+      {},
+      123,
+      NaN,
+      null
+    ];
+
+    values.forEach((value) => {
+      player.setIsHuman(true);
+      player.setPlayerName(value);
+      expect(player.getPlayerName()).toBe(`${value}`);
+    });
+  });
+
+  it('set an empty name if the value is an empty string', () => {
+    const player = Player();
+    player.setIsHuman(true);
+    player.setPlayerName('');
+    expect(player.getPlayerName()).toBe('');
+  });
+
+  it('set an empty string if the value is undefined', () => {
+    const player = Player();
+    player.setIsHuman(true);
+    player.setPlayerName();
+    expect(player.getPlayerName()).toBe('');
+  });
+
+  it(`set 'cpu' as player two name`, () => {
+    const player = Player();
+    player.setIsHuman(false);
+    player.setPlayerName();
+    expect(player.getPlayerName()).toBe('cpu');
+
+    const values = [
+      'David',
+      true,
+      ['undefined'],
+      { key: 'value' },
+      [],
+      {},
+      123,
+      NaN,
+      null,
+      undefined
+    ];
+
+    values.forEach((value) => {
+      player.setPlayerName(`${value}`);
+      expect(player.getPlayerName()).toBe('cpu');
+    });
+  });
+});
+
+describe('The method getPlayerName()', () => {
+  it('get the name of player one', () => {
+    const player = Player();
+    player.setIsHuman(true);
+    player.setPlayerName('Smith');
+    expect(player.getPlayerName()).toBe('Smith');
+  });
+
+  it(`get 'cpu' as the name of player two`, () => {
+    const player = Player();
+    player.setIsHuman(false);
+    player.setPlayerName('Smith');
+    expect(player.getPlayerName()).toBe('cpu');
+  });
 });
 
 describe('The method setPlayerTurn()', () => {
-  it.todo('set a new value for player one (true)');
-  it.todo('set new value for player two (false)');
+  it('does not accept empty argument', () => {
+    const player = Player();
+    expect(player.setPlayerTurn()).toBe('Invalid setting');
+  });
+
+  it('accept only true or false has parameter', () => {
+    const player = Player();
+    const values = [
+      'true',
+      'false',
+      0,
+      1,
+      {},
+      [],
+      { isHuman: true },
+      { isHuman: false },
+      [true],
+      [false],
+      NaN,
+      null,
+      undefined
+    ];
+    values.forEach((value) =>
+      expect(player.setPlayerTurn(value)).toBe('Invalid setting')
+    );
+  });
+
+  it('set correctly true', () => {
+    const player = Player();
+    player.setPlayerTurn(true);
+    expect(player.getPlayerTurn()).toBe(true);
+  });
+
+  it('set correctly false', () => {
+    const player = Player();
+    player.setPlayerTurn(false);
+    expect(player.getPlayerTurn()).toBe(false);
+  });
+});
+
+describe('The method getPlayerTurn()', () => {
+  it('get correctly the value of isPlaying if is valid', () => {
+    const playerOne = Player();
+    const playerTwo = Player();
+    playerOne.setPlayerTurn(true);
+    expect(playerOne.getPlayerTurn()).toBe(true);
+    playerTwo.setPlayerTurn(false);
+    expect(playerTwo.getPlayerTurn()).toBe(false);
+  });
+
+  it('get undefined if the value of isPlaying property was invalid', () => {
+    const playerOne = Player();
+    const playerTwo = Player();
+    playerOne.setPlayerTurn();
+    expect(playerOne.getPlayerTurn()).toBeUndefined();
+    playerTwo.setPlayerTurn('false');
+    expect(playerTwo.getPlayerTurn()).toBeUndefined();
+  });
 });
 
 describe('Requirement for player factory', () => {
-  it.todo('can switch the turn');
   it.todo('create a player computer capable of making random, but valid play');
 });
