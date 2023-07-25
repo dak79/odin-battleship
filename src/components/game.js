@@ -7,7 +7,7 @@ const createNewPlayers = () => {
 
   const playerTwo = Player();
   playerTwo.setIsHuman(false);
-  playerTwo.setPlayerName('cpu');
+  playerTwo.setPlayerName('Cpu');
 
   return Object.assign({}, { playerOne }, { playerTwo });
 };
