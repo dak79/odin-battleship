@@ -44,9 +44,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: ' ',
+      title: 'BattleShip',
       template: './src/index.html',
       filename: './index.html',
+      favicon: './src/assets/favicon/warship.svg',
       minify: true
     }),
     new MiniCSSExtractPlugin({
