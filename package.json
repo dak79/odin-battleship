@@ -13,11 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/dak79/odin-battleship.git"
   },
-  "keywords": [
-    "battleship",
-    "test",
-    "jest"
-  ],
+  "keywords": ["battleship", "test", "jest"],
   "author": "Daniele Campari",
   "license": "MIT",
   "bugs": {

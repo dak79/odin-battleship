@@ -50,6 +50,7 @@ module.exports = {
       favicon: './src/assets/favicon/warship.svg',
       minify: true
     }),
+
     new MiniCSSExtractPlugin({
       filename: 'style/style.css',
       chunkFilename: '[id].css'
