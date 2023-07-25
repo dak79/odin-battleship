@@ -2,61 +2,61 @@ import game from './game';
 
 const hook = document.querySelector('#hook');
 
-const createAndAppendElement = (
-  parent,
-  elementType,
-  elementId = null,
-  elementClasses = null,
-  elementAttributes = null,
-  textContent = null
-) => {
-  const element = document.createElement(elementType);
-  if (elementId) element.setAttribute('id', elementId);
-  if (elementClasses) element.classList.add(...elementClasses);
-  if (elementAttributes)
-    elementAttributes.forEach((attr) =>
-      element.setAttribute(attr.name, attr.value)
-    );
+const createElement = (type, attributes = {}, textContent = null) => {
+  const element = document.createElement(type);
+  Object.entries(attributes).forEach(([attr, value]) => {
+    element.setAttribute(attr, value);
+  });
   if (textContent) element.textContent = textContent;
-  parent.appendChild(element);
 
   return element;
 };
 
-const renderBodyStructure = () => {
-  const elements = ['header', 'main', 'footer'];
-  elements.forEach((element) =>
-    createAndAppendElement(hook, element, `body-${element}`)
-  );
+const renderElement = (parent, element) => {
+  parent.appendChild(element);
+};
+
+const createAndRenderElement = (
+  type,
+  attributes = {},
+  textContent = null,
+  parent = hook
+) => {
+  const element = createElement(type, attributes, textContent);
+  renderElement(parent, element);
+
+  return element;
+};
+
+const createStructure = () => {
+  const structure = {
+    header: createAndRenderElement('header', { id: 'body-header' }),
+    main: createAndRenderElement('main', { id: 'body-main' }),
+    footer: createAndRenderElement('footer', { id: 'body-footer' })
+  };
+
+  return structure;
 };
 
 const renderBodyHeader = () => {
   const header = document.querySelector('#body-header');
-  createAndAppendElement(
-    header,
-    'h1',
-    null,
-    ['page-title'],
-    null,
-    'Battleship'
-  );
+  createAndRenderElement('h1', { class: 'page-title' }, 'Battleship', header);
 };
 
 const renderBodyMain = () => {
   const main = document.querySelector('#body-main');
+
   const sections = ['messages', 'names', 'boards'];
   sections.forEach((section) =>
-    createAndAppendElement(main, 'section', `body-${section}`)
+    createAndRenderElement('section', { id: `body-${section}` }, null, main)
   );
 
   const messages = document.querySelector('#body-messages');
-  createAndAppendElement(
-    messages,
+  createAndRenderElement(
     'div',
-    'message-field',
-    ['messages'],
-    null,
-    'Place your ships'
+    { id: 'message-field', class: 'messages' },
+    'Place your ships',
+    messages
   );
 
   const names = document.querySelector('#body-names');
@@ -68,42 +68,55 @@ const renderBodyMain = () => {
     { id: 'player-two-name', name: game.initialState.playerTwo.getPlayerName() }
   ];
   playerDefaultNames.forEach((name) =>
-    createAndAppendElement(
-      names,
+    createAndRenderElement(
       'div',
-      name.id,
-      ['player-names'],
-      null,
-      name.name
+      { id: name.id, class: 'player-names' },
+      name.name,
+      names
     )
   );
 
   const boards = document.querySelector('#body-boards');
   const boardNames = ['board-player', 'board-rival'];
-  boardNames.forEach((name) => createAndAppendElement(boards, 'div', name));
+  boardNames.forEach((name) =>
+    createAndRenderElement('div', { id: name }, null, boards)
+  );
+
   const boardPlayer = document.querySelector('#board-player');
   const playerOneBoard = game.initialState.playerOneGameboard.board;
   renderBoard(boardPlayer, playerOneBoard);
+
   const rival = document.querySelector('#board-rival');
   const playerTwoBoard = game.initialState.playerTwoGameboard.board;
   renderBoard(rival, playerTwoBoard);
 };
 
 const renderBoard = (hook, board) => {
-  const table = createAndAppendElement(hook, 'table', `${hook.id}-table`);
-  const tbody = createAndAppendElement(table, 'tbody', `${hook.id}-tbody`);
+  const table = createAndRenderElement(
+    'table',
+    { id: `${hook.id}-table` },
+    null,
+    hook
+  );
+  const tbody = createAndRenderElement(
+    'tbody',
+    { id: `${hook.id}-tbody` },
+    null,
+    table
+  );
   board.forEach((row, rowIndex) => {
-    const tr = createAndAppendElement(tbody, 'tr', null, ['board-row']);
+    const tr = createAndRenderElement(
+      'tr',
+      { class: 'board-row' },
+      null,
+      tbody
+    );
     row.forEach((cell, colIndex) => {
-      createAndAppendElement(
-        tr,
+      createAndRenderElement(
         'td',
+        { class: 'board-cell', 'data-x': rowIndex, 'data-y': colIndex },
         null,
-        ['board-cell'],
-        [
-          { name: 'data-x', value: rowIndex },
-          { name: 'data-y', value: colIndex }
-        ]
+        tr
       );
     });
   });
@@ -111,16 +124,20 @@ const renderBoard = (hook, board) => {
 
 const renderBodyFooter = () => {
   const footer = document.querySelector('#body-footer');
-  createAndAppendElement(
-    footer,
+  console.log(footer);
+  createAndRenderElement(
     'div',
-    null,
-    ['footer-info'],
-    null,
-    '2023 - Daniele Campari'
+    { class: 'footer-info' },
+    '2023 - Daniele Campari',
+    footer
   );
 
-  const icons = createAndAppendElement(footer, 'div', null, ['footer-icons']);
+  const icons = createAndRenderElement(
+    'div',
+    { class: 'footer-icons' },
+    null,
+    footer
+  );
 
   const links = [
     {
@@ -132,22 +149,15 @@ const renderBodyFooter = () => {
   ];
 
   links.forEach((link) =>
-    createAndAppendElement(
-      icons,
-      'a',
-      null,
-      null,
-      [{ name: link.attr, value: link.link }],
-      link.name
-    )
+    createAndRenderElement('a', { [link.attr]: link.link }, link.name, icons)
   );
 };
 
 const renderInitialState = () => {
-  renderBodyStructure();
-  renderBodyHeader();
-  renderBodyMain();
-  renderBodyFooter();
+  const structure = createStructure();
+  renderBodyHeader(structure.header);
+  renderBodyMain(structure.main);
+  renderBodyFooter(structure.footer);
 };
 const DOM = () => {
   renderInitialState();
