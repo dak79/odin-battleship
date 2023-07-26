@@ -1,9 +1,17 @@
 import game from './game';
+import pipe from '../util/pipe';
 import iconLN from '../assets/icons/linkedin.svg';
 import iconGH from '../assets/icons/github.svg';
 
 const hook = document.querySelector('#hook');
 
+ /**
+  * Create an HTML element.
+  * @param {String} type - Element tag
+  * @param {Object} attributes - Element attributes
+  * @param {String|null} textContent - Element text content
+  * @returns {HTMLElement}
+  */
 const createElement = (type, attributes = {}, textContent = null) => {
   const element = document.createElement(type);
   Object.entries(attributes).forEach(([attr, value]) => {
@@ -14,6 +22,11 @@ const createElement = (type, attributes = {}, textContent = null) => {
   return element;
 };
 
+ /**
+  * Append element to DOM.
+  * @param {HTMLElement} parent - parent element
+  * @param {HTMLElement} element - element to append
+  */
 const renderElement = (parent, element) => {
   parent.appendChild(element);
 };
@@ -23,12 +36,10 @@ const createAndRenderElement = (
   attributes = {},
   textContent = null,
   parent = hook
-) => {
-  const element = createElement(type, attributes, textContent);
-  renderElement(parent, element);
-
-  return element;
-};
+) => pipe(
+    () => createElement(type, attributes, textContent),
+    (element) => renderElement(parent, element)
+  )(type, attributes, textContent, parent)
 
 const createStructure = () => {
   const structure = {
@@ -93,6 +104,11 @@ const renderBodyMain = () => {
   renderBoard(rival, playerTwoBoard);
 };
 
+ /**
+  * Render the board.
+  * @param {HTMLElement} hook 
+  * @param {Array[]} board 
+  */
 const renderBoard = (hook, board) => {
   const table = createAndRenderElement(
     'table',
@@ -175,6 +191,7 @@ const renderInitialState = () => {
   renderBodyMain(structure.main);
   renderBodyFooter(structure.footer);
 };
+
 const DOM = () => {
   renderInitialState();
 };
