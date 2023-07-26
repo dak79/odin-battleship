@@ -1,5 +1,45 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src;
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) {
+/******/ 					var i = scripts.length - 1;
+/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl + "../";
+/******/ 	})();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: ./src/components/players.js
@@ -20,7 +60,7 @@ var Player = function Player() {
     return getIsHuman() ? Object.assign(init, {
       name: "".concat(value === undefined ? '' : value)
     }) : Object.assign(init, {
-      name: 'cpu'
+      name: 'Cpu'
     });
   };
   var getPlayerName = function getPlayerName() {
@@ -346,7 +386,7 @@ var createNewPlayers = function createNewPlayers() {
   playerOne.setPlayerName('Player 1');
   var playerTwo = players();
   playerTwo.setIsHuman(false);
-  playerTwo.setPlayerName('cpu');
+  playerTwo.setPlayerName('Cpu');
   return Object.assign({}, {
     playerOne: playerOne
   }, {
@@ -367,29 +407,169 @@ var init = function init() {
   var gameboards = createNewGameboards();
   return Object.assign({}, players, gameboards);
 };
-var game_game = function () {
+var game = function () {
   var initialState = init();
   return {
     initialState: initialState
   };
 }();
-/* harmony default export */ const components_game = (game_game);
+/* harmony default export */ const components_game = (game);
+;// CONCATENATED MODULE: ./src/assets/icons/linkedin.svg
+const linkedin_namespaceObject = __webpack_require__.p + "assets/imgs/e9b8df20d092b20af087.svg";
+;// CONCATENATED MODULE: ./src/assets/icons/github.svg
+const github_namespaceObject = __webpack_require__.p + "assets/imgs/dc49a960a2d3c5a49c80.svg";
 ;// CONCATENATED MODULE: ./src/components/DOM.js
+function DOM_slicedToArray(arr, i) { return DOM_arrayWithHoles(arr) || DOM_iterableToArrayLimit(arr, i) || DOM_unsupportedIterableToArray(arr, i) || DOM_nonIterableRest(); }
+function DOM_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function DOM_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return DOM_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return DOM_arrayLikeToArray(o, minLen); }
+function DOM_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function DOM_iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function DOM_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 var hook = document.querySelector('#hook');
-console.log(hook);
-var renderPlayerNames = function renderPlayerNames() {
-  var nameOne = game.playerOne.name;
-  var nameTwo = game.playerTwo.name;
+var createElement = function createElement(type) {
+  var attributes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var textContent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var element = document.createElement(type);
+  Object.entries(attributes).forEach(function (_ref) {
+    var _ref2 = DOM_slicedToArray(_ref, 2),
+      attr = _ref2[0],
+      value = _ref2[1];
+    element.setAttribute(attr, value);
+  });
+  if (textContent) element.textContent = textContent;
+  return element;
+};
+var renderElement = function renderElement(parent, element) {
+  parent.appendChild(element);
+};
+var createAndRenderElement = function createAndRenderElement(type) {
+  var attributes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var textContent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var parent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : hook;
+  var element = createElement(type, attributes, textContent);
+  renderElement(parent, element);
+  return element;
+};
+var createStructure = function createStructure() {
+  var structure = {
+    header: createAndRenderElement('header', {
+      id: 'body-header'
+    }),
+    main: createAndRenderElement('main', {
+      id: 'body-main'
+    }),
+    footer: createAndRenderElement('footer', {
+      id: 'body-footer'
+    })
+  };
+  return structure;
+};
+var renderBodyHeader = function renderBodyHeader() {
+  var header = document.querySelector('#body-header');
+  createAndRenderElement('h1', {
+    "class": 'page-title'
+  }, 'Battleship', header);
+};
+var renderBodyMain = function renderBodyMain() {
+  var main = document.querySelector('#body-main');
+  var sections = ['messages', 'names', 'boards'];
+  sections.forEach(function (section) {
+    return createAndRenderElement('section', {
+      id: "body-".concat(section)
+    }, null, main);
+  });
+  var messages = document.querySelector('#body-messages');
+  createAndRenderElement('div', {
+    id: 'message-field',
+    "class": 'messages'
+  }, 'Place your ships', messages);
+  var names = document.querySelector('#body-names');
+  var playerDefaultNames = [{
+    id: 'player-one-name',
+    name: components_game.initialState.playerOne.getPlayerName()
+  }, {
+    id: 'player-two-name',
+    name: components_game.initialState.playerTwo.getPlayerName()
+  }];
+  playerDefaultNames.forEach(function (name) {
+    return createAndRenderElement('div', {
+      id: name.id,
+      "class": 'player-names'
+    }, name.name, names);
+  });
+  var boards = document.querySelector('#body-boards');
+  var boardNames = ['board-player', 'board-rival'];
+  boardNames.forEach(function (name) {
+    return createAndRenderElement('div', {
+      id: name
+    }, null, boards);
+  });
+  var boardPlayer = document.querySelector('#board-player');
+  var playerOneBoard = components_game.initialState.playerOneGameboard.board;
+  renderBoard(boardPlayer, playerOneBoard);
+  var rival = document.querySelector('#board-rival');
+  var playerTwoBoard = components_game.initialState.playerTwoGameboard.board;
+  renderBoard(rival, playerTwoBoard);
+};
+var renderBoard = function renderBoard(hook, board) {
+  var table = createAndRenderElement('table', {
+    id: "".concat(hook.id, "-table")
+  }, null, hook);
+  var tbody = createAndRenderElement('tbody', {
+    id: "".concat(hook.id, "-tbody")
+  }, null, table);
+  board.forEach(function (row, rowIndex) {
+    var tr = createAndRenderElement('tr', {
+      "class": 'board-row'
+    }, null, tbody);
+    row.forEach(function (cell, colIndex) {
+      createAndRenderElement('td', {
+        "class": 'board-cell',
+        'data-x': rowIndex,
+        'data-y': colIndex
+      }, null, tr);
+    });
+  });
+};
+var renderBodyFooter = function renderBodyFooter() {
+  var footer = document.querySelector('#body-footer');
+  console.log(footer);
+  createAndRenderElement('div', {
+    "class": 'footer-info'
+  }, '2023 - Daniele Campari', footer);
+  var icons = createAndRenderElement('div', {
+    "class": 'footer-icons'
+  }, null, footer);
+  var linkLinkedIn = createAndRenderElement('a', {
+    href: 'https://www.linkedin.com/in/daniele-campari-33757593/'
+  }, null, icons);
+  createAndRenderElement('img', {
+    src: linkedin_namespaceObject,
+    alt: 'LinkedIn link'
+  }, null, linkLinkedIn);
+  var linkGitHub = createAndRenderElement('a', {
+    href: 'https://github.com/dak79/'
+  }, null, icons);
+  createAndRenderElement('img', {
+    src: github_namespaceObject,
+    alt: 'GitHub link'
+  }, null, linkGitHub);
+};
+var renderInitialState = function renderInitialState() {
+  var structure = createStructure();
+  renderBodyHeader(structure.header);
+  renderBodyMain(structure.main);
+  renderBodyFooter(structure.footer);
 };
 var DOM = function DOM() {
-  console.log(components_game.initialState.playerOne);
-  console.log(components_game.initialState.playerTwo);
-  console.log(components_game.initialState.playerOneGameboard);
-  consol.log(components_game.initialState.playerTwoGameboard);
+  renderInitialState();
 };
 /* harmony default export */ const components_DOM = (DOM);
 ;// CONCATENATED MODULE: ./src/index.js
+
 
 
 
