@@ -47,7 +47,7 @@ module.exports = {
       title: 'BattleShip',
       template: './src/index.html',
       filename: './index.html',
-      favicon: './src/assets/favicon/warship.svg',
+      favicon: './src/assets/favicon/warship.png',
       minify: true
     }),
 
