@@ -1,5 +1,4 @@
 import game from './game';
-import pipe from '../util/pipe';
 import iconLN from '../assets/icons/linkedin.svg';
 import iconGH from '../assets/icons/github.svg';
 
@@ -36,10 +35,12 @@ const createAndRenderElement = (
   attributes = {},
   textContent = null,
   parent = hook
-) => pipe(
-    () => createElement(type, attributes, textContent),
-    (element) => renderElement(parent, element)
-  )(type, attributes, textContent, parent)
+) => {
+  const element = createElement(type, attributes, textContent);
+  renderElement(parent, element);
+
+  return element;
+};
 
 const createStructure = () => {
   const structure = {
@@ -104,21 +105,16 @@ const renderBodyMain = () => {
   renderBoard(rival, playerTwoBoard);
 };
 
- /**
-  * Render the board.
-  * @param {HTMLElement} hook 
-  * @param {Array[]} board 
-  */
-const renderBoard = (hook, board) => {
+const renderBoard = (parent, board) => {
   const table = createAndRenderElement(
     'table',
-    { id: `${hook.id}-table` },
+    { id: `${parent.id}-table` },
     null,
-    hook
+    parent
   );
   const tbody = createAndRenderElement(
     'tbody',
-    { id: `${hook.id}-tbody` },
+    { id: `${parent.id}-tbody` },
     null,
     table
   );
@@ -129,7 +125,7 @@ const renderBoard = (hook, board) => {
       null,
       tbody
     );
-    row.forEach((cell, colIndex) => {
+    row.forEach((_, colIndex) => {
       createAndRenderElement(
         'td',
         { class: 'board-cell', 'data-x': rowIndex, 'data-y': colIndex },
@@ -191,7 +187,6 @@ const renderInitialState = () => {
   renderBodyMain(structure.main);
   renderBodyFooter(structure.footer);
 };
-
 const DOM = () => {
   renderInitialState();
 };
