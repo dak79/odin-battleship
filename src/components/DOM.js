@@ -44,9 +44,9 @@ const createAndRenderElement = (
 
 const createStructure = () => {
   const structure = {
-    header: createAndRenderElement('header', { id: 'body-header' }),
+    header: createAndRenderElement('header', { id: 'body-header', class: 'center' }),
     main: createAndRenderElement('main', { id: 'body-main' }),
-    footer: createAndRenderElement('footer', { id: 'body-footer' })
+    footer: createAndRenderElement('footer', { id: 'body-footer', class: 'center' })
   };
 
   return structure;
@@ -54,26 +54,21 @@ const createStructure = () => {
 
 const renderBodyHeader = () => {
   const header = document.querySelector('#body-header');
-  createAndRenderElement('h1', { class: 'page-title' }, 'Battleship', header);
+  createAndRenderElement('h1', { class: 'fonts-bigger padding1vw' }, 'Battleship', header);
 };
 
 const renderBodyMain = () => {
   const main = document.querySelector('#body-main');
 
-  const sections = ['messages', 'names', 'boards'];
-  sections.forEach((section) =>
-    createAndRenderElement('section', { id: `body-${section}` }, null, main)
-  );
-
-  const messages = document.querySelector('#body-messages');
+  const messages = createAndRenderElement('section', {id: 'messages'}, null, main);
   createAndRenderElement(
     'div',
-    { id: 'message-field', class: 'messages' },
+    { id: 'message-field', class: 'fonts-normal center padding1vw' },
     'Place your ships',
     messages
   );
 
-  const names = document.querySelector('#body-names');
+  const names = createAndRenderElement('section', {id: 'players-names', class: 'grid-2col-cent'}, null, main);
   const playerDefaultNames = [
     {
       id: 'player-one-name',
@@ -84,31 +79,27 @@ const renderBodyMain = () => {
   playerDefaultNames.forEach((name) =>
     createAndRenderElement(
       'div',
-      { id: name.id, class: 'player-names' },
+      { id: name.id, class: 'fonts-normal padding1vw' },
       name.name,
       names
     )
   );
 
-  const boards = document.querySelector('#body-boards');
-  const boardNames = ['board-player', 'board-rival'];
-  boardNames.forEach((name) =>
-    createAndRenderElement('div', { id: name }, null, boards)
-  );
+  const boards = createAndRenderElement('section', {id: 'players-boards', class: 'grid-2col-cent'}, null, main);
 
-  const boardPlayer = document.querySelector('#board-player');
+  const boardPlayer = createAndRenderElement('div', {id: 'board-player'}, null, boards);
   const playerOneBoard = game.initialState.playerOneGameboard.board;
   renderBoard(boardPlayer, playerOneBoard);
 
-  const rival = document.querySelector('#board-rival');
+  const boardRival = createAndRenderElement('div', {id: 'board-rival'}, null, boards);
   const playerTwoBoard = game.initialState.playerTwoGameboard.board;
-  renderBoard(rival, playerTwoBoard);
+  renderBoard(boardRival, playerTwoBoard);
 };
 
 const renderBoard = (parent, board) => {
   const table = createAndRenderElement(
     'table',
-    { id: `${parent.id}-table` },
+    { id: `${parent.id}-table`, class: 'battlefield-border' },
     null,
     parent
   );
@@ -128,7 +119,7 @@ const renderBoard = (parent, board) => {
     row.forEach((_, colIndex) => {
       createAndRenderElement(
         'td',
-        { class: 'board-cell', 'data-x': rowIndex, 'data-y': colIndex },
+        { class: 'cell-size cell-border', 'data-x': rowIndex, 'data-y': colIndex },
         null,
         tr
       );
@@ -138,21 +129,22 @@ const renderBoard = (parent, board) => {
 
 const renderBodyFooter = () => {
   const footer = document.querySelector('#body-footer');
-  console.log(footer);
+  const wrapper = createAndRenderElement('div', {class: 'footer-wrapper fonts-small space-evenly padding1vw'}, null, footer);
+  console.log(wrapper)
   createAndRenderElement(
     'div',
     { class: 'footer-info' },
     '2023 - Daniele Campari',
-    footer
+    wrapper
   );
 
   const icons = createAndRenderElement(
     'div',
     { class: 'footer-icons' },
     null,
-    footer
+    wrapper
   );
-
+  
   const linkLinkedIn = createAndRenderElement(
     'a',
     { href: 'https://www.linkedin.com/in/daniele-campari-33757593/' },
@@ -162,7 +154,7 @@ const renderBodyFooter = () => {
 
   createAndRenderElement(
     'img',
-    { src: iconLN, alt: 'LinkedIn link' },
+    { src: iconLN, alt: 'LinkedIn link', class: 'icons-size' },
     null,
     linkLinkedIn
   );
@@ -175,7 +167,7 @@ const renderBodyFooter = () => {
   );
   createAndRenderElement(
     'img',
-    { src: iconGH, alt: 'GitHub link' },
+    { src: iconGH, alt: 'GitHub link', class: 'icons-size' },
     null,
     linkGitHub
   );
