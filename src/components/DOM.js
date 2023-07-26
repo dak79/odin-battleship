@@ -1,4 +1,6 @@
 import game from './game';
+import iconLN from '../assets/icons/linkedin.svg';
+import iconGH from '../assets/icons/github.svg';
 
 const hook = document.querySelector('#hook');
 
@@ -139,17 +141,31 @@ const renderBodyFooter = () => {
     footer
   );
 
-  const links = [
-    {
-      name: 'LinkedIn',
-      attr: 'href',
-      link: 'https://www.linkedin.com/in/daniele-campari-33757593/'
-    },
-    { name: 'GitHub', attr: 'href', link: 'https://github.com/dak79/' }
-  ];
+  const linkLinkedIn = createAndRenderElement(
+    'a',
+    { href: 'https://www.linkedin.com/in/daniele-campari-33757593/' },
+    null,
+    icons
+  );
 
-  links.forEach((link) =>
-    createAndRenderElement('a', { [link.attr]: link.link }, link.name, icons)
+  createAndRenderElement(
+    'img',
+    { src: iconLN, alt: 'LinkedIn link' },
+    null,
+    linkLinkedIn
+  );
+
+  const linkGitHub = createAndRenderElement(
+    'a',
+    { href: 'https://github.com/dak79/' },
+    null,
+    icons
+  );
+  createAndRenderElement(
+    'img',
+    { src: iconGH, alt: 'GitHub link' },
+    null,
+    linkGitHub
   );
 };
 
