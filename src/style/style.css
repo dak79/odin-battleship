@@ -39,31 +39,13 @@ body {
   width: 100vw;
   height: 100vh;
   display: grid;
-  grid-template:
-    [row1-start] 'header' 1fr [row1-end]
-    [row2-start] 'main' 8fr [row2-end]
-    [row3-start] 'footer' 1fr [row3-end]
-    / 1fr;
+  grid-template-rows: 1fr 10fr 1fr;
+  gap: 1vw;
 }
 
-/* Layout: body header */
-#body-header {
-  grid-area: header;
-}
-
-/* Layout: body main */
-#body-main {
-  grid-area: main;
-}
-
-/* Layout: body footer */
-#body-footer {
-  grid-area: footer;
-}
-
-.footer-wrapper {
-  width: 50%;
-  height: auto;
+.grid-3rows {
+  display: grid;
+  grid-template-rows: 0.5fr 0.2fr 6fr;
 }
 
 /* Layout: padding */
@@ -87,8 +69,8 @@ body {
 /* Layout: icons and cell sizes */
 .icons-size,
 .cell-size {
-  width: 3vw;
-  height: 3vw;
+  width: 2vw;
+  height: 2vw;
 }
 
 /* Layout: common classes */
@@ -110,21 +92,38 @@ body {
   justify-items: center;
 }
 
-/* Style
- * Not worked yet. Only started
- *
- * */
+/* Style */
 
 body {
   font-family: 'montserrat_alternatesmedium', system-ui, -apple-system,
     BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
     'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--slate50);
+  color: var(--slate950);
+}
+
+.header-colors {
+  background-color: var(--slate700);
+  color: var(--slate50);
+}
+
+.footer-colors {
+  background-color: var(--slate100);
+  color: var(--slate600);
+}
+
+.message-colors {
+  background-color: var(--slate300);
+}
+
+.player-colors {
+  color: var(--slate700);
 }
 
 .battlefield-border {
-  border: 1px solid black;
+  border: 2px solid var(--slate700);
 }
 
 .cell-border {
-  border: 1px solid lightgray;
+  border: 1px solid var(--slate300);
 }
