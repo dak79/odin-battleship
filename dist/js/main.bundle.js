@@ -429,6 +429,14 @@ function DOM_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var hook = document.querySelector('#hook');
+
+/**
+ * Create an HTML element.
+ * @param {String} type - Element tag
+ * @param {Object} attributes - Element attributes
+ * @param {String|null} textContent - Element text content
+ * @returns {HTMLElement}
+ */
 var createElement = function createElement(type) {
   var attributes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var textContent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -442,6 +450,12 @@ var createElement = function createElement(type) {
   if (textContent) element.textContent = textContent;
   return element;
 };
+
+/**
+ * Append element to DOM.
+ * @param {HTMLElement} parent - parent element
+ * @param {HTMLElement} element - element to append
+ */
 var renderElement = function renderElement(parent, element) {
   parent.appendChild(element);
 };
@@ -456,13 +470,15 @@ var createAndRenderElement = function createAndRenderElement(type) {
 var createStructure = function createStructure() {
   var structure = {
     header: createAndRenderElement('header', {
-      id: 'body-header'
+      id: 'body-header',
+      "class": 'center'
     }),
     main: createAndRenderElement('main', {
       id: 'body-main'
     }),
     footer: createAndRenderElement('footer', {
-      id: 'body-footer'
+      id: 'body-footer',
+      "class": 'center'
     })
   };
   return structure;
@@ -470,23 +486,22 @@ var createStructure = function createStructure() {
 var renderBodyHeader = function renderBodyHeader() {
   var header = document.querySelector('#body-header');
   createAndRenderElement('h1', {
-    "class": 'page-title'
+    "class": 'fonts-bigger padding1vw'
   }, 'Battleship', header);
 };
 var renderBodyMain = function renderBodyMain() {
   var main = document.querySelector('#body-main');
-  var sections = ['messages', 'names', 'boards'];
-  sections.forEach(function (section) {
-    return createAndRenderElement('section', {
-      id: "body-".concat(section)
-    }, null, main);
-  });
-  var messages = document.querySelector('#body-messages');
+  var messages = createAndRenderElement('section', {
+    id: 'messages'
+  }, null, main);
   createAndRenderElement('div', {
     id: 'message-field',
-    "class": 'messages'
+    "class": 'fonts-normal center padding1vw'
   }, 'Place your ships', messages);
-  var names = document.querySelector('#body-names');
+  var names = createAndRenderElement('section', {
+    id: 'players-names',
+    "class": 'grid-2col-cent'
+  }, null, main);
   var playerDefaultNames = [{
     id: 'player-one-name',
     name: components_game.initialState.playerOne.getPlayerName()
@@ -497,37 +512,39 @@ var renderBodyMain = function renderBodyMain() {
   playerDefaultNames.forEach(function (name) {
     return createAndRenderElement('div', {
       id: name.id,
-      "class": 'player-names'
+      "class": 'fonts-normal padding1vw'
     }, name.name, names);
   });
-  var boards = document.querySelector('#body-boards');
-  var boardNames = ['board-player', 'board-rival'];
-  boardNames.forEach(function (name) {
-    return createAndRenderElement('div', {
-      id: name
-    }, null, boards);
-  });
-  var boardPlayer = document.querySelector('#board-player');
+  var boards = createAndRenderElement('section', {
+    id: 'players-boards',
+    "class": 'grid-2col-cent'
+  }, null, main);
+  var boardPlayer = createAndRenderElement('div', {
+    id: 'board-player'
+  }, null, boards);
   var playerOneBoard = components_game.initialState.playerOneGameboard.board;
   renderBoard(boardPlayer, playerOneBoard);
-  var rival = document.querySelector('#board-rival');
+  var boardRival = createAndRenderElement('div', {
+    id: 'board-rival'
+  }, null, boards);
   var playerTwoBoard = components_game.initialState.playerTwoGameboard.board;
-  renderBoard(rival, playerTwoBoard);
+  renderBoard(boardRival, playerTwoBoard);
 };
-var renderBoard = function renderBoard(hook, board) {
+var renderBoard = function renderBoard(parent, board) {
   var table = createAndRenderElement('table', {
-    id: "".concat(hook.id, "-table")
-  }, null, hook);
+    id: "".concat(parent.id, "-table"),
+    "class": 'battlefield-border'
+  }, null, parent);
   var tbody = createAndRenderElement('tbody', {
-    id: "".concat(hook.id, "-tbody")
+    id: "".concat(parent.id, "-tbody")
   }, null, table);
   board.forEach(function (row, rowIndex) {
     var tr = createAndRenderElement('tr', {
       "class": 'board-row'
     }, null, tbody);
-    row.forEach(function (cell, colIndex) {
+    row.forEach(function (_, colIndex) {
       createAndRenderElement('td', {
-        "class": 'board-cell',
+        "class": 'cell-size cell-border',
         'data-x': rowIndex,
         'data-y': colIndex
       }, null, tr);
@@ -536,26 +553,31 @@ var renderBoard = function renderBoard(hook, board) {
 };
 var renderBodyFooter = function renderBodyFooter() {
   var footer = document.querySelector('#body-footer');
-  console.log(footer);
+  var wrapper = createAndRenderElement('div', {
+    "class": 'footer-wrapper fonts-small space-evenly padding1vw'
+  }, null, footer);
+  console.log(wrapper);
   createAndRenderElement('div', {
     "class": 'footer-info'
-  }, '2023 - Daniele Campari', footer);
+  }, '2023 - Daniele Campari', wrapper);
   var icons = createAndRenderElement('div', {
     "class": 'footer-icons'
-  }, null, footer);
+  }, null, wrapper);
   var linkLinkedIn = createAndRenderElement('a', {
     href: 'https://www.linkedin.com/in/daniele-campari-33757593/'
   }, null, icons);
   createAndRenderElement('img', {
     src: linkedin_namespaceObject,
-    alt: 'LinkedIn link'
+    alt: 'LinkedIn link',
+    "class": 'icons-size'
   }, null, linkLinkedIn);
   var linkGitHub = createAndRenderElement('a', {
     href: 'https://github.com/dak79/'
   }, null, icons);
   createAndRenderElement('img', {
     src: github_namespaceObject,
-    alt: 'GitHub link'
+    alt: 'GitHub link',
+    "class": 'icons-size'
   }, null, linkGitHub);
 };
 var renderInitialState = function renderInitialState() {
