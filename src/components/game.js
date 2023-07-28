@@ -1,5 +1,6 @@
 import Player from './players.js';
 import Gameboard from './gameBoard.js';
+import Ship from './ships.js';
 const createNewPlayers = () => {
   const playerOne = Player();
   playerOne.setIsHuman(true);
@@ -26,27 +27,33 @@ const init = () => {
   return Object.assign({}, players, gameboards);
 };
 
+const createShips = (type) =>
+  Array.from({ length: type.number }, () => ({
+    body: Ship(type.size),
+    size: type.size
+  }));
+
 const shipsPlayers = () => {
-  /* Carrier = 1 da 5
-   * Battleships = 2 da 4
-   * Submarines = 3 da 3
-   * Destroyers = 4 da 2
-   */
-};
-const shipCreation = () => {};
+  const carrier = { number: 1, size: 5 };
+  const battleship = { number: 2, size: 4 };
+  const submarine = { number: 3, size: 3 };
+  const destroyer = { number: 4, size: 2 };
 
-const shipPlacement = () => {
-  const ships = shipCreation();
-
-  return Object.assign({}, ships);
+  return {
+    carrier: createShips(carrier),
+    battleships: createShips(battleship),
+    submarines: createShips(submarine),
+    destroyers: createShips(destroyer)
+  };
 };
 
 const game = (() => {
   const initialState = init();
-  const placementStage = shipPlacement();
+  const ships = shipsPlayers();
+  console.log(ships);
   return {
     initialState,
-    placementStage
+    ships
   };
 })();
 
@@ -55,14 +62,13 @@ export default game;
 /* TODO:
  *  - Ship creation
  *      - chose numebers and create it for each player.
+ *      - Render ships in a card under or on the left of boards.
  *  - Ship placement:
  *    - Placement for player throught injecting coords.
  *    - Visualization of ships in player board.
  *    - Check if the cell contain effectivly a ship object.
  *    - Placement for cpu random
  *    - Check if effectivly the cells contain ship object.
- *  - Ship summary visualization:
- *    - Render ships in a card under or on the left of boards.
  *  - Code review
  *  - Functional style review
  *
