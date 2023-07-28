@@ -32,8 +32,8 @@ describe('The .getLength() method', () => {
     });
   });
 
-  it('returns false if length is out of min (2) or max (4)', () => {
-    const values = [0, 1, 5, 10];
+  it('returns false if length is out of min (2) or max (5)', () => {
+    const values = [0, 1, 6, 10];
 
     values.forEach((value) => {
       const ship = Ship(value);

@@ -2,7 +2,7 @@ import pipe from '../util/pipe';
 import validateInput from '../util/input';
 
 const MIN_LENGTH = 2;
-const MAX_LENGTH = 4;
+const MAX_LENGTH = 5;
 /**
  * Check if the length is between 1 and 4.
  * @param {Number|false} input - length
