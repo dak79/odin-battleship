@@ -39,6 +39,15 @@ describe('The board', () => {
 });
 
 describe('The method gameBoard.placeShip()', () => {
+  it('place a ship of length 5 vertically in [7, 2][7, 3][7, 4][7, 5][7, 6]', () => {
+    const ship = Ship(5);
+    const length = ship.getLength();
+    gameboard.placeShip(gameboard.board, ship, 7, 2, true);
+    gameboard.board[7]
+      .slice(2, length)
+      .forEach((square) => expect(square).toBe(ship));
+  });
+
   it('place a ship of length 4 vertically in [0, 0][0, 1][0, 2][0, 3]', () => {
     const ship = Ship(4);
     const length = ship.getLength();
@@ -64,6 +73,15 @@ describe('The method gameBoard.placeShip()', () => {
     gameboard.board[2]
       .slice(0, length)
       .forEach((square) => expect(square).toBe(ship));
+  });
+
+  it('place a ship of length 5 horizontally in [2, 6][3, 6][4, 6][5, 6][6, 6]', () => {
+    const ship = Ship(5);
+    const length = ship.getLength();
+    gameboard.placeShip(gameboard.board, ship, 2, 6, false);
+    gameboard.board
+      .slice(2, 2 + length)
+      .forEach((row) => expect(row[6]).toBe(ship));
   });
 
   it('place a ship of length 4 horizontally in [3, 0][4, 0][5, 0][6, 0]', () => {
@@ -269,7 +287,17 @@ describe('The method GameBoard.allShipSunked()', () => {
       [3, 2],
       [4, 2],
       [3, 4],
-      [4, 4]
+      [4, 4],
+      [7, 2],
+      [7, 3],
+      [7, 4],
+      [7, 5],
+      [7, 6],
+      [2, 6],
+      [3, 6],
+      [4, 6],
+      [5, 6],
+      [6, 6]
     ];
 
     coord.forEach(([x, y]) => gameboard.receiveAttack(gameboard.board, x, y));
