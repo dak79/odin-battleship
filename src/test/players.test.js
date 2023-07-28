@@ -138,7 +138,7 @@ describe('The method setPlayerName()', () => {
     const player = Player();
     player.setIsHuman(false);
     player.setPlayerName();
-    expect(player.getPlayerName()).toBe('cpu');
+    expect(player.getPlayerName()).toBe('Cpu');
 
     const values = [
       'David',
@@ -155,7 +155,7 @@ describe('The method setPlayerName()', () => {
 
     values.forEach((value) => {
       player.setPlayerName(`${value}`);
-      expect(player.getPlayerName()).toBe('cpu');
+      expect(player.getPlayerName()).toBe('Cpu');
     });
   });
 });
@@ -172,7 +172,7 @@ describe('The method getPlayerName()', () => {
     const player = Player();
     player.setIsHuman(false);
     player.setPlayerName('Smith');
-    expect(player.getPlayerName()).toBe('cpu');
+    expect(player.getPlayerName()).toBe('Cpu');
   });
 });
 
