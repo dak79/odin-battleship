@@ -45,47 +45,26 @@ const createAndRenderElement = (
 const createStructureBody = () => ({
   header: createAndRenderElement('header', {
     id: 'body-header',
-    class: 'center header-colors'
+    class: 'body-header'
   }),
   main: createAndRenderElement('main', {
     id: 'body-main',
-    class: 'fonts-normal grid-3rows'
+    class: 'body-main'
   }),
   footer: createAndRenderElement('footer', {
     id: 'body-footer',
-    class: 'fonts-small center padding1vw footer-colors'
+    class: 'body-footer'
   })
 });
 
 const renderTitle = (header) => {
-  createAndRenderElement(
-    'h1',
-    { class: 'fonts-bigger padding1vw' },
-    'Battleship',
-    header
-  );
+  createAndRenderElement('h1', { class: 'header-title' }, 'Battleship', header);
 };
-
-const createStructureMain = (main) => ({
-  messages: createAndRenderElement('section', { id: 'messages' }, null, main),
-  names: createAndRenderElement(
-    'section',
-    { id: 'players-names', class: 'grid-2col-cent' },
-    null,
-    main
-  ),
-  boards: createAndRenderElement(
-    'section',
-    { id: 'players-boards', class: 'grid-2col-cent' },
-    null,
-    main
-  )
-});
 
 const renderMessage = (section) =>
   createAndRenderElement(
     'div',
-    { id: 'message-field', class: 'center padding1vw message-colors' },
+    { id: 'message-field', class: 'messages' },
     'Place your ships',
     section
   );
@@ -93,7 +72,10 @@ const renderMessage = (section) =>
 const renderPlayerName = (section) =>
   createAndRenderElement(
     'div',
-    { id: 'player-one-name', class: 'padding1vw player-colors' },
+    {
+      id: 'player-one-name',
+      class: 'players-name player-one-name'
+    },
     game.initialState.playerOne.getPlayerName(),
     section
   );
@@ -101,21 +83,34 @@ const renderPlayerName = (section) =>
 const renderCpuName = (section) =>
   createAndRenderElement(
     'div',
-    { id: 'player-two-name', class: 'padding1vw player-colors' },
+    {
+      id: 'player-two-name',
+      class: 'players-name player-two-name'
+    },
     game.initialState.playerTwo.getPlayerName(),
     section
   );
 
 const renderBoardPlayer = (section) =>
-  createAndRenderElement('div', { id: 'board-player' }, null, section);
+  createAndRenderElement(
+    'div',
+    { id: 'board-player', class: 'player-board' },
+    null,
+    section
+  );
 
 const renderBoardRival = (section) =>
-  createAndRenderElement('div', { id: 'board-rival' }, null, section);
+  createAndRenderElement(
+    'div',
+    { id: 'board-rival', class: 'rival-board' },
+    null,
+    section
+  );
 
 const renderBoard = (parent, board) => {
   const table = createAndRenderElement(
     'table',
-    { id: `${parent.id}-table`, class: 'battlefield-border' },
+    { id: `${parent.id}-table`, class: 'boards' },
     null,
     parent
   );
@@ -147,19 +142,29 @@ const renderBoard = (parent, board) => {
   });
 };
 
+const renderShipsPlayer = (section) =>
+  createAndRenderElement(
+    'div',
+    { id: 'ships-player', class: 'ships-container player-ships' },
+    null,
+    section
+  );
+
+const renderShipsRival = (section) =>
+  createAndRenderElement(
+    'div',
+    { id: 'ships-rival', class: 'ships-container rival-ships' },
+    null,
+    section
+  );
 const createFooterStructure = (footer) => ({
   credits: createAndRenderElement(
     'div',
-    { class: 'padding1vw' },
+    { class: 'credits' },
     'Daniele Campari - 2023',
     footer
   ),
-  icons: createAndRenderElement(
-    'div',
-    { class: 'footer-icons padding1vw' },
-    null,
-    footer
-  )
+  icons: createAndRenderElement('div', { class: 'footer-icons' }, null, footer)
 });
 
 const createLinks = (div) => ({
@@ -196,14 +201,15 @@ const renderGhIcon = (link) =>
 const renderPage = () => {
   const body = createStructureBody();
   renderTitle(body.header);
-  const main = createStructureMain(body.main);
-  renderMessage(main.messages);
-  renderPlayerName(main.names);
-  renderCpuName(main.names);
-  const boardPlayer = renderBoardPlayer(main.boards);
+  renderMessage(body.main);
+  renderPlayerName(body.main);
+  renderCpuName(body.main);
+  const boardPlayer = renderBoardPlayer(body.main);
   renderBoard(boardPlayer, game.initialState.playerOneGameboard.board);
-  const boardRival = renderBoardRival(main.boards);
+  const boardRival = renderBoardRival(body.main);
   renderBoard(boardRival, game.initialState.playerTwoGameboard.board);
+  const shipsPlayer = renderShipsPlayer(body.main);
+  const shipsRival = renderShipsRival(body.main);
   const footer = createFooterStructure(body.footer);
   const links = createLinks(footer.icons);
   renderLnIcon(links.linkedin);
