@@ -1,6 +1,12 @@
 import Player from './players.js';
 import Gameboard from './gameBoard.js';
 import Ship from './ships.js';
+
+import iconCarrier from '../assets/icons/carrier.svg';
+import iconBattleship from '../assets/icons/battleship.svg';
+import iconSubmarine from '../assets/icons/submarine.svg';
+import iconDestroyer from '../assets/icons/destroyer.svg';
+
 const createNewPlayers = () => {
   const playerOne = Player();
   playerOne.setIsHuman(true);
@@ -30,14 +36,15 @@ const init = () => {
 const createShips = (type) =>
   Array.from({ length: type.number }, () => ({
     body: Ship(type.size),
-    size: type.size
+    size: type.size,
+    icon: type.icon
   }));
 
 const shipsPlayers = () => {
-  const carrier = { number: 1, size: 5 };
-  const battleship = { number: 2, size: 4 };
-  const submarine = { number: 3, size: 3 };
-  const destroyer = { number: 4, size: 2 };
+  const carrier = { number: 1, size: 5, icon: iconCarrier };
+  const battleship = { number: 2, size: 4, icon: iconBattleship };
+  const submarine = { number: 3, size: 3, icon: iconSubmarine };
+  const destroyer = { number: 4, size: 2, icon: iconDestroyer };
 
   return {
     carrier: createShips(carrier),
@@ -46,11 +53,12 @@ const shipsPlayers = () => {
     destroyers: createShips(destroyer)
   };
 };
+const placementShipPlayer = () => {};
+const placementShipCpu = () => {};
 
 const game = (() => {
   const initialState = init();
   const ships = shipsPlayers();
-  console.log(ships);
   return {
     initialState,
     ships
@@ -60,9 +68,6 @@ const game = (() => {
 export default game;
 
 /* TODO:
- *  - Ship creation
- *      - chose numebers and create it for each player.
- *      - Render ships in a card under or on the left of boards.
  *  - Ship placement:
  *    - Placement for player throught injecting coords.
  *    - Visualization of ships in player board.
