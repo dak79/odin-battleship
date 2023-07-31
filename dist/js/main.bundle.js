@@ -377,7 +377,102 @@ var Gameboard = function Gameboard() {
   };
 };
 /* harmony default export */ const gameBoard = (Gameboard);
+;// CONCATENATED MODULE: ./src/components/ships.js
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+var MIN_LENGTH = 2;
+var MAX_LENGTH = 5;
+/**
+ * Check if the length is between 1 and 4.
+ * @param {Number|false} input - length
+ * @returns {Number|false}
+ */
+var validateShipLength = function validateShipLength(input) {
+  return input > MAX_LENGTH || input < MIN_LENGTH ? false : input;
+};
+
+/**
+ * Add an hit.
+ * @param {Object} obj
+ * @returns {Object} With hits updated.
+ */
+var addHit = function addHit(obj) {
+  return _objectSpread(_objectSpread({}, obj), {}, {
+    hits: obj.hits + 1
+  });
+};
+
+/**
+ * Set sunked property
+ * @param {Object} obj
+ * @returns {Object} with sunked updated.
+ */
+var setSunk = function setSunk(obj) {
+  return _objectSpread(_objectSpread({}, obj), {}, {
+    sunked: obj.len === obj.hits
+  });
+};
+var Ship = function Ship(len) {
+  /**
+   * Set the length of ship.
+   */
+  var setLength = function setLength() {
+    return util_pipe(function () {
+      return input(len);
+    }, function (_int) {
+      return validateShipLength(_int);
+    })(len);
+  };
+  var init = {
+    len: setLength(),
+    hits: 0,
+    sunked: false
+  };
+
+  /**
+   * Hit the ship.
+   * @param {Object} obj
+   */
+  var hit = function hit() {
+    var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : init;
+    return util_pipe(addHit, setSunk)(obj);
+  };
+
+  /**
+   * Get the length of ship init.
+   * @param {Object} obj
+   * @returns
+   */
+  var getLength = function getLength() {
+    var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : init;
+    return obj.len;
+  };
+
+  /**
+   * Get sunked from ship init.
+   * @param {Object} obj
+   * @returns
+   */
+  var isSunk = function isSunk() {
+    var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : init;
+    return obj.sunked;
+  };
+  return {
+    init: init,
+    getLength: getLength,
+    hit: hit,
+    isSunk: isSunk
+  };
+};
+/* harmony default export */ const ships = (Ship);
 ;// CONCATENATED MODULE: ./src/components/game.js
+
 
 
 var createNewPlayers = function createNewPlayers() {
@@ -407,17 +502,71 @@ var init = function init() {
   var gameboards = createNewGameboards();
   return Object.assign({}, players, gameboards);
 };
+var createShips = function createShips(type) {
+  return Array.from({
+    length: type.number
+  }, function () {
+    return {
+      body: ships(type.size),
+      size: type.size
+    };
+  });
+};
+var shipsPlayers = function shipsPlayers() {
+  var carrier = {
+    number: 1,
+    size: 5
+  };
+  var battleship = {
+    number: 2,
+    size: 4
+  };
+  var submarine = {
+    number: 3,
+    size: 3
+  };
+  var destroyer = {
+    number: 4,
+    size: 2
+  };
+  return {
+    carrier: createShips(carrier),
+    battleships: createShips(battleship),
+    submarines: createShips(submarine),
+    destroyers: createShips(destroyer)
+  };
+};
 var game = function () {
   var initialState = init();
+  var ships = shipsPlayers();
+  console.log(ships);
   return {
-    initialState: initialState
+    initialState: initialState,
+    ships: ships
   };
 }();
 /* harmony default export */ const components_game = (game);
+
+/* TODO:
+ *  - Ship creation
+ *      - chose numebers and create it for each player.
+ *      - Render ships in a card under or on the left of boards.
+ *  - Ship placement:
+ *    - Placement for player throught injecting coords.
+ *    - Visualization of ships in player board.
+ *    - Check if the cell contain effectivly a ship object.
+ *    - Placement for cpu random
+ *    - Check if effectivly the cells contain ship object.
+ *  - Code review
+ *  - Functional style review
+ *
+ *  Tips: game as to contain only game loop and using other object, if logic is
+ *  needed put the logic in the right file and develop it in TDD.
+ */
 ;// CONCATENATED MODULE: ./src/assets/icons/linkedin.svg
-const linkedin_namespaceObject = __webpack_require__.p + "assets/imgs/e9b8df20d092b20af087.svg";
+const linkedin_namespaceObject = __webpack_require__.p + "assets/imgs/4bc2ae884215d6dfdaec.svg";
 ;// CONCATENATED MODULE: ./src/assets/icons/github.svg
-const github_namespaceObject = __webpack_require__.p + "assets/imgs/dc49a960a2d3c5a49c80.svg";
+const github_namespaceObject = __webpack_require__.p + "assets/imgs/f902e1244b7397444de8.svg";
 ;// CONCATENATED MODULE: ./src/components/DOM.js
 function DOM_slicedToArray(arr, i) { return DOM_arrayWithHoles(arr) || DOM_iterableToArrayLimit(arr, i) || DOM_unsupportedIterableToArray(arr, i) || DOM_nonIterableRest(); }
 function DOM_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -467,73 +616,61 @@ var createAndRenderElement = function createAndRenderElement(type) {
   renderElement(parent, element);
   return element;
 };
-var createStructure = function createStructure() {
-  var structure = {
+var createStructureBody = function createStructureBody() {
+  return {
     header: createAndRenderElement('header', {
       id: 'body-header',
-      "class": 'center'
+      "class": 'body-header'
     }),
     main: createAndRenderElement('main', {
-      id: 'body-main'
+      id: 'body-main',
+      "class": 'body-main'
     }),
     footer: createAndRenderElement('footer', {
       id: 'body-footer',
-      "class": 'center'
+      "class": 'body-footer'
     })
   };
-  return structure;
 };
-var renderBodyHeader = function renderBodyHeader() {
-  var header = document.querySelector('#body-header');
+var renderTitle = function renderTitle(header) {
   createAndRenderElement('h1', {
-    "class": 'fonts-bigger padding1vw'
+    "class": 'header-title'
   }, 'Battleship', header);
 };
-var renderBodyMain = function renderBodyMain() {
-  var main = document.querySelector('#body-main');
-  var messages = createAndRenderElement('section', {
-    id: 'messages'
-  }, null, main);
-  createAndRenderElement('div', {
+var renderMessage = function renderMessage(section) {
+  return createAndRenderElement('div', {
     id: 'message-field',
-    "class": 'fonts-normal center padding1vw'
-  }, 'Place your ships', messages);
-  var names = createAndRenderElement('section', {
-    id: 'players-names',
-    "class": 'grid-2col-cent'
-  }, null, main);
-  var playerDefaultNames = [{
+    "class": 'messages'
+  }, 'Place your ships', section);
+};
+var renderPlayerName = function renderPlayerName(section) {
+  return createAndRenderElement('div', {
     id: 'player-one-name',
-    name: components_game.initialState.playerOne.getPlayerName()
-  }, {
+    "class": 'players-name player-one-name'
+  }, components_game.initialState.playerOne.getPlayerName(), section);
+};
+var renderCpuName = function renderCpuName(section) {
+  return createAndRenderElement('div', {
     id: 'player-two-name',
-    name: components_game.initialState.playerTwo.getPlayerName()
-  }];
-  playerDefaultNames.forEach(function (name) {
-    return createAndRenderElement('div', {
-      id: name.id,
-      "class": 'fonts-normal padding1vw'
-    }, name.name, names);
-  });
-  var boards = createAndRenderElement('section', {
-    id: 'players-boards',
-    "class": 'grid-2col-cent'
-  }, null, main);
-  var boardPlayer = createAndRenderElement('div', {
-    id: 'board-player'
-  }, null, boards);
-  var playerOneBoard = components_game.initialState.playerOneGameboard.board;
-  renderBoard(boardPlayer, playerOneBoard);
-  var boardRival = createAndRenderElement('div', {
-    id: 'board-rival'
-  }, null, boards);
-  var playerTwoBoard = components_game.initialState.playerTwoGameboard.board;
-  renderBoard(boardRival, playerTwoBoard);
+    "class": 'players-name player-two-name'
+  }, components_game.initialState.playerTwo.getPlayerName(), section);
+};
+var renderBoardPlayer = function renderBoardPlayer(section) {
+  return createAndRenderElement('div', {
+    id: 'board-player',
+    "class": 'player-board'
+  }, null, section);
+};
+var renderBoardRival = function renderBoardRival(section) {
+  return createAndRenderElement('div', {
+    id: 'board-rival',
+    "class": 'rival-board'
+  }, null, section);
 };
 var renderBoard = function renderBoard(parent, board) {
   var table = createAndRenderElement('table', {
     id: "".concat(parent.id, "-table"),
-    "class": 'battlefield-border'
+    "class": 'boards'
   }, null, parent);
   var tbody = createAndRenderElement('tbody', {
     id: "".concat(parent.id, "-tbody")
@@ -551,43 +688,71 @@ var renderBoard = function renderBoard(parent, board) {
     });
   });
 };
-var renderBodyFooter = function renderBodyFooter() {
-  var footer = document.querySelector('#body-footer');
-  var wrapper = createAndRenderElement('div', {
-    "class": 'footer-wrapper fonts-small space-evenly padding1vw'
-  }, null, footer);
-  console.log(wrapper);
-  createAndRenderElement('div', {
-    "class": 'footer-info'
-  }, '2023 - Daniele Campari', wrapper);
-  var icons = createAndRenderElement('div', {
-    "class": 'footer-icons'
-  }, null, wrapper);
-  var linkLinkedIn = createAndRenderElement('a', {
-    href: 'https://www.linkedin.com/in/daniele-campari-33757593/'
-  }, null, icons);
-  createAndRenderElement('img', {
+var renderShipsPlayer = function renderShipsPlayer(section) {
+  return createAndRenderElement('div', {
+    id: 'ships-player',
+    "class": 'ships-container player-ships'
+  }, null, section);
+};
+var renderShipsRival = function renderShipsRival(section) {
+  return createAndRenderElement('div', {
+    id: 'ships-rival',
+    "class": 'ships-container rival-ships'
+  }, null, section);
+};
+var createFooterStructure = function createFooterStructure(footer) {
+  return {
+    credits: createAndRenderElement('div', {
+      "class": 'credits'
+    }, 'Daniele Campari - 2023', footer),
+    icons: createAndRenderElement('div', {
+      "class": 'footer-icons'
+    }, null, footer)
+  };
+};
+var createLinks = function createLinks(div) {
+  return {
+    linkedin: createAndRenderElement('a', {
+      href: 'https://www.linkedin.com/in/daniele-campari-33757593/'
+    }, null, div),
+    github: createAndRenderElement('a', {
+      href: 'https://github.com/dak79/'
+    }, null, div)
+  };
+};
+var renderLnIcon = function renderLnIcon(link) {
+  return createAndRenderElement('img', {
     src: linkedin_namespaceObject,
     alt: 'LinkedIn link',
     "class": 'icons-size'
-  }, null, linkLinkedIn);
-  var linkGitHub = createAndRenderElement('a', {
-    href: 'https://github.com/dak79/'
-  }, null, icons);
-  createAndRenderElement('img', {
+  }, null, link);
+};
+var renderGhIcon = function renderGhIcon(link) {
+  return createAndRenderElement('img', {
     src: github_namespaceObject,
     alt: 'GitHub link',
     "class": 'icons-size'
-  }, null, linkGitHub);
+  }, null, link);
 };
-var renderInitialState = function renderInitialState() {
-  var structure = createStructure();
-  renderBodyHeader(structure.header);
-  renderBodyMain(structure.main);
-  renderBodyFooter(structure.footer);
+var renderPage = function renderPage() {
+  var body = createStructureBody();
+  renderTitle(body.header);
+  renderMessage(body.main);
+  renderPlayerName(body.main);
+  renderCpuName(body.main);
+  var boardPlayer = renderBoardPlayer(body.main);
+  renderBoard(boardPlayer, components_game.initialState.playerOneGameboard.board);
+  var boardRival = renderBoardRival(body.main);
+  renderBoard(boardRival, components_game.initialState.playerTwoGameboard.board);
+  var shipsPlayer = renderShipsPlayer(body.main);
+  var shipsRival = renderShipsRival(body.main);
+  var footer = createFooterStructure(body.footer);
+  var links = createLinks(footer.icons);
+  renderLnIcon(links.linkedin);
+  renderGhIcon(links.github);
 };
 var DOM = function DOM() {
-  renderInitialState();
+  renderPage();
 };
 /* harmony default export */ const components_DOM = (DOM);
 ;// CONCATENATED MODULE: ./src/index.js
