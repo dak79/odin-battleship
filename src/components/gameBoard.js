@@ -11,8 +11,8 @@ const isValidCoordinate = (coord) =>
   coord >= 0 && coord < MAX_BOARD_SIZE ? coord : false;
 
 const getCoord = (x, y, length, direction) => {
-  const xCoord = direction ? x : x + length;
-  const yCoord = direction ? y + length : y;
+  const xCoord = direction ? y + length : y;
+  const yCoord = direction ? x : x + length;
 
   return [xCoord, yCoord];
 };

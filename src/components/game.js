@@ -53,12 +53,64 @@ const shipsPlayers = () => {
     destroyers: createShips(destroyer)
   };
 };
-const placementShipPlayer = () => {};
+
+const placementShipPlayer = (ships, initialState) => {
+  const placementData = [
+    {
+      ship: 'carrier',
+      data: [{ x: 0, y: 0, isVertical: false }]
+    },
+    {
+      ship: 'battleships',
+      data: [
+        { x: 5, y: 5, isVertical: false },
+        { x: 2, y: 4, isVertical: true }
+      ]
+    },
+    {
+      ship: 'submarines',
+      data: [
+        { x: 7, y: 2, isVertical: true },
+        { x: 3, y: 2, isVertical: false },
+        { x: 4, y: 8, isVertical: false }
+      ]
+    },
+    {
+      ship: 'destroyers',
+      data: [
+        { x: 9, y: 0, isVertical: true },
+        { x: 4, y: 4, isVertical: true },
+        { x: 0, y: 4, isVertical: true },
+        { x: 3, y: 9, isVertical: false }
+      ]
+    }
+  ];
+
+  Object.entries(ships).forEach(([_, ships], typeIndex) => {
+    ships.forEach((ship, shipIndex) => {
+      Object.assign(ship, placementData[typeIndex].data[shipIndex]);
+    });
+  });
+
+  Object.entries(ships).forEach(([_, ships]) => {
+    ships.forEach((ship) => {
+      initialState.playerOneGameboard.placeShip(
+        initialState.playerOneGameboard.board,
+        ship.body,
+        ship.x,
+        ship.y,
+        ship.isVertical
+      );
+    });
+  });
+};
+
 const placementShipCpu = () => {};
 
 const game = (() => {
   const initialState = init();
   const ships = shipsPlayers();
+  placementShipPlayer(ships, initialState);
   return {
     initialState,
     ships
