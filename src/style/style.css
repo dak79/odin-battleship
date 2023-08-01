@@ -131,6 +131,10 @@ body {
   grid-area: player-board;
 }
 
+.ship-placed {
+  background-color: var(--slate700);
+}
+
 .rival-board {
   grid-area: rival-board;
 }

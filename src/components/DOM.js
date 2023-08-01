@@ -142,6 +142,20 @@ const renderBoard = (parent, board) => {
   });
 };
 
+const renderPlayerShips = (board) => {
+  const table = document.querySelector('#board-player-table');
+  const rows = Array.from(table.rows);
+  rows.forEach((row, rowIndex) => {
+    const cells = Array.from(row.cells);
+    cells.forEach((td, colIndex) => {
+      const cell = board[rowIndex][colIndex];
+      if (cell !== null) {
+        td.classList.add('ship-placed');
+      }
+    });
+  });
+};
+
 const renderShipsPlayerContainer = (section) =>
   createAndRenderElement(
     'div',
@@ -158,7 +172,7 @@ const renderShipsRivalContainer = (section) =>
     section
   );
 
-const renderShips = (section) => {
+const renderShipIcons = (section) => {
   Object.entries(game.ships).forEach(([ship, descriptions]) => {
     const div = createAndRenderElement('div', { id: ship }, null, section);
     descriptions.forEach((description, index) => {
@@ -230,10 +244,11 @@ const renderPage = () => {
   renderBoard(boardPlayer, game.initialState.playerOneGameboard.board);
   const boardRival = renderBoardRival(body.main);
   renderBoard(boardRival, game.initialState.playerTwoGameboard.board);
-  const shipsPlayer = renderShipsPlayerContainer(body.main);
-  renderShips(shipsPlayer);
-  const shipsRival = renderShipsRivalContainer(body.main);
-  renderShips(shipsRival);
+  const shipsContainerPlayer = renderShipsPlayerContainer(body.main);
+  renderShipIcons(shipsContainerPlayer);
+  renderPlayerShips(game.initialState.playerOneGameboard.board);
+  const shipsContainerRival = renderShipsRivalContainer(body.main);
+  renderShipIcons(shipsContainerRival);
   const footer = createFooterStructure(body.footer);
   const links = createLinks(footer.icons);
   renderLnIcon(links.linkedin);

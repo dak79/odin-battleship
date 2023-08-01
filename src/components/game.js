@@ -121,7 +121,6 @@ export default game;
 
 /* TODO:
  *  - Ship placement:
- *    - Placement for player throught injecting coords.
  *    - Visualization of ships in player board.
  *    - Check if the cell contain effectivly a ship object.
  *    - Placement for cpu random
