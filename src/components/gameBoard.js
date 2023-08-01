@@ -130,7 +130,7 @@ const Gameboard = () => {
   const placeShip = (board, ship, x, y, direction) =>
     isValidPlacement(board, ship, x, y, direction)
       ? addShipToBoard(board, ship, x, y, direction)
-      : [...board];
+      : false;
 
   const shots = [];
 
