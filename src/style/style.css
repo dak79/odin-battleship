@@ -34,19 +34,21 @@
   --slate950: #020617;
 
   /* Fonts */
-  --fonts-big: 4vw;
-  --fonts-normal: 2vw;
-  --fonts-small: 1vw;
+  --fonts-big: 2.5vw;
+  --fonts-normal: 1.5vw;
+  --fonts-small: 0.9vw;
 
   /* Padding */
   --padding-min: 1vw;
 }
 
 body {
-  width: 100vw;
-  height: 100vh;
   display: grid;
-  grid-template-rows: 10% auto 10%;
+  grid-template:
+    [row1-start] 'header' [row1-end]
+    [row2-start] 'main' [row2-end]
+    [row3-start] 'footer' [row3-end]
+    / 1fr;
   gap: 1vw;
 
   font-family: 'montserrat_alternatesmedium', system-ui, -apple-system,
@@ -59,6 +61,9 @@ body {
 .body-header {
   background-color: var(--slate700);
   color: var(--slate50);
+  grid-area: header;
+  max-height: 15vh;
+  min-height: 7vh;
 }
 
 .body-header,
@@ -74,6 +79,7 @@ body {
 }
 
 .body-main {
+  grid-area: main;
   display: grid;
   grid-template:
     [row1-start] 'messages messages' [row1-end]
@@ -86,6 +92,7 @@ body {
   gap: 1vw;
 
   font-size: var(--fonts-normal);
+  min-height: 79vh;
 }
 .messages {
   grid-area: messages;
@@ -146,11 +153,14 @@ body {
 }
 
 .body-footer {
+  grid-area: footer;
   padding: var(--padding-min);
   font-size: var(--fonts-small);
 
   background-color: var(--slate100);
   color: var(--slate600);
+  max-height: 8vh;
+  min-height: 7vh;
 }
 
 .credits,
