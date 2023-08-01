@@ -173,24 +173,26 @@ const renderShipsRivalContainer = (section) =>
   );
 
 const renderShipIcons = (section) => {
-  Object.entries(game.ships).forEach(([ship, descriptions]) => {
-    const div = createAndRenderElement('div', { id: ship }, null, section);
-    descriptions.forEach((description, index) => {
-      const span = createAndRenderElement(
-        'span',
-        { id: `${ship}-${index}`, class: 'container' },
-        null,
-        div
-      );
+  Object.entries(game.placementState.playerOneShips).forEach(
+    ([ship, descriptions]) => {
+      const div = createAndRenderElement('div', { id: ship }, null, section);
+      descriptions.forEach((description, index) => {
+        const span = createAndRenderElement(
+          'span',
+          { id: `${ship}-${index}`, class: 'container' },
+          null,
+          div
+        );
 
-      createAndRenderElement(
-        'img',
-        { src: description.icon, alt: `${ship}-icon`, class: 'icons-size' },
-        null,
-        span
-      );
-    });
-  });
+        createAndRenderElement(
+          'img',
+          { src: description.icon, alt: `${ship}-icon`, class: 'icons-size' },
+          null,
+          span
+        );
+      });
+    }
+  );
 };
 
 const createFooterStructure = (footer) => ({

@@ -16,21 +16,19 @@ const createNewPlayers = () => {
   playerTwo.setIsHuman(false);
   playerTwo.setPlayerName('Cpu');
 
-  return Object.assign({}, { playerOne }, { playerTwo });
+  return { playerOne, playerTwo };
 };
 
-const createNewGameboards = () => {
-  const playerOneGameboard = Gameboard();
-  const playerTwoGameboard = Gameboard();
-
-  return Object.assign({}, { playerOneGameboard }, { playerTwoGameboard });
-};
+const createNewGameboards = () => ({
+  playerOneGameboard: Gameboard(),
+  playerTwoGameboard: Gameboard()
+});
 
 const init = () => {
   const players = createNewPlayers();
   const gameboards = createNewGameboards();
 
-  return Object.assign({}, players, gameboards);
+  return { ...players, ...gameboards };
 };
 
 const createShips = (type) =>
@@ -54,7 +52,7 @@ const shipsPlayers = () => {
   };
 };
 
-const placementShipPlayer = (ships, initialState) => {
+const setCoordShipsPlayer = (ships) => {
   const placementData = [
     {
       ship: 'carrier',
@@ -91,7 +89,9 @@ const placementShipPlayer = (ships, initialState) => {
       Object.assign(ship, placementData[typeIndex].data[shipIndex]);
     });
   });
+};
 
+const placementShipPlayer = (ships, initialState) => {
   Object.entries(ships).forEach(([_, ships]) => {
     ships.forEach((ship) => {
       initialState.playerOneGameboard.placeShip(
@@ -105,29 +105,43 @@ const placementShipPlayer = (ships, initialState) => {
   });
 };
 
-const placementShipCpu = () => {};
+const randomPlacementRival = (ships, initialState) => {
+  const MAX_BOARD_SIZE = 10;
+  Object.entries(ships).forEach(([_, ships]) => {
+    ships.forEach((ship) => {
+      let placed;
+      while (!placed) {
+        placed = initialState.playerTwoGameboard.placeShip(
+          initialState.playerTwoGameboard.board,
+          ship.body,
+          Math.floor(Math.random() * MAX_BOARD_SIZE),
+          Math.floor(Math.random() * MAX_BOARD_SIZE),
+          Math.floor(Math.random() * MAX_BOARD_SIZE) < 5 ? true : false
+        );
+      }
+    });
+  });
+};
+
+const placement = (initialState) => {
+  const shipsPlayer = shipsPlayers();
+  setCoordShipsPlayer(shipsPlayer);
+  placementShipPlayer(shipsPlayer, initialState);
+  const shipsRival = shipsPlayers();
+  randomPlacementRival(shipsRival, initialState);
+  return { playerOneShips: shipsPlayer };
+};
 
 const game = (() => {
   const initialState = init();
-  const ships = shipsPlayers();
-  placementShipPlayer(ships, initialState);
+  const placementState = placement(initialState);
   return {
     initialState,
-    ships
+    placementState
   };
 })();
 
 export default game;
 
 /* TODO:
- *  - Ship placement:
- *    - Visualization of ships in player board.
- *    - Check if the cell contain effectivly a ship object.
- *    - Placement for cpu random
- *    - Check if effectivly the cells contain ship object.
- *  - Code review
- *  - Functional style review
- *
- *  Tips: game as to contain only game loop and using other object, if logic is
- *  needed put the logic in the right file and develop it in TDD.
  */
