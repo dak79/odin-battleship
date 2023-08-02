@@ -7,29 +7,22 @@ import iconBattleship from '../assets/icons/battleship.svg';
 import iconSubmarine from '../assets/icons/submarine.svg';
 import iconDestroyer from '../assets/icons/destroyer.svg';
 
-const createNewPlayers = () => {
-  const playerOne = Player();
-  playerOne.setIsHuman(true);
-  playerOne.setPlayerName('Player 1');
-
-  const playerTwo = Player();
-  playerTwo.setIsHuman(false);
-  playerTwo.setPlayerName('Cpu');
-
-  return { playerOne, playerTwo };
+const createPlayer = (isHuman, name) => {
+  const player = Player();
+  player.setIsHuman(isHuman);
+  player.setPlayerName(name);
+  return player;
 };
+
+const createNewPlayers = () => ({
+  playerOne: createPlayer(true, 'Player 1'),
+  playerTwo: createPlayer(false, 'Cpu')
+});
 
 const createNewGameboards = () => ({
   playerOneGameboard: Gameboard(),
   playerTwoGameboard: Gameboard()
 });
-
-const init = () => {
-  const players = createNewPlayers();
-  const gameboards = createNewGameboards();
-
-  return { ...players, ...gameboards };
-};
 
 const createShips = (type) =>
   Array.from({ length: type.number }, () => ({
@@ -38,64 +31,54 @@ const createShips = (type) =>
     icon: type.icon
   }));
 
-const shipsPlayers = () => {
-  const carrier = { number: 1, size: 5, icon: iconCarrier };
-  const battleship = { number: 2, size: 4, icon: iconBattleship };
-  const submarine = { number: 3, size: 3, icon: iconSubmarine };
-  const destroyer = { number: 4, size: 2, icon: iconDestroyer };
+const shipTypes = {
+  carrier: { number: 1, size: 5, icon: iconCarrier },
+  battleships: { number: 2, size: 4, icon: iconBattleship },
+  submarines: { number: 3, size: 3, icon: iconSubmarine },
+  destroyers: { number: 4, size: 2, icon: iconDestroyer }
+};
 
-  return {
-    carrier: createShips(carrier),
-    battleships: createShips(battleship),
-    submarines: createShips(submarine),
-    destroyers: createShips(destroyer)
-  };
+const createShipPlayers = () =>
+  Object.keys(shipTypes).reduce((ships, type) => {
+    ships[type] = createShips(shipTypes[type]);
+    return ships;
+  }, {});
+
+const shipPlacement = {
+  carrier: [{ x: 0, y: 0, isVertical: false }],
+  battleships: [
+    { x: 5, y: 5, isVertical: false },
+    { x: 2, y: 4, isVertical: true }
+  ],
+
+  submarines: [
+    { x: 7, y: 2, isVertical: true },
+    { x: 3, y: 2, isVertical: false },
+    { x: 4, y: 8, isVertical: false }
+  ],
+
+  destroyers: [
+    { x: 9, y: 0, isVertical: true },
+    { x: 4, y: 4, isVertical: true },
+    { x: 0, y: 4, isVertical: true },
+    { x: 3, y: 9, isVertical: false }
+  ]
 };
 
 const setCoordShipsPlayer = (ships) => {
-  const placementData = [
-    {
-      ship: 'carrier',
-      data: [{ x: 0, y: 0, isVertical: false }]
-    },
-    {
-      ship: 'battleships',
-      data: [
-        { x: 5, y: 5, isVertical: false },
-        { x: 2, y: 4, isVertical: true }
-      ]
-    },
-    {
-      ship: 'submarines',
-      data: [
-        { x: 7, y: 2, isVertical: true },
-        { x: 3, y: 2, isVertical: false },
-        { x: 4, y: 8, isVertical: false }
-      ]
-    },
-    {
-      ship: 'destroyers',
-      data: [
-        { x: 9, y: 0, isVertical: true },
-        { x: 4, y: 4, isVertical: true },
-        { x: 0, y: 4, isVertical: true },
-        { x: 3, y: 9, isVertical: false }
-      ]
-    }
-  ];
-
-  Object.entries(ships).forEach(([_, ships], typeIndex) => {
-    ships.forEach((ship, shipIndex) => {
-      Object.assign(ship, placementData[typeIndex].data[shipIndex]);
+  return Object.keys(ships).reduce((updatedShips, type) => {
+    updatedShips[type] = ships[type].map((ship, shipIndex) => {
+      return Object.assign(ship, shipPlacement[type][shipIndex]);
     });
-  });
+    return updatedShips;
+  }, {});
 };
 
-const placementShipPlayer = (ships, initialState) => {
-  Object.entries(ships).forEach(([_, ships]) => {
-    ships.forEach((ship) => {
-      initialState.playerOneGameboard.placeShip(
-        initialState.playerOneGameboard.board,
+const initialPlacementPlayer = (ships, gameboard) => {
+  Object.values(ships).forEach((typeOfShip) => {
+    typeOfShip.forEach((ship) => {
+      gameboard.placeShip(
+        gameboard.board,
         ship.body,
         ship.x,
         ship.y,
@@ -105,49 +88,47 @@ const placementShipPlayer = (ships, initialState) => {
   });
 };
 
-const randomPlacementRival = (ships, initialState) => {
+const initialPlacementRival = (ships, gameboard) => {
   const MAX_BOARD_SIZE = 10;
-  Object.entries(ships).forEach(([_, ships]) => {
-    ships.forEach((ship) => {
-      let placed;
+  Object.values(ships).forEach((typeOfShips) => {
+    typeOfShips.forEach((ship) => {
+      let placed = false;
       while (!placed) {
-        placed = initialState.playerTwoGameboard.placeShip(
-          initialState.playerTwoGameboard.board,
+        placed = gameboard.placeShip(
+          gameboard.board,
           ship.body,
           Math.floor(Math.random() * MAX_BOARD_SIZE),
           Math.floor(Math.random() * MAX_BOARD_SIZE),
-          Math.floor(Math.random() * MAX_BOARD_SIZE) < 5 ? true : false
+          Math.random() < 0.5
         );
       }
     });
   });
 };
 
-const placement = (initialState) => {
-  const shipsPlayer = shipsPlayers();
+const initGame = () => {
+  const players = createNewPlayers();
+  const gameboards = createNewGameboards();
+  const shipsPlayer = createShipPlayers();
+
   setCoordShipsPlayer(shipsPlayer);
-  placementShipPlayer(shipsPlayer, initialState);
-  const shipsRival = shipsPlayers();
-  randomPlacementRival(shipsRival, initialState);
-  return { playerOneShips: shipsPlayer };
+  initialPlacementPlayer(shipsPlayer, gameboards.playerOneGameboard);
+  initialPlacementRival(shipsPlayer, gameboards.playerTwoGameboard);
+
+  return {
+    ...players,
+    ...gameboards,
+    shipsPlayer
+  };
 };
 
-const game = (() => {
-  const initialState = init();
-  const placementState = placement(initialState);
-  return {
-    initialState,
-    placementState
-  };
-})();
+const game = initGame();
 
 export default game;
 
 /* TODO:
- * - Method to take input for attack from player 2 board.
- *   - Apply an eventListener to all cells of cpu board
- *   - Create an event handler which take the click and parse an x and an y
- *    - Decide where to put event handler, maybe in a file or in game.
- *    - Carefull about IEEF game, might need a new file or module not IEFF.
- *      Maybe is better to separate handler and game IEEF.
+ * - fix gameboard tests
+ * - Tests: finish game tests?
+ * - Comments
+ * - Pass to DOM
  */
