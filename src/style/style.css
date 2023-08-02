@@ -1,3 +1,10 @@
+/* TODO: 
+ * - button;
+ * - button:hover;
+ * - button:active;
+ * - rival board: hover;
+ */
+
 /* CSS Reset */
 *,
 *::before,
@@ -40,6 +47,8 @@
 
   /* Padding */
   --padding-min: 1vw;
+
+  --radius: 10px;
 }
 
 body {
@@ -82,7 +91,7 @@ body {
   grid-area: main;
   display: grid;
   grid-template:
-    [row1-start] 'messages messages' [row1-end]
+    [row1-start] 'instructions instructions' [row1-end]
     [row2-start] 'player-one-name player-two-name' [row2-end]
     [row3-start] 'player-board rival-board' [row3-end]
     [row4-start] 'player-ships rival-ships' [row4-end]
@@ -94,10 +103,54 @@ body {
   font-size: var(--fonts-normal);
   min-height: 79vh;
 }
+
+.instructions {
+  grid-area: instructions;
+  width: 100%;
+  display: grid;
+  grid-template:
+    [row1-start] 'messages btnStart' [row1-end]
+    / 0.8fr 0.2fr;
+  align-items: center;
+  justify-items: center;
+  gap: 1vw;
+}
+
 .messages {
   grid-area: messages;
+  width: 30%;
   padding: var(--padding-min);
   background-color: var(--slate300);
+  border-radius: var(--radius);
+}
+
+.message-field {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.buttons {
+  grid-area: btnStart;
+  width: 30%;
+  padding: var(--padding-min);
+  font-size: var(--fonts-normal);
+
+  color: var(--slate50);
+  background-color: var(--slate700);
+  border-radius: var(--radius);
+  border: none;
+  box-shadow: 5px 5px 5px 1px var(--slate300);
+}
+
+.buttons:hover {
+  background-color: var(--slate600);
+  box-shadow: 5px 5px 5px 1px var(--slate200);
+}
+
+.buttons:active {
+  transform: translateY(5px);
+  box-shadow: none;
 }
 
 .players-name {
@@ -146,6 +199,7 @@ body {
   padding: 0.5vw;
   width: 15vw;
   height: 10vw;
+  border-radius: var(--radius);
 }
 
 .player-ships {

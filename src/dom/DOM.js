@@ -1,4 +1,5 @@
 import game from '../components/game';
+import eventListeners from './eventListeners';
 import iconLN from '../assets/icons/linkedin.svg';
 import iconGH from '../assets/icons/github.svg';
 
@@ -61,11 +62,27 @@ const renderTitle = (header) => {
   createAndRenderElement('h1', { class: 'header-title' }, 'Battleship', header);
 };
 
+const renderControllers = (section) =>
+  createAndRenderElement(
+    'div',
+    { id: 'controllers', class: 'instructions' },
+    null,
+    section
+  );
+
 const renderMessage = (section) =>
   createAndRenderElement(
     'div',
-    { id: 'message-field', class: 'messages' },
+    { id: 'message-field', class: 'messages message-field' },
     'Place your ships',
+    section
+  );
+
+const renderButton = (section) =>
+  createAndRenderElement(
+    'button',
+    { type: 'button', id: 'button-start', class: 'buttons' },
+    'Start',
     section
   );
 
@@ -239,7 +256,9 @@ const renderGhIcon = (link) =>
 const renderPage = () => {
   const body = createStructureBody();
   renderTitle(body.header);
-  renderMessage(body.main);
+  const controllers = renderControllers(body.main);
+  renderMessage(controllers);
+  renderButton(controllers);
   renderPlayerName(body.main);
   renderCpuName(body.main);
   const boardPlayer = renderBoardPlayer(body.main);
@@ -255,6 +274,9 @@ const renderPage = () => {
   const links = createLinks(footer.icons);
   renderLnIcon(links.linkedin);
   renderGhIcon(links.github);
+  const listeners = eventListeners();
+  const cellsRivalBoard = listeners.clicksRivalBoard();
+  listeners.removeClicksRivalBoard(cellsRivalBoard);
 };
 
 const DOM = () => {
@@ -262,3 +284,10 @@ const DOM = () => {
 };
 
 export default DOM;
+
+/* TODO:
+ * - Button start
+ * - Code Review
+ * - Functional style Review
+ * - Tests?
+ */
