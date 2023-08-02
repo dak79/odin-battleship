@@ -1,4 +1,4 @@
-import game from './game';
+import game from '../components/game';
 import iconLN from '../assets/icons/linkedin.svg';
 import iconGH from '../assets/icons/github.svg';
 
