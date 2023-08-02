@@ -93,7 +93,7 @@ const renderPlayerName = (section) =>
       id: 'player-one-name',
       class: 'players-name player-one-name'
     },
-    game.initialState.playerOne.getPlayerName(),
+    game.playerOne.getPlayerName(),
     section
   );
 
@@ -104,7 +104,7 @@ const renderCpuName = (section) =>
       id: 'player-two-name',
       class: 'players-name player-two-name'
     },
-    game.initialState.playerTwo.getPlayerName(),
+    game.playerTwo.getPlayerName(),
     section
   );
 
@@ -190,26 +190,24 @@ const renderShipsRivalContainer = (section) =>
   );
 
 const renderShipIcons = (section) => {
-  Object.entries(game.placementState.playerOneShips).forEach(
-    ([ship, descriptions]) => {
-      const div = createAndRenderElement('div', { id: ship }, null, section);
-      descriptions.forEach((description, index) => {
-        const span = createAndRenderElement(
-          'span',
-          { id: `${ship}-${index}`, class: 'container' },
-          null,
-          div
-        );
+  Object.entries(game.shipsPlayer).forEach(([ship, descriptions]) => {
+    const div = createAndRenderElement('div', { id: ship }, null, section);
+    descriptions.forEach((description, index) => {
+      const span = createAndRenderElement(
+        'span',
+        { id: `${ship}-${index}`, class: 'container' },
+        null,
+        div
+      );
 
-        createAndRenderElement(
-          'img',
-          { src: description.icon, alt: `${ship}-icon`, class: 'icons-size' },
-          null,
-          span
-        );
-      });
-    }
-  );
+      createAndRenderElement(
+        'img',
+        { src: description.icon, alt: `${ship}-icon`, class: 'icons-size' },
+        null,
+        span
+      );
+    });
+  });
 };
 
 const createFooterStructure = (footer) => ({
@@ -262,12 +260,12 @@ const renderPage = () => {
   renderPlayerName(body.main);
   renderCpuName(body.main);
   const boardPlayer = renderBoardPlayer(body.main);
-  renderBoard(boardPlayer, game.initialState.playerOneGameboard.board);
+  renderBoard(boardPlayer, game.playerOneGameboard.board);
   const boardRival = renderBoardRival(body.main);
-  renderBoard(boardRival, game.initialState.playerTwoGameboard.board);
+  renderBoard(boardRival, game.playerTwoGameboard.board);
   const shipsContainerPlayer = renderShipsPlayerContainer(body.main);
   renderShipIcons(shipsContainerPlayer);
-  renderPlayerShips(game.initialState.playerOneGameboard.board);
+  renderPlayerShips(game.playerOneGameboard.board);
   const shipsContainerRival = renderShipsRivalContainer(body.main);
   renderShipIcons(shipsContainerRival);
   const footer = createFooterStructure(body.footer);
@@ -286,8 +284,8 @@ const DOM = () => {
 export default DOM;
 
 /* TODO:
- * - Button start
  * - Code Review
  * - Functional style Review
  * - Tests?
+ * - Comments
  */
