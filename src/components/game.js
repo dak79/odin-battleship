@@ -45,23 +45,23 @@ const createShipPlayers = () =>
   }, {});
 
 const shipPlacement = {
-  carrier: [{ x: 0, y: 0, isVertical: false }],
+  carrier: [{ row: 0, col: 0, isHorizontal: true }],
   battleships: [
-    { x: 5, y: 5, isVertical: false },
-    { x: 2, y: 4, isVertical: true }
+    { row: 4, col: 2, isHorizontal: false },
+    { row: 5, col: 5, isHorizontal: true }
   ],
 
   submarines: [
-    { x: 7, y: 2, isVertical: true },
-    { x: 3, y: 2, isVertical: false },
-    { x: 4, y: 8, isVertical: false }
+    { row: 2, col: 3, isHorizontal: true },
+    { row: 2, col: 7, isHorizontal: false },
+    { row: 8, col: 4, isHorizontal: true }
   ],
 
   destroyers: [
-    { x: 9, y: 0, isVertical: true },
-    { x: 4, y: 4, isVertical: true },
-    { x: 0, y: 4, isVertical: true },
-    { x: 3, y: 9, isVertical: false }
+    { row: 4, col: 0, isHorizontal: false },
+    { row: 4, col: 4, isHorizontal: false },
+    { row: 9, col: 3, isHorizontal: true },
+    { row: 0, col: 9, isHorizontal: false }
   ]
 };
 
@@ -80,9 +80,9 @@ const initialPlacementPlayer = (ships, gameboard) => {
       gameboard.placeShip(
         gameboard.board,
         ship.body,
-        ship.x,
-        ship.y,
-        ship.isVertical
+        ship.row,
+        ship.col,
+        ship.isHorizontal
       );
     });
   });
@@ -127,7 +127,6 @@ const game = initGame();
 export default game;
 
 /* TODO:
- * - fix gameboard tests
  * - Tests: finish game tests?
  * - Comments
  * - Pass to DOM
