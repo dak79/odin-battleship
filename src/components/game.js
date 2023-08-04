@@ -7,23 +7,44 @@ import iconBattleship from '../assets/icons/battleship.svg';
 import iconSubmarine from '../assets/icons/submarine.svg';
 import iconDestroyer from '../assets/icons/destroyer.svg';
 
-const createPlayer = (isHuman, name) => {
+/**
+ * Create a player.
+ * @param {Boolean} isHuman
+ * @param {String} name
+ * @param {Boolean} isPlaying
+ * @returns player
+ */
+const createPlayer = (isHuman, name, isPlaying) => {
   const player = Player();
   player.setIsHuman(isHuman);
   player.setPlayerName(name);
+  player.setPlayerTurn(isPlaying);
   return player;
 };
 
+/**
+ * Initialize players
+ * @returns Object with players
+ */
 const createNewPlayers = () => ({
-  playerOne: createPlayer(true, 'Player 1'),
-  playerTwo: createPlayer(false, 'Cpu')
+  playerOne: createPlayer(true, 'Player 1', true),
+  playerTwo: createPlayer(false, 'Cpu', false)
 });
 
+/**
+ * Initialize gameboards
+ * @returns Object with gameboards
+ */
 const createNewGameboards = () => ({
   playerOneGameboard: Gameboard(),
   playerTwoGameboard: Gameboard()
 });
 
+/**
+ * Create ships
+ * @param {Object} type - Type of ship
+ * @returns An Object with ships
+ */
 const createShips = (type) =>
   Array.from({ length: type.number }, () => ({
     body: Ship(type.size),
@@ -31,6 +52,9 @@ const createShips = (type) =>
     icon: type.icon
   }));
 
+/**
+ * Describe ships
+ */
 const shipTypes = {
   carrier: { number: 1, size: 5, icon: iconCarrier },
   battleships: { number: 2, size: 4, icon: iconBattleship },
@@ -38,12 +62,19 @@ const shipTypes = {
   destroyers: { number: 4, size: 2, icon: iconDestroyer }
 };
 
+/**
+ * Create ships for each player
+ * @returns Object with ships
+ */
 const createShipPlayers = () =>
   Object.keys(shipTypes).reduce((ships, type) => {
     ships[type] = createShips(shipTypes[type]);
     return ships;
   }, {});
 
+/**
+ * Describe coordinate and direction of ships
+ */
 const shipPlacement = {
   carrier: [{ row: 0, col: 0, isHorizontal: true }],
   battleships: [
@@ -65,6 +96,11 @@ const shipPlacement = {
   ]
 };
 
+/**
+ * Merge ships description and data for placement.
+ * @param {Object} ships
+ * @returns Object of ships with all data
+ */
 const setCoordShipsPlayer = (ships) => {
   return Object.keys(ships).reduce((updatedShips, type) => {
     updatedShips[type] = ships[type].map((ship, shipIndex) => {
@@ -74,6 +110,11 @@ const setCoordShipsPlayer = (ships) => {
   }, {});
 };
 
+/**
+ * Place ship on player board
+ * @param {Object} ships
+ * @param {Object} gameboard
+ */
 const initialPlacementPlayer = (ships, gameboard) => {
   Object.values(ships).forEach((typeOfShip) => {
     typeOfShip.forEach((ship) => {
@@ -88,6 +129,11 @@ const initialPlacementPlayer = (ships, gameboard) => {
   });
 };
 
+/**
+ * Place randomly ship on opponent board.
+ * @param {Object} ships
+ * @param {Object} gameboard
+ */
 const initialPlacementRival = (ships, gameboard) => {
   const MAX_BOARD_SIZE = 10;
   Object.values(ships).forEach((typeOfShips) => {
@@ -106,6 +152,10 @@ const initialPlacementRival = (ships, gameboard) => {
   });
 };
 
+/**
+ * Initialize the game;
+ * @returns Object
+ */
 const initGame = () => {
   const players = createNewPlayers();
   const gameboards = createNewGameboards();
@@ -122,12 +172,9 @@ const initGame = () => {
   };
 };
 
+/**
+ * Export the game object
+ */
 const game = initGame();
 
 export default game;
-
-/* TODO:
- * - Tests: finish game tests?
- * - Comments
- * - Pass to DOM
- */
