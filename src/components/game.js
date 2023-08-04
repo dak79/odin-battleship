@@ -101,33 +101,32 @@ const shipPlacement = {
  * @param {Object} ships
  * @returns Object of ships with all data
  */
-const setCoordShipsPlayer = (ships) => {
-  return Object.keys(ships).reduce((updatedShips, type) => {
-    updatedShips[type] = ships[type].map((ship, shipIndex) => {
-      return Object.assign(ship, shipPlacement[type][shipIndex]);
-    });
-    return updatedShips;
-  }, {});
-};
+const setCoordShipsPlayer = (ships) =>
+  Object.keys(ships).reduce(
+    (updatedShips, type) =>
+      (updatedShips[type] = ships[type].map((ship, shipIndex) =>
+        Object.assign(ship, shipPlacement[type][shipIndex])
+      )),
+    {}
+  );
 
 /**
  * Place ship on player board
  * @param {Object} ships
  * @param {Object} gameboard
  */
-const initialPlacementPlayer = (ships, gameboard) => {
-  Object.values(ships).forEach((typeOfShip) => {
-    typeOfShip.forEach((ship) => {
+const initialPlacementPlayer = (ships, gameboard) =>
+  Object.values(ships).forEach((typeOfShip) =>
+    typeOfShip.forEach((ship) =>
       gameboard.placeShip(
         gameboard.board,
         ship.body,
         ship.row,
         ship.col,
         ship.isHorizontal
-      );
-    });
-  });
-};
+      )
+    )
+  );
 
 /**
  * Place randomly ship on opponent board.
@@ -136,7 +135,7 @@ const initialPlacementPlayer = (ships, gameboard) => {
  */
 const initialPlacementRival = (ships, gameboard) => {
   const MAX_BOARD_SIZE = 10;
-  Object.values(ships).forEach((typeOfShips) => {
+  Object.values(ships).forEach((typeOfShips) =>
     typeOfShips.forEach((ship) => {
       let placed = false;
       while (!placed) {
@@ -148,8 +147,8 @@ const initialPlacementRival = (ships, gameboard) => {
           Math.random() < 0.5
         );
       }
-    });
-  });
+    })
+  );
 };
 
 /**
