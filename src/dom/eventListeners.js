@@ -1,7 +1,6 @@
 import eventHandlers from './eventHandlers';
 
-const clicksRivalBoard = () => {
-  const table = document.querySelector('#board-rival-table');
+const clicksRivalBoard = (table) => {
   const cells = table.querySelectorAll('td');
 
   cells.forEach((cell) => {
@@ -19,11 +18,13 @@ const removeClicksRivalBoard = (cells) => {
 const removeClickRivalBoard = (cell) =>
   cell.removeEventListener('click', eventHandlers.parseAttackCoords);
 
-const eventListeners = () => {
+const initializeEventListeners = (body) => {
+  const rivalTable = body.main.querySelector('#board-rival');
+  const cellsRivalBoard = clicksRivalBoard(rivalTable);
+};
+const eventListeners = (body) => {
   return {
-    clicksRivalBoard,
-    removeClicksRivalBoard,
-    removeClickRivalBoard
+    events: () => initializeEventListeners(body)
   };
 };
 export default eventListeners;
