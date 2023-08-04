@@ -1,18 +1,45 @@
-import game from './game';
+import game from '../components/game';
+
+describe('Game Object', () => {
+  it('has playerOne property', () => {
+    expect(game).toHaveProperty('playerOne');
+  });
+
+  it('has playerTwo property', () => {
+    expect(game).toHaveProperty('playerTwo');
+  });
+
+  it('has playerOneGameboard property', () => {
+    expect(game).toHaveProperty('playerOneGameboard');
+  });
+
+  it('has playerTwoGameboard property', () => {
+    expect(game).toHaveProperty('playerTwoGameboard');
+  });
+});
 
 describe('Game Initialization', () => {
-  it('initializes the game with correct states', () => {
-    expect(game.initialState.playerOne.isHuman).toBe(true);
-    expect(game.initialState.playerOne.playerName).toBe('Player 1');
-    expect(game.initialState.playerTwo.isHuman).toBe(false);
-    expect(game.initialState.playerTwo.playerName).toBe('Cpu');
-    // Test other properties of players
+  it('initializes the game with correct Player One states', () => {
+    expect(game.playerOne.getIsHuman()).toBe(true);
+    expect(game.playerOne.getPlayerName()).toBe('Player 1');
+    expect(game.playerOne.getPlayerTurn()).toBe(true);
+  });
 
-    expect(game.initialState.playerOneGameboard).toBeDefined();
-    expect(game.initialState.playerTwoGameboard).toBeDefined();
-    // Test other properties of gameboards
+  it('initializes the game with correct Player Two states', () => {
+    expect(game.playerTwo.getIsHuman()).toBe(false);
+    expect(game.playerTwo.getPlayerName()).toBe('Cpu');
+    expect(game.playerTwo.getPlayerTurn()).toBe(false);
+  });
 
-    expect(game.placementState.playerOneShips).toBeDefined();
-    // Test other aspects of the game initialization
+  it('initializes playerOneGameboard', () => {
+    expect(game.playerOneGameboard.board).toBeDefined();
+  });
+
+  it('initializes playerTwoGameboard', () => {
+    expect(game.playerTwoGameboard.board).toBeDefined();
+  });
+
+  it('initializes shipsPlayer', () => {
+    expect(game.shipsPlayer).toBeDefined();
   });
 });
