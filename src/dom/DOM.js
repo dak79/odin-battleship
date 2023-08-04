@@ -27,6 +27,14 @@ const renderElement = (parent, element) => {
   parent.appendChild(element);
 };
 
+/**
+ * Create and append element.
+ * @param {String} type - Element tag
+ * @param {Object} attributes - Element attributes
+ * @param {String|null} textContent - Element text content
+ * @param {Node} parent - Node to attach element.
+ * @returns HTML Element.
+ */
 const createAndRenderElement = (
   type,
   attributes = {},
@@ -39,6 +47,11 @@ const createAndRenderElement = (
   return element;
 };
 
+/**
+ * Create the structure of body element.
+ * @param {Node} hook
+ * @returns
+ */
 const createStructureBody = (hook) => ({
   header: createAndRenderElement(
     'header',
@@ -69,10 +82,19 @@ const createStructureBody = (hook) => ({
   )
 });
 
+/**
+ * Render the page title
+ * @param {Node} header
+ */
 const renderTitle = (header) => {
   createAndRenderElement('h1', { class: 'header-title' }, 'Battleship', header);
 };
 
+/**
+ * Render the controllers section
+ * @param {Node} section
+ * @returns
+ */
 const renderControllers = (section) =>
   createAndRenderElement(
     'div',
@@ -81,6 +103,11 @@ const renderControllers = (section) =>
     section
   );
 
+/**
+ * Render the message section.
+ * @param {Node} section
+ * @returns
+ */
 const renderMessage = (section) =>
   createAndRenderElement(
     'div',
@@ -89,6 +116,11 @@ const renderMessage = (section) =>
     section
   );
 
+/**
+ * Render start button.
+ * @param {Node} section
+ * @returns
+ */
 const renderButton = (section) =>
   createAndRenderElement(
     'button',
@@ -97,6 +129,12 @@ const renderButton = (section) =>
     section
   );
 
+/**
+ * Render player name
+ * @param {Node} section
+ * @param {String} name
+ * @returns
+ */
 const renderPlayerName = (section, name) =>
   createAndRenderElement(
     'div',
@@ -108,6 +146,12 @@ const renderPlayerName = (section, name) =>
     section
   );
 
+/**
+ * Render Cpu name
+ * @param {Node} section
+ * @param {String} name
+ * @returns
+ */
 const renderCpuName = (section, name) =>
   createAndRenderElement(
     'div',
@@ -119,6 +163,11 @@ const renderCpuName = (section, name) =>
     section
   );
 
+/**
+ * Render board container for player
+ * @param {Node} section
+ * @returns
+ */
 const renderBoardPlayer = (section) =>
   createAndRenderElement(
     'div',
@@ -127,6 +176,11 @@ const renderBoardPlayer = (section) =>
     section
   );
 
+/**
+ * Render the board container for rival
+ * @param {Node} section
+ * @returns
+ */
 const renderBoardRival = (section) =>
   createAndRenderElement(
     'div',
@@ -135,6 +189,11 @@ const renderBoardRival = (section) =>
     section
   );
 
+/**
+ * Render board
+ * @param {Node} parent
+ * @param {Array[]} board
+ */
 const renderBoard = (parent, board) => {
   const table = createAndRenderElement(
     'table',
@@ -170,6 +229,10 @@ const renderBoard = (parent, board) => {
   });
 };
 
+/**
+ * Render the ship on board
+ * @param {Array[]} board
+ */
 const renderPlayerShips = (board) => {
   const table = document.querySelector('#board-player-table');
   const rows = Array.from(table.rows);
@@ -184,6 +247,11 @@ const renderPlayerShips = (board) => {
   });
 };
 
+/**
+ * Render container for player ship icon.
+ * @param {Node} section
+ * @returns
+ */
 const renderShipsPlayerContainer = (section) =>
   createAndRenderElement(
     'div',
@@ -192,6 +260,11 @@ const renderShipsPlayerContainer = (section) =>
     section
   );
 
+/**
+ * Render container for cpu ship icon.
+ * @param {Node} section
+ * @returns
+ */
 const renderShipsRivalContainer = (section) =>
   createAndRenderElement(
     'div',
@@ -200,6 +273,11 @@ const renderShipsRivalContainer = (section) =>
     section
   );
 
+/**
+ * Render icon for ships
+ * @param {Node} section
+ * @param {Object} ships
+ */
 const renderShipIcons = (section, ships) => {
   Object.entries(ships).forEach(([ship, descriptions]) => {
     const div = createAndRenderElement('div', { id: ship }, null, section);
@@ -221,6 +299,11 @@ const renderShipIcons = (section, ships) => {
   });
 };
 
+/**
+ * Render container for footer elments
+ * @param {Node} footer
+ * @returns
+ */
 const createFooterStructure = (footer) => ({
   credits: createAndRenderElement(
     'div',
@@ -231,6 +314,11 @@ const createFooterStructure = (footer) => ({
   icons: createAndRenderElement('div', { class: 'footer-icons' }, null, footer)
 });
 
+/**
+ * Create links for GitHub and LinkedIn
+ * @param {Node} div
+ * @returns
+ */
 const createLinks = (div) => ({
   linkedin: createAndRenderElement(
     'a',
@@ -246,6 +334,11 @@ const createLinks = (div) => ({
   )
 });
 
+/**
+ * Render Linkedin Icon
+ * @param {Node} link
+ * @returns
+ */
 const renderLnIcon = (link) =>
   createAndRenderElement(
     'img',
@@ -254,6 +347,11 @@ const renderLnIcon = (link) =>
     link
   );
 
+/**
+ * Render GitHub icon
+ * @param {Node} link
+ * @returns
+ */
 const renderGhIcon = (link) =>
   createAndRenderElement(
     'img',
@@ -262,10 +360,19 @@ const renderGhIcon = (link) =>
     link
   );
 
+/**
+ * Render Header Content
+ * @param {Node} parent
+ */
 const renderHeaderContent = (parent) => {
   renderTitle(parent);
 };
 
+/**
+ * Render controllers content
+ * @param {Node} parent
+ * @param {*} game
+ */
 const renderControllersContent = (parent, game) => {
   const controllers = renderControllers(parent);
   renderMessage(controllers);
@@ -275,6 +382,11 @@ const renderControllersContent = (parent, game) => {
   renderCpuName(parent, game.playerTwo.getPlayerName());
 };
 
+/**
+ * Render game contents
+ * @param {Node} parent
+ * @param {*} game
+ */
 const renderGameContent = (parent, game) => {
   const boardPlayer = renderBoardPlayer(parent);
   renderBoard(boardPlayer, game.playerOneGameboard.board);
@@ -290,6 +402,10 @@ const renderGameContent = (parent, game) => {
   renderShipIcons(shipsContainerRival, game.shipsPlayer);
 };
 
+/**
+ * Render footer content
+ * @param {Node} parent
+ */
 const renderFooterContent = (parent) => {
   const footer = createFooterStructure(parent);
   const links = createLinks(footer.icons);
@@ -297,6 +413,12 @@ const renderFooterContent = (parent) => {
   renderGhIcon(links.github);
 };
 
+/**
+ * Render the web page
+ * @param {Node} hook
+ * @param {Object} game
+ * @returns
+ */
 const renderPage = (hook, game) => {
   const body = createStructureBody(hook);
 
@@ -310,16 +432,14 @@ const renderPage = (hook, game) => {
   return body;
 };
 
+/**
+ * Export DOM object
+ * @param {Node} hook
+ * @param {Object} game
+ * @returns
+ */
 const DOM = (hook, game) => ({
   render: () => renderPage(hook, game)
 });
 
 export default DOM;
-
-/* TODO:
- * - Code Review
- * - Functional style Review
- * - Tests?
- * - Comments
- * - check gameboard, gameboard test, ship and ship test;
- */
