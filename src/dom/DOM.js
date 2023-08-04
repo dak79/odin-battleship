@@ -1,9 +1,5 @@
-import game from '../components/game';
-import eventListeners from './eventListeners';
 import iconLN from '../assets/icons/linkedin.svg';
 import iconGH from '../assets/icons/github.svg';
-
-const hook = document.querySelector('#hook');
 
 /**
  * Create an HTML element.
@@ -35,7 +31,7 @@ const createAndRenderElement = (
   type,
   attributes = {},
   textContent = null,
-  parent = hook
+  parent
 ) => {
   const element = createElement(type, attributes, textContent);
   renderElement(parent, element);
@@ -43,19 +39,34 @@ const createAndRenderElement = (
   return element;
 };
 
-const createStructureBody = () => ({
-  header: createAndRenderElement('header', {
-    id: 'body-header',
-    class: 'body-header'
-  }),
-  main: createAndRenderElement('main', {
-    id: 'body-main',
-    class: 'body-main'
-  }),
-  footer: createAndRenderElement('footer', {
-    id: 'body-footer',
-    class: 'body-footer'
-  })
+const createStructureBody = (hook) => ({
+  header: createAndRenderElement(
+    'header',
+    {
+      id: 'body-header',
+      class: 'body-header'
+    },
+    null,
+    hook
+  ),
+  main: createAndRenderElement(
+    'main',
+    {
+      id: 'body-main',
+      class: 'body-main'
+    },
+    null,
+    hook
+  ),
+  footer: createAndRenderElement(
+    'footer',
+    {
+      id: 'body-footer',
+      class: 'body-footer'
+    },
+    null,
+    hook
+  )
 });
 
 const renderTitle = (header) => {
@@ -86,25 +97,25 @@ const renderButton = (section) =>
     section
   );
 
-const renderPlayerName = (section) =>
+const renderPlayerName = (section, name) =>
   createAndRenderElement(
     'div',
     {
       id: 'player-one-name',
       class: 'players-name player-one-name'
     },
-    game.playerOne.getPlayerName(),
+    name,
     section
   );
 
-const renderCpuName = (section) =>
+const renderCpuName = (section, name) =>
   createAndRenderElement(
     'div',
     {
       id: 'player-two-name',
       class: 'players-name player-two-name'
     },
-    game.playerTwo.getPlayerName(),
+    name,
     section
   );
 
@@ -189,8 +200,8 @@ const renderShipsRivalContainer = (section) =>
     section
   );
 
-const renderShipIcons = (section) => {
-  Object.entries(game.shipsPlayer).forEach(([ship, descriptions]) => {
+const renderShipIcons = (section, ships) => {
+  Object.entries(ships).forEach(([ship, descriptions]) => {
     const div = createAndRenderElement('div', { id: ship }, null, section);
     descriptions.forEach((description, index) => {
       const span = createAndRenderElement(
@@ -251,35 +262,57 @@ const renderGhIcon = (link) =>
     link
   );
 
-const renderPage = () => {
-  const body = createStructureBody();
-  renderTitle(body.header);
-  const controllers = renderControllers(body.main);
+const renderHeaderContent = (parent) => {
+  renderTitle(parent);
+};
+
+const renderControllersContent = (parent, game) => {
+  const controllers = renderControllers(parent);
   renderMessage(controllers);
   renderButton(controllers);
-  renderPlayerName(body.main);
-  renderCpuName(body.main);
-  const boardPlayer = renderBoardPlayer(body.main);
+
+  renderPlayerName(parent, game.playerOne.getPlayerName());
+  renderCpuName(parent, game.playerTwo.getPlayerName());
+};
+
+const renderGameContent = (parent, game) => {
+  const boardPlayer = renderBoardPlayer(parent);
   renderBoard(boardPlayer, game.playerOneGameboard.board);
-  const boardRival = renderBoardRival(body.main);
+
+  const boardRival = renderBoardRival(parent);
   renderBoard(boardRival, game.playerTwoGameboard.board);
-  const shipsContainerPlayer = renderShipsPlayerContainer(body.main);
-  renderShipIcons(shipsContainerPlayer);
+
+  const shipsContainerPlayer = renderShipsPlayerContainer(parent);
+  renderShipIcons(shipsContainerPlayer, game.shipsPlayer);
   renderPlayerShips(game.playerOneGameboard.board);
-  const shipsContainerRival = renderShipsRivalContainer(body.main);
-  renderShipIcons(shipsContainerRival);
-  const footer = createFooterStructure(body.footer);
+
+  const shipsContainerRival = renderShipsRivalContainer(parent);
+  renderShipIcons(shipsContainerRival, game.shipsPlayer);
+};
+
+const renderFooterContent = (parent) => {
+  const footer = createFooterStructure(parent);
   const links = createLinks(footer.icons);
   renderLnIcon(links.linkedin);
   renderGhIcon(links.github);
-  const listeners = eventListeners();
-  const cellsRivalBoard = listeners.clicksRivalBoard();
-  listeners.removeClicksRivalBoard(cellsRivalBoard);
 };
 
-const DOM = () => {
-  renderPage();
+const renderPage = (hook, game) => {
+  const body = createStructureBody(hook);
+
+  renderHeaderContent(body.header);
+
+  renderControllersContent(body.main, game);
+  renderGameContent(body.main, game);
+
+  renderFooterContent(body.footer);
+
+  return body;
 };
+
+const DOM = (hook, game) => ({
+  render: () => renderPage(hook, game)
+});
 
 export default DOM;
 
@@ -288,4 +321,5 @@ export default DOM;
  * - Functional style Review
  * - Tests?
  * - Comments
+ * - check gameboard, gameboard test, ship and ship test;
  */
