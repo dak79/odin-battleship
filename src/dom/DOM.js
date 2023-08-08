@@ -116,6 +116,11 @@ const renderMessage = (section) =>
     section
   );
 
+const setMessage = (message) => {
+  const messageField = document.querySelector('#message-field');
+  messageField.textContent = message;
+};
+
 /**
  * Render start button.
  * @param {Node} section
@@ -233,8 +238,8 @@ const renderBoard = (parent, board) => {
  * Render the ship on board
  * @param {Array[]} board
  */
-const renderPlayerShips = (board) => {
-  const table = document.querySelector('#board-player-table');
+const renderPlayerShips = (board, table) => {
+  // const table = document.querySelector('#board-player-table');
   const rows = Array.from(table.rows);
   rows.forEach((row, rowIndex) => {
     const cells = Array.from(row.cells);
@@ -244,6 +249,25 @@ const renderPlayerShips = (board) => {
         td.classList.add('ship-placed');
       }
     });
+  });
+};
+
+const renderShot = (table, x, y, isHit) => {
+  const rows = Array.from(table.rows);
+  rows.forEach((row) => {
+    const td = Array.from(row.cells).find(
+      (td) => td.dataset.x === x && td.dataset.y === y
+    );
+
+    if (td) {
+      if (!td.classList.contains('.ship-hit') && isHit === true) {
+        td.classList.add('ship-hit');
+      }
+
+      if (!td.classList.contains('missed-hit') && isHit === false) {
+        td.classList.add('missed-hit');
+      }
+    }
   });
 };
 
@@ -281,22 +305,23 @@ const renderShipsRivalContainer = (section) =>
 const renderShipIcons = (section, ships) => {
   Object.entries(ships).forEach(([ship, descriptions]) => {
     const div = createAndRenderElement('div', { id: ship }, null, section);
-    descriptions.forEach((description, index) => {
-      const span = createAndRenderElement(
-        'span',
-        { id: `${ship}-${index}`, class: 'container' },
-        null,
-        div
-      );
-
+    descriptions.forEach((description) => {
       createAndRenderElement(
         'img',
         { src: description.icon, alt: `${ship}-icon`, class: 'icons-size' },
         null,
-        span
+        div
       );
     });
   });
+};
+
+const renderSunkedShip = (container) => {
+  const icons = Array.from(container.children);
+  const icon = icons.find((icon) => !icon.classList.contains('ship-sunked'));
+  if (icon) {
+    icon.classList.add('ship-sunked');
+  }
 };
 
 /**
@@ -396,7 +421,11 @@ const renderGameContent = (parent, game) => {
 
   const shipsContainerPlayer = renderShipsPlayerContainer(parent);
   renderShipIcons(shipsContainerPlayer, game.shipsPlayer);
-  renderPlayerShips(game.playerOneGameboard.board);
+
+  const tablePlayer = document.querySelector('#board-player-table');
+  renderPlayerShips(game.playerOneGameboard.board, tablePlayer);
+  const tableRival = document.querySelector('#board-rival-table');
+  renderPlayerShips(game.playerTwoGameboard.board, tableRival);
 
   const shipsContainerRival = renderShipsRivalContainer(parent);
   renderShipIcons(shipsContainerRival, game.shipsPlayer);
@@ -438,8 +467,11 @@ const renderPage = (hook, game) => {
  * @param {Object} game
  * @returns
  */
-const DOM = (hook, game) => ({
-  render: () => renderPage(hook, game)
+const DOM = () => ({
+  render: (hook, game) => renderPage(hook, game),
+  setMessage: (message) => setMessage(message),
+  renderShot: (table, row, col, isHit) => renderShot(table, row, col, isHit),
+  renderSunkedShip: (ship) => renderSunkedShip(ship)
 });
 
 export default DOM;
