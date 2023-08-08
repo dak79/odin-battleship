@@ -39,6 +39,9 @@
   --slate800: #1e293b;
   --slate900: #0f172a;
   --slate950: #020617;
+  --red500: #ef4444;
+  --red600: #dc2626;
+  --red700: #b91c1c;
 
   /* Fonts */
   --fonts-big: 2.5vw;
@@ -190,6 +193,15 @@ body {
 
 .rival-board {
   grid-area: rival-board;
+}
+
+.ship-hit,
+.ship-sunked {
+  background-color: var(--red500);
+}
+
+.missed-hit {
+  background-color: var(--slate300);
 }
 
 .ships-container {
