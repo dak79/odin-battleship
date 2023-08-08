@@ -38,12 +38,6 @@ const Ship = (len) => {
       (int) => validateShipLength(int)
     )(len);
 
-  const init = {
-    len: setLength(),
-    hits: 0,
-    sunked: false
-  };
-
   /**
    * Hit the ship.
    * @param {Object} obj
@@ -63,6 +57,20 @@ const Ship = (len) => {
    * @returns
    */
   const isSunk = (obj = init) => obj.sunked;
+
+  const init = {
+    len: setLength(),
+    type:
+      len === 5
+        ? 'carrier'
+        : len === 4
+        ? 'battleships'
+        : len === 3
+        ? 'submarines'
+        : 'destroyers',
+    hits: 0,
+    sunked: false
+  };
 
   return {
     init,
