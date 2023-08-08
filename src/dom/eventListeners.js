@@ -1,17 +1,29 @@
 import eventHandlers from './eventHandlers';
+
+const startGame = (body) => {
+  const btnStart = body.main.querySelector('#controllers #button-start');
+  btnStart.addEventListener('click', eventHandlers.startGameLoop);
+};
+
 /**
  * Add click listener to cpu board.
  * @param {HTMLElement} table
  * @returns
  */
-const clicksRivalBoard = (table) => {
-  const cells = table.querySelectorAll('td');
+const addClicksRivalBoard = (body) => {
+  return new Promise((resolve) => {
+    const table = body.querySelector('#body-main #board-rival #board-rival-table');
+    const cells = table.querySelectorAll('td');
+
+  function attackCoords(event) {
+    const [row, col] = eventHandlers.parseAttackCoords(event)
+    resolve([row, col])
+  }
 
   cells.forEach((cell) => {
-    cell.addEventListener('click', eventHandlers.parseAttackCoords);
+    cell.addEventListener('click', attackCoords);
   });
-
-  return cells;
+  });
 };
 
 /**
@@ -22,6 +34,10 @@ const removeClicksRivalBoard = (cells) => {
   cells.forEach((cell) =>
     cell.removeEventListener('click', eventHandlers.parseAttackCoords)
   );
+};
+
+const startGameRemove = (btn) => {
+  btn.removeEventListener('click', eventHandlers.startGameLoop);
 };
 
 /**
@@ -37,8 +53,11 @@ const removeClickRivalBoard = (cell) =>
  * @param {HTMLElement} body
  */
 const initializeEventListeners = (body) => {
-  const rivalTable = body.main.querySelector('#board-rival');
+  const rivalTable = body.main.querySelector('#board-rival #board-rival-table');
   const cellsRivalBoard = clicksRivalBoard(rivalTable);
+
+  // const startBtn = body.main.querySelector('#controllers #button-start');
+  // startGame(startBtn);
 };
 
 /**
@@ -46,10 +65,10 @@ const initializeEventListeners = (body) => {
  * @param {HTMLElement} body
  * @returns
  */
-const eventListeners = (body) => {
-  return {
-    events: () => initializeEventListeners(body)
-  };
-};
+const eventListeners = () => ({
+  startBtn: (body) => startGame(body),
+  addClicksRivalBoard: (body) => addClicksRivalBoard(body),
+  removeClicksRivalBoard: (cells) => removeClicksRivalBoard(cells)
+});
 
 export default eventListeners;
