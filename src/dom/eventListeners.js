@@ -16,13 +16,9 @@ const addClicks = (body) => {
       '#body-main #board-rival #board-rival-table'
     );
     const cells = table.querySelectorAll('td');
-    const removeClicks = () => {
-      cells.forEach((cell) => cell.removeEventListener('click', attackHandler));
-    };
     const attackHandler = (event) => {
       const [row, col] = eventHandlers.parseAttackCoords(event);
-      removeClicks();
-      resolve({ coord: [row, col], remove: removeClicks });
+      resolve([row, col]);
     };
 
     cells.forEach((cell) => cell.addEventListener('click', attackHandler), {
