@@ -10,54 +10,29 @@ const startGame = (body) => {
  * @param {HTMLElement} table
  * @returns
  */
-const addClicksRivalBoard = (body) => {
+const addClicks = (body) => {
   return new Promise((resolve) => {
-    const table = body.querySelector('#body-main #board-rival #board-rival-table');
+    const table = body.querySelector(
+      '#body-main #board-rival #board-rival-table'
+    );
     const cells = table.querySelectorAll('td');
+    const removeClicks = () => {
+      cells.forEach((cell) => cell.removeEventListener('click', attackHandler));
+    };
+    const attackHandler = (event) => {
+      const [row, col] = eventHandlers.parseAttackCoords(event);
+      removeClicks();
+      resolve({ coord: [row, col], remove: removeClicks });
+    };
 
-  function attackCoords(event) {
-    const [row, col] = eventHandlers.parseAttackCoords(event)
-    resolve([row, col])
-  }
-
-  cells.forEach((cell) => {
-    cell.addEventListener('click', attackCoords);
+    cells.forEach((cell) => cell.addEventListener('click', attackHandler), {
+      once: true
+    });
   });
-  });
-};
-
-/**
- * Remove click listener from cpu board
- * @param {Array[]} cells
- */
-const removeClicksRivalBoard = (cells) => {
-  cells.forEach((cell) =>
-    cell.removeEventListener('click', eventHandlers.parseAttackCoords)
-  );
 };
 
 const startGameRemove = (btn) => {
   btn.removeEventListener('click', eventHandlers.startGameLoop);
-};
-
-/**
- * Remove listener from a cell.
- * @param {Array[]} cell
- * @returns
- */
-const removeClickRivalBoard = (cell) =>
-  cell.removeEventListener('click', eventHandlers.parseAttackCoords);
-
-/**
- * Initialize event listeners
- * @param {HTMLElement} body
- */
-const initializeEventListeners = (body) => {
-  const rivalTable = body.main.querySelector('#board-rival #board-rival-table');
-  const cellsRivalBoard = clicksRivalBoard(rivalTable);
-
-  // const startBtn = body.main.querySelector('#controllers #button-start');
-  // startGame(startBtn);
 };
 
 /**
@@ -67,8 +42,7 @@ const initializeEventListeners = (body) => {
  */
 const eventListeners = () => ({
   startBtn: (body) => startGame(body),
-  addClicksRivalBoard: (body) => addClicksRivalBoard(body),
-  removeClicksRivalBoard: (cells) => removeClicksRivalBoard(cells)
+  addClicks: (body) => addClicks(body)
 });
 
 export default eventListeners;
