@@ -2,106 +2,76 @@ import game from './game';
 import DOM from '../dom/DOM';
 import eventListeners from '../dom/eventListeners';
 
-const gameLoop = async () => {
+const attackDelay = 1000;
+
+const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const getTableSelector = (isPlayerOne) =>
+  isPlayerOne
+    ? '#body-main #board-rival #board-rival-table'
+    : '#body-main #board-player #board-player-table';
+
+const getMessage = (isPlayerOne) =>
+  isPlayerOne ? 'Attack enemy board' : 'Enemy attacks your ships';
+const getIconSelector = (isPlayerOne, shipType) =>
+  isPlayerOne
+    ? `#body-main #ships-rival #${shipType}`
+    : `#body-main #ships-player #${shipType}`;
+
+const playerAttack = async (attacker, opponent, isPlayerOne) => {
   const updateDom = DOM();
   const events = eventListeners();
   const body = document.querySelector('#hook');
-  let isWinner = false;
-  while (!isWinner) {
-    if (game.playerOne.getPlayerTurn()) {
-      updateDom.setMessage('Attack enemy board');
+  const tableSelector = getTableSelector(isPlayerOne);
+  const table = body.querySelector(tableSelector);
 
-      let parsedAttack = false;
-      while (!parsedAttack) {
-        await events.addClicks(body).then((res) => {
-          const [row, col] = res.coord;
-          parsedAttack = game.playerTwoGameboard.receiveAttack(
-            game.playerTwoGameboard.board,
-            row,
-            col
-          );
+  updateDom.setMessage(getMessage(isPlayerOne));
 
-          if (parsedAttack) {
-            res.remove();
-            if (game.playerTwoGameboard.board[row][col]) {
-              const ship = game.playerTwoGameboard.board[row][col];
-              const table = body.querySelector(
-                '#body-main #board-rival #board-rival-table'
-              );
-              updateDom.renderShot(table, row, col, true);
+  let validAttack = false;
 
-              if (ship.init.sunked) {
-                const icons = body.querySelector(
-                  `#body-main #ships-rival #${ship.init.type}`
-                );
-                updateDom.renderSunkedShip(icons);
-              }
-            } else {
-              const table = body.querySelector(
-                '#body-main #board-rival #board-rival-table'
-              );
-              updateDom.renderShot(table, row, col, false);
-            }
-            const tab = body.querySelector(
-              '#body-main #board-rival #board-rival-table'
-            );
-            tab.replaceWith(tab.cloneNode(true));
-          }
-        });
-      }
-      game.playerOne.setPlayerTurn(false);
-      game.playerTwo.setPlayerTurn(true);
-      isWinner = game.playerTwoGameboard.allShipSunked();
-    } else {
-      updateDom.setMessage('Enemy attacks your ships');
+  while (!validAttack) {
+    const coord = isPlayerOne
+      ? await events.addClicks(body)
+      : attacker.generateRandomCoordinates();
+    const [row, col] = coord;
+    validAttack = opponent.receiveAttack(opponent.board, row, col);
 
-      const playerOneBoard = document.querySelector('table');
-      playerOneBoard.style.pointerEvents = 'none';
+    if (validAttack) {
+      if (!isPlayerOne) await timer(attackDelay);
 
-      let parsedAttack = false;
-      while (!parsedAttack) {
-        const [row, col] = game.playerTwo.generateRandomCoordinates();
-
-        parsedAttack = game.playerOneGameboard.receiveAttack(
-          game.playerOneGameboard.board,
-          row,
-          col
-        );
-
-        if (parsedAttack) {
-          const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-          await timer(1000);
-          if (game.playerOneGameboard.board[row][col]) {
-            const ship = game.playerOneGameboard.board[row][col];
-            const table = body.querySelector(
-              '#body-main #board-player #board-player-table'
-            );
-            updateDom.renderShot(table, row, col, true);
-            if (ship.init.sunked) {
-              const icons = body.querySelector(
-                `#body-main #ships-player #${ship.init.type}`
-              );
-              updateDom.renderSunkedShip(icons);
-            }
-          } else {
-            const table = body.querySelector(
-              '#body-main #board-player #board-player-table'
-            );
-            updateDom.renderShot(table, row, col, false);
-          }
+      if (opponent.board[row][col]) {
+        updateDom.renderShot(table, row, col, true);
+        const ship = opponent.board[row][col];
+        if (ship.init.sunked) {
+          const iconSelector = getIconSelector(isPlayerOne, ship.init.type);
+          const shipIcons = body.querySelector(iconSelector);
+          updateDom.renderSunkedShip(shipIcons);
         }
+      } else {
+        updateDom.renderShot(table, row, col, false);
       }
-
-      // valid attack or repeat;
-      game.playerOne.setPlayerTurn(true);
-      game.playerTwo.setPlayerTurn(false);
-      isWinner = game.playerOneGameboard.allShipSunked();
     }
   }
-  console.log('Player win. Which?');
 };
 
+const gameLoop = async () => {
+  while (
+    !game.playerOneGameboard.allShipSunked() &&
+    !game.playerTwoGameboard.allShipSunked()
+  ) {
+    if (!game.playerOneGameboard.allShipSunked())
+      await playerAttack(game.playerOne, game.playerTwoGameboard, true);
+    if (!game.playerTwoGameboard.allShipSunked())
+      await playerAttack(game.playerTwo, game.playerOneGameboard, false);
+  }
+
+  game.playerOneGameboard.allShipSunked()
+    ? console.log('Cpu wins')
+    : console.log('Player 1 wins');
+};
 /* TODO:
- * ship test for ship type
+ * - ship test for ship type
+ * - read and think new requirement
+ *
  */
 export default gameLoop;
