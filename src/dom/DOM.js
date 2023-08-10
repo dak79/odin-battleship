@@ -262,10 +262,12 @@ const renderShot = (table, x, y, isHit) => {
     if (td) {
       if (!td.classList.contains('.ship-hit') && isHit === true) {
         td.classList.add('ship-hit');
+        return;
       }
 
       if (!td.classList.contains('missed-hit') && isHit === false) {
         td.classList.add('missed-hit');
+        return;
       }
     }
   });
@@ -420,7 +422,7 @@ const renderGameContent = (parent, game) => {
   renderBoard(boardRival, game.playerTwoGameboard.board);
 
   const shipsContainerPlayer = renderShipsPlayerContainer(parent);
-  renderShipIcons(shipsContainerPlayer, game.shipsPlayer);
+  renderShipIcons(shipsContainerPlayer, game.playerOneShips);
 
   const tablePlayer = document.querySelector('#board-player-table');
   renderPlayerShips(game.playerOneGameboard.board, tablePlayer);
@@ -428,7 +430,7 @@ const renderGameContent = (parent, game) => {
   renderPlayerShips(game.playerTwoGameboard.board, tableRival);
 
   const shipsContainerRival = renderShipsRivalContainer(parent);
-  renderShipIcons(shipsContainerRival, game.shipsPlayer);
+  renderShipIcons(shipsContainerRival, game.playerTwoShips);
 };
 
 /**
