@@ -1,11 +1,9 @@
 import gameLoop from '../components/gameLoop';
 
-const parseAttackCoords = (event) => {
-  const row = event.target.dataset.x;
-  const col = event.target.dataset.y;
-
-  return [row, col];
-};
+const parseAttackCoords = (event) => [
+  event.target.dataset.x,
+  event.target.dataset.y
+];
 
 const startGameLoop = () => {
   gameLoop();
