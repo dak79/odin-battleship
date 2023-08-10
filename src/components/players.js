@@ -25,8 +25,8 @@ const Player = () => {
   const getPlayerTurn = () => init.isPlaying;
 
   const generateRandomCoordinates = () => [
-    Math.floor(Math.random() * 10),
-    Math.floor(Math.random() * 10)
+    Math.floor(Math.random() * 10).toString(),
+    Math.floor(Math.random() * 10).toString()
   ];
 
   return {
