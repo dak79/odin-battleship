@@ -2,32 +2,10 @@ import game from './game';
 import DOM from '../dom/DOM';
 import eventListeners from '../dom/eventListeners';
 
-/* TODO:
- * - Starting by pressing start:
- *   - (Hide the button start) -> it will be quit and it will reset the game.
- *   - add event listener to enemy board;
- *   - Take the input from cell (P1)
- *   - remove event listener to enemy board
- *
- *   - Random attack (CPU)
- *   - (make temporary visibile the opponent ship)
- *   - procede throught attack, with hit or miss,
- *   - if hit happen hit staff;
- *   - if miss, happen miss stuff;
- *   - switch the turn to the other player;
- *
- * - Method to take input for attack from player 2 board.
- *   - Apply an eventListener to all cells of cpu board
- *   - Create an event handler which take the click and parse an x and an y
- *    - Decide where to put event handler, maybe in a file or in game.
- *    - Carefull about IEEF game, might need a new file or module not IEFF.
- *      Maybe is better to separate handler and game IEEF.
- */
 const gameLoop = async () => {
   const updateDom = DOM();
   const events = eventListeners();
   const body = document.querySelector('#hook');
-
   let isWinner = false;
   while (!isWinner) {
     if (game.playerOne.getPlayerTurn()) {
@@ -35,45 +13,92 @@ const gameLoop = async () => {
 
       let parsedAttack = false;
       while (!parsedAttack) {
-        const [row, col] = await events.addClicksRivalBoard(body);
-        parsedAttack = game.playerTwoGameboard.receiveAttack(
-          game.playerTwoGameboard.board,
+        await events.addClicks(body).then((res) => {
+          const [row, col] = res.coord;
+          parsedAttack = game.playerTwoGameboard.receiveAttack(
+            game.playerTwoGameboard.board,
+            row,
+            col
+          );
+
+          if (parsedAttack) {
+            res.remove();
+            if (game.playerTwoGameboard.board[row][col]) {
+              const ship = game.playerTwoGameboard.board[row][col];
+              const table = body.querySelector(
+                '#body-main #board-rival #board-rival-table'
+              );
+              updateDom.renderShot(table, row, col, true);
+
+              if (ship.init.sunked) {
+                const icons = body.querySelector(
+                  `#body-main #ships-rival #${ship.init.type}`
+                );
+                updateDom.renderSunkedShip(icons);
+              }
+            } else {
+              const table = body.querySelector(
+                '#body-main #board-rival #board-rival-table'
+              );
+              updateDom.renderShot(table, row, col, false);
+            }
+            const tab = body.querySelector(
+              '#body-main #board-rival #board-rival-table'
+            );
+            tab.replaceWith(tab.cloneNode(true));
+          }
+        });
+      }
+      game.playerOne.setPlayerTurn(false);
+      game.playerTwo.setPlayerTurn(true);
+      isWinner = game.playerTwoGameboard.allShipSunked();
+    } else {
+      updateDom.setMessage('Enemy attacks your ships');
+
+      const playerOneBoard = document.querySelector('table');
+      playerOneBoard.style.pointerEvents = 'none';
+
+      let parsedAttack = false;
+      while (!parsedAttack) {
+        const [row, col] = game.playerTwo.generateRandomCoordinates();
+
+        parsedAttack = game.playerOneGameboard.receiveAttack(
+          game.playerOneGameboard.board,
           row,
           col
         );
-        if (game.playerTwoGameboard.board[row][col]) {
-          const ship = game.playerTwoGameboard.board[row][col];
-          const table = body.querySelector(
-            '#body-main #board-rival #board-rival-table'
-          );
-          updateDom.renderShot(table, row, col, true);
 
-          if (ship.init.sunked) {
-            const icons = body.querySelector(
-              `#body-main #ships-rival #${ship.init.type}`
+        if (parsedAttack) {
+          const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+          await timer(1000);
+          if (game.playerOneGameboard.board[row][col]) {
+            const ship = game.playerOneGameboard.board[row][col];
+            const table = body.querySelector(
+              '#body-main #board-player #board-player-table'
             );
-            updateDom.renderSunkedShip(icons);
+            updateDom.renderShot(table, row, col, true);
+            if (ship.init.sunked) {
+              const icons = body.querySelector(
+                `#body-main #ships-player #${ship.init.type}`
+              );
+              updateDom.renderSunkedShip(icons);
+            }
+          } else {
+            const table = body.querySelector(
+              '#body-main #board-player #board-player-table'
+            );
+            updateDom.renderShot(table, row, col, false);
           }
-        } else {
-          const table = body.querySelector(
-            '#body-main #board-rival #board-rival-table'
-          );
-          updateDom.renderShot(table, row, col, false);
         }
       }
-      //game.playerOne.setPlayerTurn(false);
-      isWinner = game.playerTwoGameboard.allShipSunked();
-      // events.removeClicksRivalBoard(cells);
+
+      // valid attack or repeat;
+      game.playerOne.setPlayerTurn(true);
+      game.playerTwo.setPlayerTurn(false);
+      isWinner = game.playerOneGameboard.allShipSunked();
     }
-    // else {
-    //   // player two is playing
-    //   console.log('pass the turn');
-    //   // Set the message
-    //   updateDom.setMessage('Enemy attacks your ships');
-    //   isWinner = true;
-    // }
   }
-  console.log('Player 1 wins');
+  console.log('Player win. Which?');
 };
 
 /* TODO:
