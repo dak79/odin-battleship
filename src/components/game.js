@@ -72,6 +72,11 @@ const createShipPlayers = () =>
     return ships;
   }, {});
 
+const createPlayersShips = () => ({
+  playerOneShips: createShipPlayers(),
+  playerTwoShips: createShipPlayers()
+});
+
 /**
  * Describe coordinate and direction of ships
  */
@@ -158,16 +163,16 @@ const initialPlacementRival = (ships, gameboard) => {
 const initGame = () => {
   const players = createNewPlayers();
   const gameboards = createNewGameboards();
-  const shipsPlayer = createShipPlayers();
+  const ships = createPlayersShips();
 
-  setCoordShipsPlayer(shipsPlayer);
-  initialPlacementPlayer(shipsPlayer, gameboards.playerOneGameboard);
-  initialPlacementRival(shipsPlayer, gameboards.playerTwoGameboard);
+  setCoordShipsPlayer(ships.playerOneShips);
+  initialPlacementPlayer(ships.playerOneShips, gameboards.playerOneGameboard);
+  initialPlacementRival(ships.playerTwoShips, gameboards.playerTwoGameboard);
 
   return {
     ...players,
     ...gameboards,
-    shipsPlayer
+    ...ships
   };
 };
 
