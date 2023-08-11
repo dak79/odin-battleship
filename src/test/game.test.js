@@ -2,44 +2,52 @@ import game from '../components/game';
 
 describe('Game Object', () => {
   it('has playerOne property', () => {
-    expect(game).toHaveProperty('playerOne');
+    expect(game.initState).toHaveProperty('playerOne');
   });
 
   it('has playerTwo property', () => {
-    expect(game).toHaveProperty('playerTwo');
+    expect(game.initState).toHaveProperty('playerTwo');
   });
 
   it('has playerOneGameboard property', () => {
-    expect(game).toHaveProperty('playerOneGameboard');
+    expect(game.initState).toHaveProperty('playerOneGameboard');
   });
 
   it('has playerTwoGameboard property', () => {
-    expect(game).toHaveProperty('playerTwoGameboard');
+    expect(game.initState).toHaveProperty('playerTwoGameboard');
+  });
+
+  it('has playGame method', () => {
+    expect(game).toHaveProperty('playGame');
   });
 });
 
 describe('Game Initialization', () => {
   it('initializes the game with correct Player One states', () => {
-    expect(game.playerOne.getIsHuman()).toBe(true);
-    expect(game.playerOne.getPlayerName()).toBe('Player 1');
-    expect(game.playerOne.getPlayerTurn()).toBe(true);
+    expect(game.initState.playerOne.getIsHuman()).toBe(true);
+    expect(game.initState.playerOne.getPlayerName()).toBe('Player 1');
+    expect(game.initState.playerOne.getPlayerTurn()).toBe(true);
   });
 
   it('initializes the game with correct Player Two states', () => {
-    expect(game.playerTwo.getIsHuman()).toBe(false);
-    expect(game.playerTwo.getPlayerName()).toBe('Cpu');
-    expect(game.playerTwo.getPlayerTurn()).toBe(false);
+    expect(game.initState.playerTwo.getIsHuman()).toBe(false);
+    expect(game.initState.playerTwo.getPlayerName()).toBe('Cpu');
+    expect(game.initState.playerTwo.getPlayerTurn()).toBe(false);
   });
 
   it('initializes playerOneGameboard', () => {
-    expect(game.playerOneGameboard.board).toBeDefined();
+    expect(game.initState.playerOneGameboard.board).toBeDefined();
   });
 
   it('initializes playerTwoGameboard', () => {
-    expect(game.playerTwoGameboard.board).toBeDefined();
+    expect(game.initState.playerTwoGameboard.board).toBeDefined();
   });
 
-  it('initializes shipsPlayer', () => {
-    expect(game.shipsPlayer).toBeDefined();
+  it('initializes ships for player one', () => {
+    expect(game.initState.playerOneShips).toBeDefined();
+  });
+
+  it('initializes ships for player two', () => {
+    expect(game.initState.playerTwoShips).toBeDefined();
   });
 });
