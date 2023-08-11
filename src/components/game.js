@@ -1,7 +1,7 @@
 import Player from './players.js';
 import Gameboard from './gameBoard.js';
 import Ship from './ships.js';
-
+import DOM from '../dom/DOM';
 import iconCarrier from '../assets/icons/carrier.svg';
 import iconBattleship from '../assets/icons/battleship.svg';
 import iconSubmarine from '../assets/icons/submarine.svg';
@@ -176,9 +176,41 @@ const initGame = () => {
   };
 };
 
+// Instantiate initialization
+const initState = initGame();
+
+// Instantiate DOM
+const updateDom = DOM();
+
+// Game Loop
+const gameLoop = async () => {
+  while (
+    !initState.playerOneGameboard.allShipSunked() &&
+    !initState.playerTwoGameboard.allShipSunked()
+  ) {
+    if (!initState.playerOneGameboard.allShipSunked())
+      await updateDom.renderPlayerAttack(
+        initState.playerOne,
+        initState.playerTwoGameboard,
+        true
+      );
+    if (!initState.playerTwoGameboard.allShipSunked())
+      await updateDom.renderPlayerAttack(
+        initState.playerTwo,
+        initState.playerOneGameboard,
+        false
+      );
+  }
+
+  updateDom.renderWinningState(initState.playerTwoGameboard.allShipSunked());
+};
+
 /**
  * Export the game object
  */
-const game = initGame();
+const game = {
+  initState: initState,
+  playGame: gameLoop
+};
 
 export default game;
