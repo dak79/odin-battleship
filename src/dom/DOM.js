@@ -1,6 +1,6 @@
 import iconLN from '../assets/icons/linkedin.svg';
 import iconGH from '../assets/icons/github.svg';
-
+import eventListeners from './eventListeners';
 /**
  * Create an HTML element.
  * @param {String} type - Element tag
@@ -404,9 +404,8 @@ const renderControllersContent = (parent, game) => {
   const controllers = renderControllers(parent);
   renderMessage(controllers);
   renderButton(controllers);
-
-  renderPlayerName(parent, game.playerOne.getPlayerName());
-  renderCpuName(parent, game.playerTwo.getPlayerName());
+  renderPlayerName(parent, game.initState.playerOne.getPlayerName());
+  renderCpuName(parent, game.initState.playerTwo.getPlayerName());
 };
 
 /**
@@ -416,21 +415,21 @@ const renderControllersContent = (parent, game) => {
  */
 const renderGameContent = (parent, game) => {
   const boardPlayer = renderBoardPlayer(parent);
-  renderBoard(boardPlayer, game.playerOneGameboard.board);
+  renderBoard(boardPlayer, game.initState.playerOneGameboard.board);
 
   const boardRival = renderBoardRival(parent);
-  renderBoard(boardRival, game.playerTwoGameboard.board);
+  renderBoard(boardRival, game.initState.playerTwoGameboard.board);
 
   const shipsContainerPlayer = renderShipsPlayerContainer(parent);
-  renderShipIcons(shipsContainerPlayer, game.playerOneShips);
+  renderShipIcons(shipsContainerPlayer, game.initState.playerOneShips);
 
   const tablePlayer = document.querySelector('#board-player-table');
-  renderPlayerShips(game.playerOneGameboard.board, tablePlayer);
+  renderPlayerShips(game.initState.playerOneGameboard.board, tablePlayer);
   const tableRival = document.querySelector('#board-rival-table');
-  renderPlayerShips(game.playerTwoGameboard.board, tableRival);
+  renderPlayerShips(game.initState.playerTwoGameboard.board, tableRival);
 
   const shipsContainerRival = renderShipsRivalContainer(parent);
-  renderShipIcons(shipsContainerRival, game.playerTwoShips);
+  renderShipIcons(shipsContainerRival, game.initState.playerTwoShips);
 };
 
 /**
@@ -463,6 +462,89 @@ const renderPage = (hook, game) => {
   return body;
 };
 
+// Timer
+const ATTACK_DELAY = 1000;
+
+const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+
+ /**
+  * Get the table element
+  * @param {Boolean} isPlayerOne 
+  * @returns 
+  */
+const getTableSelector = (isPlayerOne) =>
+  isPlayerOne
+    ? '#body-main #board-rival #board-rival-table'
+    : '#body-main #board-player #board-player-table';
+
+ /**
+  * Get the message
+  * @param {Boolean} isPlayerOne 
+  * @returns 
+  */
+const getMessage = (isPlayerOne) =>
+  isPlayerOne ? 'Attack enemy board' : 'Enemy attacks your ships';
+
+ /**
+  * Get the selector for icon.
+  * @param {Boolean} isPlayerOne 
+  * @param {Object} shipType - Ship object 
+  * @returns 
+  */
+const getIconSelector = (isPlayerOne, shipType) =>
+  isPlayerOne
+    ? `#body-main #ships-rival #${shipType}`
+    : `#body-main #ships-player #${shipType}`;
+
+ /**
+  * Render the winning message.
+  * @param {Boolean} isPlayerOneWinner 
+  * @returns 
+  */
+const renderWinningState = (isPlayerOneWinner) =>
+  isPlayerOneWinner ? setMessage('Player 1 Wins') : setMessage('Computer Wins');
+
+ /**
+  * Render attack on boards
+  * @param {Object} attacker 
+  * @param {Object} opponent 
+  * @param {Boolean} isPlayerOne 
+  */
+const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
+  const events = eventListeners();
+  const body = document.querySelector('#hook');
+  const tableSelector = getTableSelector(isPlayerOne);
+  const table = body.querySelector(tableSelector);
+
+  setMessage(getMessage(isPlayerOne));
+
+  let validAttack = false;
+
+  while (!validAttack) {
+    const coord = isPlayerOne
+      ? await events.addClicks(body)
+      : attacker.generateRandomCoordinates();
+    const [row, col] = coord;
+    validAttack = opponent.receiveAttack(opponent.board, row, col);
+
+    if (validAttack) {
+      if (!isPlayerOne) await timer(ATTACK_DELAY);
+
+      if (opponent.board[row][col]) {
+        renderShot(table, row, col, true);
+        const ship = opponent.board[row][col];
+        if (ship.init.sunked) {
+          const iconSelector = getIconSelector(isPlayerOne, ship.init.type);
+          const shipIcons = body.querySelector(iconSelector);
+          renderSunkedShip(shipIcons);
+        }
+      } else {
+        renderShot(table, row, col, false);
+      }
+    }
+  }
+};
+
 /**
  * Export DOM object
  * @param {Node} hook
@@ -473,7 +555,11 @@ const DOM = () => ({
   render: (hook, game) => renderPage(hook, game),
   setMessage: (message) => setMessage(message),
   renderShot: (table, row, col, isHit) => renderShot(table, row, col, isHit),
-  renderSunkedShip: (ship) => renderSunkedShip(ship)
+  renderSunkedShip: (ship) => renderSunkedShip(ship),
+  renderWinningState: (isPlayerOneWinner) =>
+    renderWinningState(isPlayerOneWinner),
+  renderPlayerAttack: (attacker, opponent, isPlayerOne) =>
+    renderPlayerAttack(attacker, opponent, isPlayerOne)
 });
 
 export default DOM;
