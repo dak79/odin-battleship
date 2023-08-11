@@ -1,4 +1,5 @@
 import gameLoop from '../components/gameLoop';
+import game from '../components/game';
 
 const parseAttackCoords = (event) => [
   event.target.dataset.x,
@@ -6,7 +7,7 @@ const parseAttackCoords = (event) => [
 ];
 
 const startGameLoop = () => {
-  gameLoop();
+  game.playGame();
 };
 
 export default {
