@@ -2,18 +2,54 @@ import Ship from '../components/ships.js';
 
 describe('Ship', () => {
   it('has the method .getLength()', () => {
-    const ship = Ship(2);
-    expect(ship).toHaveProperty('getLength');
+    expect(Ship(2)).toHaveProperty('getLength');
   });
 
   it('has method .hit()', () => {
-    const ship = Ship(3);
-    expect(ship).toHaveProperty('hit');
+    expect(Ship(3)).toHaveProperty('hit');
   });
 
   it('has method .isSunk()', () => {
-    const ship = Ship(4);
-    expect(ship).toHaveProperty('isSunk');
+    expect(Ship(4)).toHaveProperty('isSunk');
+  });
+
+  it('has property init', () => {
+    expect(Ship(4)).toHaveProperty('init');
+  });
+});
+
+describe('The ship object', () => {
+  it('initializes len to ship length', () => {
+    const range = Array.from({ length: 4 }, (_, i) => i + 2);
+    range.map((len) => {
+      let ship = Ship(len);
+      expect(ship.init.len).toBe(len);
+    });
+  });
+
+  it('initializes hits to 0', () => {
+    const range = Array.from({ length: 4 }, (_, i) => i + 2);
+    range.map((len) => {
+      let ship = Ship(len);
+      expect(ship.init.hits).toBe(0);
+    });
+  });
+
+  it('initializes correctly types', () => {
+    const range = Array.from({ length: 4 }, (_, i) => i + 2);
+    const types = ['destroyers', 'submarines', 'battleships', 'carrier'];
+    range.map((len, index) => {
+      let ship = Ship(len);
+      expect(ship.init.type).toBe(types[index]);
+    });
+  });
+
+  it('initializes sunked to false', () => {
+    const range = Array.from({ length: 4 }, (_, i) => i + 2);
+    range.map((len) => {
+      let ship = Ship(len);
+      expect(ship.init.sunked).toBe(false);
+    });
   });
 });
 
@@ -26,7 +62,7 @@ describe('The .getLength() method', () => {
   it('returns false if argument is not an integer or a parsed string', () => {
     const values = ['n', {}, [], true, NaN, undefined, null];
 
-    values.forEach((value) => {
+    values.map((value) => {
       const ship = Ship(value);
       expect(ship.getLength()).toBe(false);
     });
@@ -35,7 +71,7 @@ describe('The .getLength() method', () => {
   it('returns false if length is out of min (2) or max (5)', () => {
     const values = [0, 1, 6, 10];
 
-    values.forEach((value) => {
+    values.map((value) => {
       const ship = Ship(value);
       expect(ship.getLength()).toBe(false);
     });
