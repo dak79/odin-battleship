@@ -1,4 +1,3 @@
-import gameLoop from '../components/gameLoop';
 import game from '../components/game';
 
 const parseAttackCoords = (event) => [
