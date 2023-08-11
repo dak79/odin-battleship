@@ -213,4 +213,11 @@ const game = {
   playGame: gameLoop
 };
 
+/**
+ * TODO:
+ * - Start button:
+ *   - reset before starting
+ *   - transoform in quit which reset everything
+ * Chec TOP new requirements
+ * */
 export default game;
