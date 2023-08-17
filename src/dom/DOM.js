@@ -1,6 +1,7 @@
 import iconLN from '../assets/icons/linkedin.svg';
 import iconGH from '../assets/icons/github.svg';
 import eventListeners from './eventListeners';
+
 /**
  * Create an HTML element.
  * @param {String} type - Element tag
@@ -239,6 +240,7 @@ const renderBoard = (parent, board) => {
  * @param {Array[]} board
  */
 const renderPlayerShips = (board, table) => {
+  console.log(board);
   // const table = document.querySelector('#board-player-table');
   const rows = Array.from(table.rows);
   rows.forEach((row, rowIndex) => {
@@ -252,7 +254,20 @@ const renderPlayerShips = (board, table) => {
   });
 };
 
+const resetRenderShip = (table) => {
+  const rows = Array.from(table.rows);
+  rows.forEach((row) => {
+    const cells = Array.from(row.cells);
+    cells.forEach((td) => {
+      if (td.classList.contains('ship-placed')) {
+        td.classList.remove('ship-placed');
+      }
+    });
+  });
+};
+
 const renderShot = (table, x, y, isHit) => {
+  console.log(table);
   const rows = Array.from(table.rows);
   rows.forEach((row) => {
     const td = Array.from(row.cells).find(
@@ -401,11 +416,12 @@ const renderHeaderContent = (parent) => {
  * @param {*} game
  */
 const renderControllersContent = (parent, game) => {
+  console.log(game);
   const controllers = renderControllers(parent);
   renderMessage(controllers);
   renderButton(controllers);
-  renderPlayerName(parent, game.initState.playerOne.getPlayerName());
-  renderCpuName(parent, game.initState.playerTwo.getPlayerName());
+  renderPlayerName(parent, game.playerOne.getPlayerName());
+  renderCpuName(parent, game.playerTwo.getPlayerName());
 };
 
 /**
@@ -415,21 +431,39 @@ const renderControllersContent = (parent, game) => {
  */
 const renderGameContent = (parent, game) => {
   const boardPlayer = renderBoardPlayer(parent);
-  renderBoard(boardPlayer, game.initState.playerOneGameboard.board);
+  renderBoard(boardPlayer, game.playerOneGameboard.board);
 
   const boardRival = renderBoardRival(parent);
-  renderBoard(boardRival, game.initState.playerTwoGameboard.board);
+  renderBoard(boardRival, game.playerTwoGameboard.board);
 
   const shipsContainerPlayer = renderShipsPlayerContainer(parent);
-  renderShipIcons(shipsContainerPlayer, game.initState.playerOneShips);
+  renderShipIcons(shipsContainerPlayer, game.playerOneShips);
 
   const tablePlayer = document.querySelector('#board-player-table');
-  renderPlayerShips(game.initState.playerOneGameboard.board, tablePlayer);
-  const tableRival = document.querySelector('#board-rival-table');
-  renderPlayerShips(game.initState.playerTwoGameboard.board, tableRival);
+  //resetRenderShip(tablePlayer);
+  renderPlayerShips(game.playerOneGameboard.board, tablePlayer);
+  //const tableRival = document.querySelector('#board-rival-table');
+  ////resetRenderShip(tableRival);
+  //renderPlayerShips(game.initState.playerTwoGameboard.board, tableRival);
 
   const shipsContainerRival = renderShipsRivalContainer(parent);
-  renderShipIcons(shipsContainerRival, game.initState.playerTwoShips);
+  renderShipIcons(shipsContainerRival, game.playerTwoShips);
+};
+
+const removeGameContent = (parent) => {
+  console.log(parent);
+  // const boardPlayer = parent.querySelector('#board-player');
+  // const boardRival = parent.querySelector('#board-rival');
+  // const shipPlayer = parent.querySelector('#ships-player');
+  // const shipRival = parent.querySelector('#ships-rival');
+  const elements = [
+    parent.querySelector('#board-player'),
+    parent.querySelector('#board-rival'),
+    parent.querySelector('#ships-player'),
+    parent.querySelector('#ships-rival')
+  ];
+
+  elements.forEach((element) => element.remove());
 };
 
 /**
@@ -467,49 +501,53 @@ const ATTACK_DELAY = 1000;
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
- /**
-  * Get the table element
-  * @param {Boolean} isPlayerOne 
-  * @returns 
-  */
+/**
+ * Get the table element
+ * @param {Boolean} isPlayerOne
+ * @returns
+ */
 const getTableSelector = (isPlayerOne) =>
   isPlayerOne
     ? '#body-main #board-rival #board-rival-table'
     : '#body-main #board-player #board-player-table';
 
- /**
-  * Get the message
-  * @param {Boolean} isPlayerOne 
-  * @returns 
-  */
+/**
+ * Get the message
+ * @param {Boolean} isPlayerOne
+ * @returns
+ */
 const getMessage = (isPlayerOne) =>
   isPlayerOne ? 'Attack enemy board' : 'Enemy attacks your ships';
 
- /**
-  * Get the selector for icon.
-  * @param {Boolean} isPlayerOne 
-  * @param {Object} shipType - Ship object 
-  * @returns 
-  */
+/**
+ * Get the selector for icon.
+ * @param {Boolean} isPlayerOne
+ * @param {Object} shipType - Ship object
+ * @returns
+ */
 const getIconSelector = (isPlayerOne, shipType) =>
   isPlayerOne
     ? `#body-main #ships-rival #${shipType}`
     : `#body-main #ships-player #${shipType}`;
 
- /**
-  * Render the winning message.
-  * @param {Boolean} isPlayerOneWinner 
-  * @returns 
-  */
+const toggleBtnStart = (btn) => {
+  const text = btn.textContent === 'Start' ? 'Quit' : 'Start';
+  btn.textContent = text;
+};
+/**
+ * Render the winning message.
+ * @param {Boolean} isPlayerOneWinner
+ * @returns
+ */
 const renderWinningState = (isPlayerOneWinner) =>
   isPlayerOneWinner ? setMessage('Player 1 Wins') : setMessage('Computer Wins');
 
- /**
-  * Render attack on boards
-  * @param {Object} attacker 
-  * @param {Object} opponent 
-  * @param {Boolean} isPlayerOne 
-  */
+/**
+ * Render attack on boards
+ * @param {Object} attacker
+ * @param {Object} opponent
+ * @param {Boolean} isPlayerOne
+ */
 const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
   const events = eventListeners();
   const body = document.querySelector('#hook');
@@ -527,6 +565,7 @@ const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
     const [row, col] = coord;
     validAttack = opponent.receiveAttack(opponent.board, row, col);
 
+    console.log(validAttack);
     if (validAttack) {
       if (!isPlayerOne) await timer(ATTACK_DELAY);
 
@@ -551,9 +590,12 @@ const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
  * @param {Object} game
  * @returns
  */
-const DOM = () => ({
-  render: (hook, game) => renderPage(hook, game),
+const DOM = (game) => ({
+  render: (hook) => renderPage(hook, game),
   setMessage: (message) => setMessage(message),
+  toggleBtnStart: (btn) => toggleBtnStart(btn),
+  renderGameContent: (parent) => renderGameContent(parent, game),
+  removeGameContent: (parent) => removeGameContent(parent),
   renderShot: (table, row, col, isHit) => renderShot(table, row, col, isHit),
   renderSunkedShip: (ship) => renderSunkedShip(ship),
   renderWinningState: (isPlayerOneWinner) =>
