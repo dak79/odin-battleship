@@ -82,11 +82,3 @@ const eventListeners = () => ({
 });
 
 export default eventListeners;
-
-/* - Clean files
- * - Fix file tree
- * - Code review
- * - Functional review
- * - Check test.
- * - TOP forward
- * */
