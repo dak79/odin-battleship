@@ -1,5 +1,5 @@
 import './style/style.css';
-import game from './components/game';
+import game from './components/game/game';
 import DOM from './dom/DOM';
 import eventListeners from './dom/eventListeners';
 
