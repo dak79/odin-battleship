@@ -103,7 +103,6 @@ const validAttack = (row, col, shots) => {
     ([row, col]) =>
       isAlreadyAttacked(shots, [row, col]) ? [false] : [row, col]
   )(row, col);
-  console.log(validation, row, col, shots);
   return validation.some((value) => value === false) ? false : validation;
 };
 
@@ -138,29 +137,13 @@ const Gameboard = () => {
       : false;
 
   const shots = [];
-  const emptyShots = () => (shots.length = 0);
-  const getShots = () => shots;
-
-  const missedShots = [];
 
   const ships = [];
-
-  /**
-   * Update miss shot
-   * @param {Number} row - row coordinate of attack
-   * @param {*} col - col coordinate of attack
-   */
-  const missShip = (row, col) => {
-    missedShots.push([row, col]);
-  };
-
-  const getMissed = () => missedShots;
 
   const addShipToShips = (ship) => {
     ships.push(ship);
   };
 
-  const getShips = () => ships;
   /**
    * Add a new ship on the board.
    * @param {Object} ship - The ship object
@@ -200,9 +183,9 @@ const Gameboard = () => {
     if (attack) {
       const [rowShot, colShot] = attack;
       shots.push([rowShot, colShot]);
-      board[rowShot][colShot] !== null
-        ? hitShip(board, rowShot, colShot)
-        : missShip(rowShot, colShot);
+      if (board[rowShot][colShot] !== null) {
+        hitShip(board, rowShot, colShot);
+      }
 
       return true;
     }
@@ -215,13 +198,8 @@ const Gameboard = () => {
     board: initialBoard,
     placeShip,
     receiveAttack,
-    getMissed,
     shots,
-    emptyShots,
-    getShots,
-    ships,
-    allShipSunked,
-    getShips
+    allShipSunked
   };
 };
 
