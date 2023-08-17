@@ -1,4 +1,4 @@
-import DOM from '../../dom/DOM';
+import updateDOM from '../../dom/updateDOM';
 import {
   createNewPlayers,
   createNewGameboards,
@@ -41,20 +41,20 @@ const gameLoop = async (data) => {
     !data.playerTwoGameboard.allShipSunked()
   ) {
     if (!data.playerOneGameboard.allShipSunked())
-      await DOM().renderPlayerAttack(
+      await updateDOM().renderPlayerAttack(
         data.playerOne,
         data.playerTwoGameboard,
         true
       );
     if (!data.playerTwoGameboard.allShipSunked())
-      await DOM().renderPlayerAttack(
+      await updateDOM().renderPlayerAttack(
         data.playerTwo,
         data.playerOneGameboard,
         false
       );
   }
 
-  DOM().renderWinningState(data.playerTwoGameboard.allShipSunked());
+  updateDOM().renderWinningState(data.playerTwoGameboard.allShipSunked());
 };
 
 /**
