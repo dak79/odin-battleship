@@ -429,7 +429,9 @@ const renderControllersContent = (parent, game) => {
  * @param {Node} parent
  * @param {*} game
  */
-const renderGameContent = (parent, game) => {
+const renderGameContent = (parent, game, ships) => {
+  console.log(game, ships);
+
   const boardPlayer = renderBoardPlayer(parent);
   renderBoard(boardPlayer, game.playerOneGameboard.board);
 
@@ -437,7 +439,7 @@ const renderGameContent = (parent, game) => {
   renderBoard(boardRival, game.playerTwoGameboard.board);
 
   const shipsContainerPlayer = renderShipsPlayerContainer(parent);
-  renderShipIcons(shipsContainerPlayer, game.playerOneShips);
+  renderShipIcons(shipsContainerPlayer, ships.playerOneShips);
 
   const tablePlayer = document.querySelector('#board-player-table');
   //resetRenderShip(tablePlayer);
@@ -447,7 +449,7 @@ const renderGameContent = (parent, game) => {
   //renderPlayerShips(game.initState.playerTwoGameboard.board, tableRival);
 
   const shipsContainerRival = renderShipsRivalContainer(parent);
-  renderShipIcons(shipsContainerRival, game.playerTwoShips);
+  renderShipIcons(shipsContainerRival, ships.playerTwoShips);
 };
 
 const removeGameContent = (parent) => {
@@ -483,13 +485,13 @@ const renderFooterContent = (parent) => {
  * @param {Object} game
  * @returns
  */
-const renderPage = (hook, game) => {
+const renderPage = (hook, game, ships) => {
   const body = createStructureBody(hook);
 
   renderHeaderContent(body.header);
 
   renderControllersContent(body.main, game);
-  renderGameContent(body.main, game);
+  renderGameContent(body.main, game, ships);
 
   renderFooterContent(body.footer);
 
@@ -590,11 +592,12 @@ const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
  * @param {Object} game
  * @returns
  */
-const DOM = (game) => ({
-  render: (hook) => renderPage(hook, game),
+const DOM = () => ({
+  render: (hook, game, ships) => renderPage(hook, game, ships),
   setMessage: (message) => setMessage(message),
   toggleBtnStart: (btn) => toggleBtnStart(btn),
-  renderGameContent: (parent) => renderGameContent(parent, game),
+  renderGameContent: (parent, game, ships) =>
+    renderGameContent(parent, game, ships),
   removeGameContent: (parent) => removeGameContent(parent),
   renderShot: (table, row, col, isHit) => renderShot(table, row, col, isHit),
   renderSunkedShip: (ship) => renderSunkedShip(ship),

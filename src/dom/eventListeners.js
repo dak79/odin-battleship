@@ -61,7 +61,9 @@ const quitGame = (btn) => {
 
 const quitGameLoop = (event) => {
   const body = document.querySelector('#hook');
-  const newGame = game.init();
+  const newGameInit = game.init();
+  const newGamePlacement = game.placement();
+
   console.log(game);
   console.log(event.target);
   removeQuitGame(event.target);
@@ -75,7 +77,7 @@ const quitGameLoop = (event) => {
 
   DOM().removeGameContent(main);
 
-  DOM(newGame).renderGameContent(main);
+  DOM().renderGameContent(main, newGameInit, newGamePlacement);
   startGame(body);
   DOM().setMessage('Place your ships');
   //event.target.addEventListener('click', startGameLoop);
