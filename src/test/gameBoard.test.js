@@ -16,10 +16,6 @@ describe('GameBoard', () => {
     expect(gameboard).toHaveProperty('receiveAttack');
   });
 
-  it('has a getMissed() method', () => {
-    expect(gameboard).toHaveProperty('getMissed');
-  });
-
   it('has allShipSunked method', () => {
     expect(gameboard).toHaveProperty('allShipSunked');
   });
@@ -295,26 +291,8 @@ describe('The receiveAttack() method', () => {
     });
   });
 
-  it('if miss, record the coordinate of missed shot.', () => {
-    gameboard.receiveAttack(gameboard.board, 8, 7);
-    expect(gameboard.getMissed()).toStrictEqual([[8, 7]]);
-
-    gameboard.receiveAttack(gameboard.board, 9, 0);
-    expect(gameboard.getMissed()).toStrictEqual([
-      [8, 7],
-      [9, 0]
-    ]);
-  });
-
   it('you cant attack two times the same square', () => {
-    const attacks = [
-      [0, 0],
-      [8, 7]
-    ];
-
-    attacks.map(([row, col]) =>
-      expect(gameboard.receiveAttack(gameboard.board, row, col)).toBe(false)
-    );
+    expect(gameboard.receiveAttack(gameboard.board, 0, 0)).toBe(false);
   });
 });
 

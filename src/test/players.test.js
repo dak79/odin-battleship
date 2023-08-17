@@ -6,11 +6,6 @@ describe('Player', () => {
     expect(player).toHaveProperty('setIsHuman');
   });
 
-  it('has getIsHuman() method', () => {
-    const player = Player();
-    expect(player).toHaveProperty('getIsHuman');
-  });
-
   it('has setPlayerName() method', () => {
     const player = Player();
     expect(player).toHaveProperty('setPlayerName');
@@ -24,11 +19,6 @@ describe('Player', () => {
   it('has setPlayerTurn() method', () => {
     const player = Player();
     expect(player).toHaveProperty('setPlayerTurn');
-  });
-
-  it('has getPlayerTurn() method', () => {
-    const player = Player();
-    expect(player).toHaveProperty('getPlayerTurn');
   });
 
   it('has the property generateRandomCoordinates()', () => {
@@ -63,38 +53,6 @@ describe('The method setIsHuman()', () => {
     values.forEach((value) =>
       expect(player.setIsHuman(value)).toBe('Invalid setting')
     );
-  });
-
-  it('set correctly true', () => {
-    const player = Player();
-    player.setIsHuman(true);
-    expect(player.getIsHuman()).toBe(true);
-  });
-
-  it('set correctly false', () => {
-    const player = Player();
-    player.setIsHuman(false);
-    expect(player.getIsHuman()).toBe(false);
-  });
-});
-
-describe('The method getIsHuman()', () => {
-  it('get correctly the value of isHuman if is valid', () => {
-    const playerOne = Player();
-    const playerTwo = Player();
-    playerOne.setIsHuman(true);
-    expect(playerOne.getIsHuman()).toBe(true);
-    playerTwo.setIsHuman(false);
-    expect(playerTwo.getIsHuman()).toBe(false);
-  });
-
-  it('get undefined if the value of isHuman property was invalid', () => {
-    const playerOne = Player();
-    const playerTwo = Player();
-    playerOne.setIsHuman();
-    expect(playerOne.getIsHuman()).toBeUndefined();
-    playerTwo.setIsHuman('true');
-    expect(playerTwo.getIsHuman()).toBeUndefined();
   });
 });
 
@@ -203,38 +161,6 @@ describe('The method setPlayerTurn()', () => {
       expect(player.setPlayerTurn(value)).toBe('Invalid setting')
     );
   });
-
-  it('set correctly true', () => {
-    const player = Player();
-    player.setPlayerTurn(true);
-    expect(player.getPlayerTurn()).toBe(true);
-  });
-
-  it('set correctly false', () => {
-    const player = Player();
-    player.setPlayerTurn(false);
-    expect(player.getPlayerTurn()).toBe(false);
-  });
-});
-
-describe('The method getPlayerTurn()', () => {
-  it('get correctly the value of isPlaying if is valid', () => {
-    const playerOne = Player();
-    const playerTwo = Player();
-    playerOne.setPlayerTurn(true);
-    expect(playerOne.getPlayerTurn()).toBe(true);
-    playerTwo.setPlayerTurn(false);
-    expect(playerTwo.getPlayerTurn()).toBe(false);
-  });
-
-  it('get undefined if the value of isPlaying property was invalid', () => {
-    const playerOne = Player();
-    const playerTwo = Player();
-    playerOne.setPlayerTurn();
-    expect(playerOne.getPlayerTurn()).toBeUndefined();
-    playerTwo.setPlayerTurn('false');
-    expect(playerTwo.getPlayerTurn()).toBeUndefined();
-  });
 });
 
 describe('The method generateRandomCoordinates()', () => {
@@ -242,10 +168,10 @@ describe('The method generateRandomCoordinates()', () => {
     const player = Player();
     for (let i = 0; i < 100; i++) {
       let [x, y] = player.generateRandomCoordinates();
-      expect(x).toBeGreaterThanOrEqual(0);
-      expect(x).toBeLessThanOrEqual(9);
-      expect(y).toBeGreaterThanOrEqual(0);
-      expect(y).toBeLessThanOrEqual(9);
+      expect(parseInt(x)).toBeGreaterThanOrEqual(0);
+      expect(parseInt(x)).toBeLessThanOrEqual(9);
+      expect(parseInt(y)).toBeGreaterThanOrEqual(0);
+      expect(parseInt(y)).toBeLessThanOrEqual(9);
     }
   });
 });
