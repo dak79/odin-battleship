@@ -22,8 +22,6 @@ const Player = () => {
       ? Object.assign(init, { isPlaying: value })
       : 'Invalid setting';
 
-  const getPlayerTurn = () => init.isPlaying;
-
   const generateRandomCoordinates = () => [
     Math.floor(Math.random() * 10).toString(),
     Math.floor(Math.random() * 10).toString()
@@ -31,11 +29,9 @@ const Player = () => {
 
   return {
     setIsHuman,
-    getIsHuman,
     setPlayerName,
     getPlayerName,
     setPlayerTurn,
-    getPlayerTurn,
     generateRandomCoordinates
   };
 };
