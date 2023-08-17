@@ -1,5 +1,9 @@
 import eventListeners from './eventListeners';
 
+/**
+ * Set a message in the message field
+ * @param {String} message
+ */
 const setMessage = (message) => {
   const messageField = document.querySelector('#message-field');
   messageField.textContent = message;
@@ -13,16 +17,32 @@ const setMessage = (message) => {
 const getMessage = (isPlayerOne) =>
   isPlayerOne ? 'Attack enemy board' : 'Enemy attacks your ships';
 
+/**
+ * Toggle between start and quit in the button.
+ * @param {Node} btn
+ */
 const toggleBtnStart = (btn) => {
   const text = btn.textContent === 'Start' ? 'Quit' : 'Start';
   btn.textContent = text;
 };
 
-// Timer
+// Delay
 const ATTACK_DELAY = 1000;
 
+/**
+ * Timer
+ * @param {Number} ms
+ * @returns
+ */
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
+/**
+ * Render attack result on boards
+ * @param {Node} table
+ * @param {String} x
+ * @param {String} y
+ * @param {Boolean} isHit
+ */
 const renderShot = (table, x, y, isHit) => {
   const rows = Array.from(table.rows);
   rows.forEach((row) => {
@@ -55,6 +75,10 @@ const getIconSelector = (isPlayerOne, shipType) =>
     ? `#body-main #ships-rival #${shipType}`
     : `#body-main #ships-player #${shipType}`;
 
+/**
+ * Render icon as sunked ship.
+ * @param {Node} container
+ */
 const renderSunkedShip = (container) => {
   const icons = Array.from(container.children);
   const icon = icons.find((icon) => !icon.classList.contains('ship-sunked'));
@@ -115,7 +139,7 @@ const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
 };
 
 /**
- * Render the winning message.
+ * Render winning message.
  * @param {Boolean} isPlayerOneWinner
  * @returns
  */
