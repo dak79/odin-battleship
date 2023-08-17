@@ -103,6 +103,7 @@ const validAttack = (row, col, shots) => {
     ([row, col]) =>
       isAlreadyAttacked(shots, [row, col]) ? [false] : [row, col]
   )(row, col);
+  console.log(validation, row, col, shots);
   return validation.some((value) => value === false) ? false : validation;
 };
 
@@ -137,6 +138,8 @@ const Gameboard = () => {
       : false;
 
   const shots = [];
+  const emptyShots = () => (shots.length = 0);
+  const getShots = () => shots;
 
   const missedShots = [];
 
@@ -213,6 +216,9 @@ const Gameboard = () => {
     placeShip,
     receiveAttack,
     getMissed,
+    shots,
+    emptyShots,
+    getShots,
     ships,
     allShipSunked,
     getShips
