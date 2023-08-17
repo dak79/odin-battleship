@@ -1,5 +1,6 @@
 import game from '../components/game/game';
 import DOM from './DOM';
+import updateDOM from './updateDOM';
 
 const startGame = (body) => {
   const btnStart = body.querySelector('#body-main #controllers #button-start');
@@ -11,7 +12,7 @@ const startGameLoop = (event) => {
   game.placement(newGame);
   game.playGame(newGame);
   startGameRemove(event.target);
-  DOM().toggleBtnStart(event.target);
+  updateDOM().toggleBtnStart(event.target);
   quitGame(event.target);
 };
 
@@ -54,14 +55,14 @@ const quitGameLoop = (event) => {
   const newGamePlacement = game.placement(newGameInit);
 
   removeQuitGame(event.target);
-  DOM().toggleBtnStart(event.target);
+  updateDOM().toggleBtnStart(event.target);
   const main = body.querySelector('#body-main');
 
   DOM().removeGameContent(main);
 
   DOM().renderGameContent(main, newGameInit, newGamePlacement);
   startGame(body);
-  DOM().setMessage('Place your ships');
+  updateDOM().setMessage('Place your ships');
 };
 
 const removeQuitGame = (btn) => {
