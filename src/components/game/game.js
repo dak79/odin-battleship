@@ -10,10 +10,7 @@ import {
   initialPlacementRival
 } from './placement';
 
-/**
- * Initialize the game;
- * @returns Object
- */
+// Initialize game.
 const init = () => {
   const players = createNewPlayers();
   const gameboards = createNewGameboards();
@@ -24,7 +21,7 @@ const init = () => {
   };
 };
 
-// Place ships
+// Place ships.
 const placement = (init) => {
   const ships = createPlayersShips();
 
@@ -36,7 +33,8 @@ const placement = (init) => {
     ...ships
   };
 };
-// Game Loop
+
+// Game Loop.
 const gameLoop = async (data) => {
   while (
     !data.playerOneGameboard.allShipSunked() &&
