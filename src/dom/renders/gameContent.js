@@ -116,8 +116,6 @@ const renderShipIcons = (section, ships) => {
  * @param {Array[]} board
  */
 const renderPlayerShips = (board, table) => {
-  console.log(board);
-  // const table = document.querySelector('#board-player-table');
   const rows = Array.from(table.rows);
   rows.forEach((row, rowIndex) => {
     const cells = Array.from(row.cells);
