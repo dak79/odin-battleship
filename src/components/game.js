@@ -160,7 +160,7 @@ const initialPlacementRival = (ships, gameboard) => {
  * Initialize the game;
  * @returns Object
  */
-const initGame = () => {
+const init = () => {
   const players = createNewPlayers();
   const gameboards = createNewGameboards();
   const ships = createPlayersShips();
@@ -176,48 +176,35 @@ const initGame = () => {
   };
 };
 
-// Instantiate initialization
-const initState = initGame();
-
-// Instantiate DOM
-const updateDom = DOM();
-
 // Game Loop
-const gameLoop = async () => {
+const gameLoop = async (data) => {
   while (
-    !initState.playerOneGameboard.allShipSunked() &&
-    !initState.playerTwoGameboard.allShipSunked()
+    !data.playerOneGameboard.allShipSunked() &&
+    !data.playerTwoGameboard.allShipSunked()
   ) {
-    if (!initState.playerOneGameboard.allShipSunked())
-      await updateDom.renderPlayerAttack(
-        initState.playerOne,
-        initState.playerTwoGameboard,
+    if (!data.playerOneGameboard.allShipSunked())
+      await DOM().renderPlayerAttack(
+        data.playerOne,
+        data.playerTwoGameboard,
         true
       );
-    if (!initState.playerTwoGameboard.allShipSunked())
-      await updateDom.renderPlayerAttack(
-        initState.playerTwo,
-        initState.playerOneGameboard,
+    if (!data.playerTwoGameboard.allShipSunked())
+      await DOM().renderPlayerAttack(
+        data.playerTwo,
+        data.playerOneGameboard,
         false
       );
   }
 
-  updateDom.renderWinningState(initState.playerTwoGameboard.allShipSunked());
+  DOM().renderWinningState(data.playerTwoGameboard.allShipSunked());
 };
 
 /**
  * Export the game object
  */
 const game = {
-  initState: initState,
-  playGame: gameLoop
+  init: () => init(),
+  playGame: async (data) => gameLoop(data)
 };
 
-/**
- * TODO:
- * - Start button:
- *   - reset before starting
- *   - transoform in quit which reset everything
- * Chec TOP new requirements
- * */
 export default game;
