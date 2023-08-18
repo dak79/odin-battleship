@@ -10,13 +10,13 @@ const shipPlacement = {
 
   submarines: [
     { row: 2, col: 3, isHorizontal: true },
-    { row: 2, col: 7, isHorizontal: false },
-    { row: 8, col: 4, isHorizontal: true }
+    { row: 1, col: 7, isHorizontal: false },
+    { row: 7, col: 4, isHorizontal: true }
   ],
 
   destroyers: [
     { row: 4, col: 0, isHorizontal: false },
-    { row: 4, col: 4, isHorizontal: false },
+    { row: 8, col: 8, isHorizontal: false },
     { row: 9, col: 3, isHorizontal: true },
     { row: 0, col: 9, isHorizontal: false }
   ]
