@@ -70,15 +70,10 @@ export default game;
 
 /*
  * - 1. Create a placement fase:
- *   - The game open with a message: welcome to Battleship, press start for
- *   play.
- *   - When you press start:
- *   - The message become: place your ships
- *   - to the button is attached a function for opening placement fase on
- *   player-board
- *   - the button become play and as attached the function for starting game
- *   loop. Before starting game loop the function control if all ship are
- *   placed. If yes start game loop, if not message 'place all ship'.
- *   - for now the placement is the fixed one.
+ *
+ *   - Placement fase:
+ *
+ *   - separate the render of ships on the board and the placement from init
+ *
  * - 2. Implement drag and drop
  */
