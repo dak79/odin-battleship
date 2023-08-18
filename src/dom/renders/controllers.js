@@ -22,7 +22,7 @@ const renderMessage = (section) =>
   createAndRenderElement(
     'div',
     { id: 'message-field', class: 'messages message-field' },
-    'Place your ships',
+    'Welcome! Press start to play',
     section
   );
 

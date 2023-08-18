@@ -121,7 +121,7 @@ body {
 
 .messages {
   grid-area: messages;
-  width: 30%;
+  width: 35%;
   padding: var(--padding-min);
   background-color: var(--slate300);
   border-radius: var(--radius);
