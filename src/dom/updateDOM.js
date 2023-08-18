@@ -21,8 +21,7 @@ const getMessage = (isPlayerOne) =>
  * Toggle between start and quit in the button.
  * @param {Node} btn
  */
-const toggleBtnStart = (btn) => {
-  const text = btn.textContent === 'Start' ? 'Quit' : 'Start';
+const btnTextContent = (btn, text) => {
   btn.textContent = text;
 };
 
@@ -151,7 +150,7 @@ const renderWinningState = (isPlayerOneWinner) =>
  */
 const updateDOM = () => ({
   setMessage: (message) => setMessage(message),
-  toggleBtnStart: (btn) => toggleBtnStart(btn),
+  btnTextContent: (btn, text) => btnTextContent(btn, text),
   renderShot: (table, row, col, isHit) => renderShot(table, row, col, isHit),
   renderSunkedShip: (ship) => renderSunkedShip(ship),
   renderPlayerAttack: (attacker, opponent, isPlayerOne) =>
