@@ -1,3 +1,45 @@
+import Ship from '../ships';
+import iconCarrier from '../../assets/icons/carrier.svg';
+import iconBattleship from '../../assets/icons/battleship.svg';
+import iconSubmarine from '../../assets/icons/submarine.svg';
+import iconDestroyer from '../../assets/icons/destroyer.svg';
+
+/**
+ * Create ships
+ * @param {Object} type - Type of ship
+ * @returns An Object with ships
+ */
+const createShips = (type) =>
+  Array.from({ length: type.number }, () => ({
+    body: Ship(type.size),
+    size: type.size,
+    icon: type.icon
+  }));
+
+/**
+ * Describe ships
+ */
+const shipTypes = {
+  carrier: { number: 1, size: 5, icon: iconCarrier },
+  battleships: { number: 2, size: 4, icon: iconBattleship },
+  submarines: { number: 3, size: 3, icon: iconSubmarine },
+  destroyers: { number: 4, size: 2, icon: iconDestroyer }
+};
+
+/**
+ * Create ships for each player
+ * @returns Object with ships
+ */
+const createShipPlayers = () =>
+  Object.keys(shipTypes).reduce((ships, type) => {
+    ships[type] = createShips(shipTypes[type]);
+    return ships;
+  }, {});
+
+const createPlayersShips = () => ({
+  playerOneShips: createShipPlayers(),
+  playerTwoShips: createShipPlayers()
+});
 /**
  * Describe coordinate and direction of ships
  */
@@ -77,4 +119,9 @@ const initialPlacementRival = (ships, gameboard) => {
   );
 };
 
-export { setCoordShipsPlayer, initialPlacementPlayer, initialPlacementRival };
+export {
+  setCoordShipsPlayer,
+  initialPlacementPlayer,
+  initialPlacementRival,
+  createPlayersShips
+};
