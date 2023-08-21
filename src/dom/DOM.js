@@ -10,13 +10,13 @@ import renderFooterContent from './renders/footer';
  * @param {Object} game
  * @returns
  */
-const renderPage = (hook, game, ships) => {
+const renderPage = (hook, game) => {
   const body = createStructureBody(hook);
 
   renderHeaderContent(body.header);
 
   renderControllersContent(body.main, game);
-  renderGameContent(body.main, game, ships);
+  renderGameContent(body.main, game);
 
   renderFooterContent(body.footer);
 
@@ -27,9 +27,8 @@ const renderPage = (hook, game, ships) => {
  * Export DOM object
  */
 const DOM = () => ({
-  render: (hook, game, ships) => renderPage(hook, game, ships),
-  renderGameContent: (parent, game, ships) =>
-    renderGameContent(parent, game, ships),
+  render: (hook, game) => renderPage(hook, game),
+  renderGameContent: (parent, game) => renderGameContent(parent, game),
   removeGameContent: (parent) => removeGameContent(parent)
 });
 

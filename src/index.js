@@ -5,7 +5,6 @@ import eventListeners from './dom/eventListeners';
 
 const hook = document.querySelector('#hook');
 const initGame = game.init();
-const initialPlacement = game.placement(initGame);
-DOM().render(hook, initGame, initialPlacement);
+DOM().render(hook, initGame);
 
 eventListeners().startBtn(hook);
