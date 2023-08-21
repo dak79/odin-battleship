@@ -1,7 +1,7 @@
 import game from '../components/game/game';
 import DOM from './DOM';
 import updateDOM from './updateDOM';
-
+import placementDOM from './placementDOM';
 const startGame = (body) => {
   const btnStart = body.querySelector('#body-main #controllers #button-start');
   btnStart.addEventListener('click', startPlacement);
@@ -15,7 +15,6 @@ const btnPlayGame = (btn) => btn.addEventListener('click', startGameLoop);
 const playGameRemove = (btn) => btn.removeEventListener('click', startGameLoop);
 
 const startPlacement = (event) => {
-  game.init();
   updateDOM().setMessage('Place your ships');
   updateDOM().btnTextContent(event.target, 'Play');
   startPlacementRemove(event.target);
@@ -30,6 +29,12 @@ const startGameLoop = (event) => {
   playGameRemove(event.target);
   updateDOM().btnTextContent(event.target, 'Quit');
   quitGame(event.target);
+  const newGame = game.init();
+  const ships = game.placement(newGame);
+  const main = document.querySelector('#body-main');
+  placementDOM().renderShipSummary(main, ships);
+  placementDOM().renderShipsOnBoard(newGame);
+  game.playGame(newGame);
 };
 
 const quitGame = (btn) => {
@@ -37,17 +42,18 @@ const quitGame = (btn) => {
 };
 
 const quitGameLoop = (event) => {
+  // Separa placement da init
   const body = document.querySelector('#hook');
   const newGameInit = game.init();
-  const newGamePlacement = game.placement(newGameInit);
 
   removeQuitGame(event.target);
   updateDOM().btnTextContent(event.target, 'Start');
   const main = body.querySelector('#body-main');
 
   DOM().removeGameContent(main);
+  placementDOM().removeShipsSummary(main);
 
-  DOM().renderGameContent(main, newGameInit, newGamePlacement);
+  DOM().renderGameContent(main, newGameInit);
   startGame(body);
   updateDOM().setMessage('Welcome! Press start to play');
 };
@@ -88,7 +94,7 @@ const parseAttackCoords = (event) => [
  */
 const eventListeners = () => ({
   startBtn: (body) => startGame(body),
-  removeStartBtn: (btn) => startGameRemove(btn),
+  playGameRemove: (btn) => startGameRemove(btn),
   quitBtn: (btn) => quitGame(btn),
   addClicks: (body) => addClicks(body)
 });
