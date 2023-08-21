@@ -1,10 +1,7 @@
 import updateDOM from '../../dom/updateDOM';
+import { createNewPlayers, createNewGameboards } from './init';
 import {
-  createNewPlayers,
-  createNewGameboards,
-  createPlayersShips
-} from './init';
-import {
+  createPlayersShips,
   setCoordShipsPlayer,
   initialPlacementPlayer,
   initialPlacementRival
