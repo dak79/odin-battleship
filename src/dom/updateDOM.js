@@ -114,7 +114,7 @@ const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
 
   while (!validAttack) {
     const coord = isPlayerOne
-      ? await events.addClicks(body)
+      ? await events.addClicks(body, false)
       : attacker.generateRandomCoordinates();
     const [row, col] = coord;
     validAttack = opponent.receiveAttack(opponent.board, row, col);
