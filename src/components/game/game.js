@@ -1,3 +1,4 @@
+import placementDOM from '../../dom/placementDOM';
 import updateDOM from '../../dom/updateDOM';
 import { createNewPlayers, createNewGameboards } from './init';
 import {
@@ -19,14 +20,33 @@ const init = () => {
 };
 
 // Place ships.
-const placement = (init) => {
+const placement = async (init) => {
+  const main = document.querySelector('#body-main');
+  placementDOM().renderShipsPlayerContainer(main);
   const ships = createPlayersShips();
+  const placement = await placementDOM().renderPlacement(
+    ships.playerOneShips,
+    init.playerOneGameboard
+  );
 
-  setCoordShipsPlayer(ships.playerOneShips);
-  initialPlacementPlayer(ships.playerOneShips, init.playerOneGameboard);
-  initialPlacementRival(ships.playerTwoShips, init.playerTwoGameboard);
+  // add click on player table.
+
+  /*
+   * - 2. Implement drag and drop:
+   *   Go in placement fase:
+   *
+   *   - Visual effect of player ships:
+   *    - on the dragable area shocase the place it is gonna take with a shadow.
+   *    - if the ship is invalid the shadow is red.
+   *
+   */
+
+  // setCoordShipsPlayer(ships.playerOneShips);
+  // initialPlacementPlayer(ships.playerOneShips, init.playerOneGameboard);
+  // initialPlacementRival(ships.playerTwoShips, init.playerTwoGameboard);
 
   return {
+    ...placement,
     ...ships
   };
 };
@@ -59,18 +79,8 @@ const gameLoop = async (data) => {
  */
 const game = {
   init: () => init(),
-  placement: (init) => placement(init),
+  placement: async (init) => placement(init),
   playGame: async (data) => gameLoop(data)
 };
 
 export default game;
-
-/*
- * - 1. Create a placement fase:
- *
- *   - Placement fase:
- *
- *   - separate the render of ships on the board and the placement from init
- *
- * - 2. Implement drag and drop
- */
