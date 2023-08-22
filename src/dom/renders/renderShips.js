@@ -5,13 +5,13 @@ import createAndRenderElement from '../domUtil';
  * @param {Node} section
  * @returns
  */
-const renderShipsPlayerContainer = (section) =>
-  createAndRenderElement(
-    'div',
-    { id: 'ships-player', class: 'ships-container player-ships' },
-    null,
-    section
-  );
+// const renderShipsPlayerContainer = (section) =>
+//   createAndRenderElement(
+//     'div',
+//     { id: 'ships-player', class: 'ships-container player-ships' },
+//     null,
+//     section
+//   );
 
 /**
  * Render container for cpu ship icon.
@@ -31,40 +31,35 @@ const renderShipsRivalContainer = (section) =>
  * @param {Node} section
  * @param {Object} ships
  */
-const renderShipIcons = (section, ships) => {
-  Object.entries(ships).forEach(([ship, descriptions]) => {
-    const div = createAndRenderElement('div', { id: ship }, null, section);
-    descriptions.forEach((description) => {
-      createAndRenderElement(
-        'img',
-        { src: description.icon, alt: `${ship}-icon`, class: 'icons-size' },
-        null,
-        div
-      );
-    });
-  });
-};
+// const renderShipIcons = (section, ships) => {
+//   Object.entries(ships).forEach(([ship, descriptions]) => {
+//     const div = createAndRenderElement('div', { id: ship }, null, section);
+//     descriptions.forEach((description) => {
+//       createAndRenderElement(
+//         'img',
+//         { src: description.icon, alt: `${ship}-icon`, class: 'icons-size' },
+//         null,
+//         div
+//       );
+//     });
+//   });
+// };
 
-/**
- * Render the ship on board
- * @param {Array[]} board
- */
-const renderPlayerShips = (board, table) => {
-  const rows = Array.from(table.rows);
-  rows.forEach((row, rowIndex) => {
-    const cells = Array.from(row.cells);
-    cells.forEach((td, colIndex) => {
-      const cell = board[rowIndex][colIndex];
-      if (cell !== null) {
-        td.classList.add('ship-placed');
-      }
-    });
-  });
-};
+// /**
+//  * Render the ship on board
+//  * @param {Array[]} board
+//  */
+// const renderPlayerShips = (board, table) => {
+//   const rows = Array.from(table.rows);
+//   rows.forEach((row, rowIndex) => {
+//     const cells = Array.from(row.cells);
+//     cells.forEach((td, colIndex) => {
+//       const cell = board[rowIndex][colIndex];
+//       if (cell !== null) {
+//         td.classList.add('ship-placed');
+//       }
+//     });
+//   });
+// };
 
-export {
-  renderShipsPlayerContainer,
-  renderShipsRivalContainer,
-  renderShipIcons,
-  renderPlayerShips
-};
+export { renderShipsRivalContainer };
