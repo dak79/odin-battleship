@@ -154,6 +154,7 @@ const Gameboard = () => {
    */
   const addShipToBoard = (board, ship, row, col, direction) => {
     const length = ship.getLength();
+
     const updateBoardCell = (index, newBoard) => {
       const [rowCoord, colCoord] = getCoord(row, col, index, direction);
       const updatedRow = [...newBoard[rowCoord]];
