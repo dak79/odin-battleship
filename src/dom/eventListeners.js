@@ -2,6 +2,7 @@ import game from '../components/game/game';
 import DOM from './DOM';
 import updateDOM from './updateDOM';
 import placementDOM from './placementDOM';
+
 const startGame = (body) => {
   const btnStart = body.querySelector('#body-main #controllers #button-start');
   btnStart.addEventListener('click', startPlacement);
@@ -14,11 +15,15 @@ const btnPlayGame = (btn) => btn.addEventListener('click', startGameLoop);
 
 const playGameRemove = (btn) => btn.removeEventListener('click', startGameLoop);
 
-const startPlacement = (event) => {
+const startPlacement = async (event) => {
   updateDOM().setMessage('Place your ships');
   updateDOM().btnTextContent(event.target, 'Play');
   startPlacementRemove(event.target);
   btnPlayGame(event.target);
+  const newGame = game.init();
+  const ships = await game.placement(newGame);
+  console.log(ships);
+  console.log(newGame);
 };
 
 const startGameLoop = (event) => {
@@ -29,12 +34,7 @@ const startGameLoop = (event) => {
   playGameRemove(event.target);
   updateDOM().btnTextContent(event.target, 'Quit');
   quitGame(event.target);
-  const newGame = game.init();
-  const ships = game.placement(newGame);
-  const main = document.querySelector('#body-main');
-  placementDOM().renderShipSummary(main, ships);
-  placementDOM().renderShipsOnBoard(newGame);
-  game.playGame(newGame);
+  // game.playGame(newGame);
 };
 
 const quitGame = (btn) => {
@@ -67,25 +67,22 @@ const removeQuitGame = (btn) => {
  * @param {HTMLElement} table
  * @returns
  */
-const addClicks = (body) => {
+const addClicks = (body, isPlayerBoard) => {
   return new Promise((resolve) => {
-    const table = body.querySelector(
-      '#body-main #board-rival #board-rival-table'
-    );
+    const table = isPlayerBoard
+      ? body.querySelector('#body-main #board-player #board-player-table')
+      : body.querySelector('#body-main #board-rival #board-rival-table');
     const cells = table.querySelectorAll('td');
-    const attackHandler = (event) => {
-      const [row, col] = parseAttackCoords(event);
+    const clicks = (event) => {
+      const [row, col] = parseCoords(event);
       resolve([row, col]);
     };
 
-    cells.forEach((cell) => cell.addEventListener('click', attackHandler));
+    cells.forEach((cell) => cell.addEventListener('click', clicks));
   });
 };
 
-const parseAttackCoords = (event) => [
-  event.target.dataset.x,
-  event.target.dataset.y
-];
+const parseCoords = (event) => [event.target.dataset.x, event.target.dataset.y];
 
 /**
  * Export event listeners
@@ -94,9 +91,9 @@ const parseAttackCoords = (event) => [
  */
 const eventListeners = () => ({
   startBtn: (body) => startGame(body),
-  playGameRemove: (btn) => startGameRemove(btn),
+  playGameRemove: (btn) => playGameRemove(btn),
   quitBtn: (btn) => quitGame(btn),
-  addClicks: (body) => addClicks(body)
+  addClicks: (body, isPlayerBoard) => addClicks(body, isPlayerBoard)
 });
 
 export default eventListeners;
