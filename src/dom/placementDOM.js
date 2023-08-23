@@ -2,6 +2,16 @@ import { renderShipsRivalContainer } from './renders/renderShips';
 import eventListeners from './eventListeners';
 import createAndRenderElement from './domUtil';
 
+const renderBtnRotate = (parent) =>
+  createAndRenderElement(
+    'button',
+    { id: 'btn-rotate', class: 'buttons' },
+    'Rotate',
+    parent
+  );
+
+const clearTxtContent = (element) => (element.textContent = '');
+
 /**
  * Render the ship on board
  * @param {Array[]} board
@@ -83,20 +93,25 @@ const renderPlacement = async (ships, gameboard) => {
     '#body-main #board-player #board-player-table'
   );
 
+  const name = body.querySelector('#body-main #player-one-name');
+
+  clearTxtContent(name);
+  renderBtnRotate(name);
+  const btnRotate = name.querySelector('#btn-rotate');
   const arrShips = Object.values(ships);
   for (const shipType of arrShips) {
     for (const ship of shipType) {
       let validPlacement = false;
+      events.btnRotate(btnRotate, ship);
       while (!validPlacement) {
         const coord = await events.addClicks(body, true);
         const [row, col] = coord;
-        const dir = true;
         validPlacement = gameboard.placeShip(
           gameboard.board,
           ship.body,
           parseInt(row),
           parseInt(col),
-          dir
+          ship.body.init.isHorizontal
         );
       }
       renderPlayerShips(gameboard.board, tablePlayer);
@@ -107,7 +122,6 @@ const renderPlacement = async (ships, gameboard) => {
 
 /*
  * PL1:
- *   - Add button rotate
  *   - Add ship shadow on hover
  *   - Shadow veritcal and horizonatal
  *   - Add move with drag and drop
@@ -125,6 +139,8 @@ const placementDOM = () => ({
   renderShipsPlayerContainer: (main) => renderShipsPlayerContainer(main),
   renderPlacement: async (ships, gameboard) =>
     renderPlacement(ships, gameboard),
+  clearTxtContent: (element) => clearTxtContent(element),
+  renderBtnRotate: (parent) => renderBtnRotate(parent),
   //renderShipsOnBoard: (board) => renderShipsOnBoard(board),
   removeShipsSummary: (parent) => removeShipsSummary(parent)
 });

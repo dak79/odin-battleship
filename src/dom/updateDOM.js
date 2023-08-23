@@ -1,5 +1,5 @@
 import eventListeners from './eventListeners';
-
+const removeElement = (element) => element.remove();
 /**
  * Set a message in the message field
  * @param {String} message
@@ -18,11 +18,11 @@ const getMessage = (isPlayerOne) =>
   isPlayerOne ? 'Attack enemy board' : 'Enemy attacks your ships';
 
 /**
- * Toggle between start and quit in the button.
+ * Set text content of an element.
  * @param {Node} btn
  */
-const btnTextContent = (btn, text) => {
-  btn.textContent = text;
+const setTextContent = (element, text) => {
+  element.textContent = text;
 };
 
 // Delay
@@ -150,7 +150,8 @@ const renderWinningState = (isPlayerOneWinner) =>
  */
 const updateDOM = () => ({
   setMessage: (message) => setMessage(message),
-  btnTextContent: (btn, text) => btnTextContent(btn, text),
+  removeElement: (element) => removeElement(element),
+  setTextContent: (btn, text) => setTextContent(btn, text),
   renderShot: (table, row, col, isHit) => renderShot(table, row, col, isHit),
   renderSunkedShip: (ship) => renderSunkedShip(ship),
   renderPlayerAttack: (attacker, opponent, isPlayerOne) =>

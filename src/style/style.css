@@ -163,6 +163,8 @@ body {
 
 .player-one-name {
   grid-area: player-one-name;
+  min-width: 50%;
+  text-align: center;
 }
 
 .player-two-name {
