@@ -17,7 +17,7 @@ const playGameRemove = (btn) => btn.removeEventListener('click', startGameLoop);
 
 const startPlacement = async (event) => {
   updateDOM().setMessage('Place your ships');
-  updateDOM().btnTextContent(event.target, 'Play');
+  updateDOM().setTextContent(event.target, 'Play');
   startPlacementRemove(event.target);
   btnPlayGame(event.target);
   const newGame = game.init();
@@ -31,8 +31,14 @@ const startGameLoop = (event) => {
   // place randomly cpu
   // playGAme new game
   // How to pass the game right object with placed ships? If it is necessary.
+
+  const body = document.querySelector('#hook');
+  const name = body.querySelector('#body-main #player-one-name');
+  const btn = name.querySelector('#btn-rotate');
+  updateDOM().removeElement(btn);
+  updateDOM().setTextContent(name, 'Player 1');
   playGameRemove(event.target);
-  updateDOM().btnTextContent(event.target, 'Quit');
+  updateDOM().setTextContent(event.target, 'Quit');
   quitGame(event.target);
   // game.playGame(newGame);
 };
@@ -47,7 +53,7 @@ const quitGameLoop = (event) => {
   const newGameInit = game.init();
 
   removeQuitGame(event.target);
-  updateDOM().btnTextContent(event.target, 'Start');
+  updateDOM().setTextContent(event.target, 'Start');
   const main = body.querySelector('#body-main');
 
   DOM().removeGameContent(main);
@@ -61,6 +67,14 @@ const quitGameLoop = (event) => {
 const removeQuitGame = (btn) => {
   btn.removeEventListener('click', quitGameLoop);
 };
+
+const btnRotate = (btn, ship) =>
+  btn.addEventListener('click', rotateShip.bind(null, ship));
+
+const rotateShip = (ship) =>
+  ship.body.init.isHorizontal
+    ? ship.body.setDirection(false)
+    : ship.body.setDirection(true);
 
 /**
  * Add click listener to cpu board.
@@ -93,6 +107,7 @@ const eventListeners = () => ({
   startBtn: (body) => startGame(body),
   playGameRemove: (btn) => playGameRemove(btn),
   quitBtn: (btn) => quitGame(btn),
+  btnRotate: (btn, ship) => btnRotate(btn, ship),
   addClicks: (body, isPlayerBoard) => addClicks(body, isPlayerBoard)
 });
 
