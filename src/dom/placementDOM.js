@@ -1,4 +1,3 @@
-import { renderShipsRivalContainer } from './renders/renderShips';
 import eventListeners from './eventListeners';
 import createAndRenderElement from './domUtil';
 
@@ -33,6 +32,19 @@ const renderPlayerShips = (board, table) => {
 };
 
 /**
+ * Render container for cpu ship icon.
+ * @param {Node} section
+ * @returns
+ */
+const renderShipsRivalContainer = (section) =>
+  createAndRenderElement(
+    'div',
+    { id: 'ships-rival', class: 'ships-container rival-ships' },
+    null,
+    section
+  );
+
+/**
  * Render container for player ship icon.
  * @param {Node} section
  * @returns
@@ -64,22 +76,29 @@ const renderShipIcons = (section, ship) => {
     div
   );
 };
-
-const renderShipSummary = (parent, ships) => {
-  // const shipsContainerPlayer = renderShipsPlayerContainer(parent);
-  // renderShipIcons(shipsContainerPlayer, ships.playerOneShips);
-
-  const shipsContainerRival = renderShipsRivalContainer(parent);
-  renderShipIcons(shipsContainerRival, ships.playerTwoShips);
+const renderShipIconsRival = (section, ships) => {
+  for (const ship in ships) {
+    ships[ship].forEach((ship) => {
+      renderShipIcons(section, ship);
+    });
+  }
+};
+const renderShipsSummaryRival = (main, ships) => {
+  const shipsContainerRival = renderShipsRivalContainer(main);
+  renderShipIconsRival(shipsContainerRival, ships.playerTwoShips);
 };
 
 const removeShipsSummary = (parent) => {
   const elements = [
-    parent.querySelector('#ships-player')
-    //parent.querySelector('#ships-rival')
+    parent.querySelector('#ships-player'),
+    parent.querySelector('#ships-rival')
   ];
 
-  elements.forEach((element) => element.remove());
+  elements.forEach((element) => {
+    if (element) {
+      element.remove();
+    }
+  });
 };
 
 const renderPlacement = async (ships, gameboard) => {
@@ -120,31 +139,17 @@ const renderPlacement = async (ships, gameboard) => {
     }
   }
   events.mouseListener(tablePlayer, false);
+  return gameboard;
 };
 
-/*
- * PL1:
- *   - Shadow is gray but if the future placement is considered invalid became
- *   red;
- *   - Add move with drag and drop
- *   - Fix the message for player 1
- * PL2:
- *   - Random placement
- *   - Render icons container
- *   - Render icons
- * Pass to game.loop:
- *  -  delete 'Play'
- *  -  Check button quit
- */
-
 const placementDOM = () => ({
-  renderShipSummary: (parent, ships) => renderShipSummary(parent, ships),
+  renderShipsSummaryRival: (main, ships) =>
+    renderShipsSummaryRival(main, ships),
   renderShipsPlayerContainer: (main) => renderShipsPlayerContainer(main),
   renderPlacement: async (ships, gameboard) =>
     renderPlacement(ships, gameboard),
   clearTxtContent: (element) => clearTxtContent(element),
   renderBtnRotate: (parent) => renderBtnRotate(parent),
-  //renderShipsOnBoard: (board) => renderShipsOnBoard(board),
   removeShipsSummary: (parent) => removeShipsSummary(parent)
 });
 
