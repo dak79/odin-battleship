@@ -11,37 +11,19 @@ const startGame = (body) => {
 const startPlacementRemove = (btn) =>
   btn.removeEventListener('click', startPlacement);
 
-const btnPlayGame = (btn) => btn.addEventListener('click', startGameLoop);
-
-const playGameRemove = (btn) => btn.removeEventListener('click', startGameLoop);
-
 const startPlacement = async (event) => {
-  updateDOM().setMessage('Place your ships');
-  updateDOM().setTextContent(event.target, 'Play');
-  startPlacementRemove(event.target);
-  btnPlayGame(event.target);
-  const newGame = game.init();
-  const ships = await game.placement(newGame);
-  console.log(ships);
-  console.log(newGame);
-  //
-};
-
-const startGameLoop = (event) => {
-  // confirm the placement of player ships.
-  // place randomly cpu
-  // playGAme new game
-  // How to pass the game right object with placed ships? If it is necessary.
-
   const body = document.querySelector('#hook');
   const name = body.querySelector('#body-main #player-one-name');
   const btn = name.querySelector('#btn-rotate');
+  updateDOM().setMessage('Place your ships');
+  updateDOM().setTextContent(event.target, 'Quit');
+  startPlacementRemove(event.target);
+  quitGame(event.target);
+  const newGame = game.init();
+  await game.placement(newGame);
   updateDOM().removeElement(btn);
   updateDOM().setTextContent(name, 'Player 1');
-  playGameRemove(event.target);
-  updateDOM().setTextContent(event.target, 'Quit');
-  quitGame(event.target);
-  // game.playGame(newGame);
+  game.playGame(newGame);
 };
 
 const quitGame = (btn) => {
@@ -49,18 +31,21 @@ const quitGame = (btn) => {
 };
 
 const quitGameLoop = (event) => {
-  // Separa placement da init
   const body = document.querySelector('#hook');
+  const name = body.querySelector('#body-main #player-one-name');
+  const btn = name.querySelector('#btn-rotate');
   const newGameInit = game.init();
 
   removeQuitGame(event.target);
   updateDOM().setTextContent(event.target, 'Start');
   const main = body.querySelector('#body-main');
 
-  DOM().removeGameContent(main);
+  DOM().removeBoards(main);
   placementDOM().removeShipsSummary(main);
+  updateDOM().removeElement(btn);
+  updateDOM().setTextContent(name, 'Player 1');
 
-  DOM().renderGameContent(main, newGameInit);
+  DOM().renderBoards(main, newGameInit);
   startGame(body);
   updateDOM().setMessage('Welcome! Press start to play');
 };
@@ -105,6 +90,28 @@ const clearActiveShip = () => {
   activeShip = null;
 };
 
+const getCoord = (row, col, direction, value) => [
+  direction ? row : row + value,
+  direction ? col + value : col
+];
+
+const validateCells = (ship) =>
+  ship.map((coords) => {
+    const [row, col] = coords;
+    if (
+      row < 0 ||
+      row > 9 ||
+      col < 0 ||
+      col > 9 ||
+      document
+        .querySelector(`[data-x='${row}'][data-y='${col}']`)
+        .classList.contains('ship-placed')
+    ) {
+      return false;
+    }
+    return true;
+  });
+
 const mouseHandler = (event) => {
   event.stopPropagation();
   const ship = getActiveShip();
@@ -114,9 +121,16 @@ const mouseHandler = (event) => {
 
   if (document.querySelector(`[data-x='${targetX}'][data-y='${targetY}']`)) {
     const range = Array.from({ length: ship.body.init.len }, (_, i) => i);
+    const shipCoord = range.map((cell) =>
+      getCoord(targetX, targetY, shipDir, cell)
+    );
+
+    const className = validateCells(shipCoord).some((value) => value === false)
+      ? 'ship-shadow-invalid'
+      : 'ship-shadow';
+
     range.forEach((cell) => {
-      const cellX = shipDir ? targetX : targetX + cell;
-      const cellY = shipDir ? targetY + cell : targetY;
+      const [cellX, cellY] = getCoord(targetX, targetY, shipDir, cell);
       const td = document.querySelector(
         `[data-x='${cellX}'][data-y='${cellY}']`
       );
@@ -125,11 +139,11 @@ const mouseHandler = (event) => {
           event.type === 'mouseover' &&
           !td.classList.contains('ship-placed')
         ) {
-          td.classList.add('ship-shadow');
+          td.classList.add(className);
         }
 
         if (event.type === 'mouseleave') {
-          td.classList.remove('ship-shadow');
+          td.classList.remove(className);
         }
       }
     });
@@ -165,7 +179,6 @@ const parseCoords = (event) => [event.target.dataset.x, event.target.dataset.y];
  */
 const eventListeners = () => ({
   startBtn: (body) => startGame(body),
-  playGameRemove: (btn) => playGameRemove(btn),
   quitBtn: (btn) => quitGame(btn),
   btnRotate: (btn, ship) => btnRotate(btn, ship),
   addClicks: (body, isPlayerBoard) => addClicks(body, isPlayerBoard),
