@@ -24,6 +24,7 @@ const startPlacement = async (event) => {
   const ships = await game.placement(newGame);
   console.log(ships);
   console.log(newGame);
+  //
 };
 
 const startGameLoop = (event) => {
@@ -76,6 +77,65 @@ const rotateShip = (ship) =>
     ? ship.body.setDirection(false)
     : ship.body.setDirection(true);
 
+const mouseListener = (table, isAdding) => {
+  const rows = Array.from(table.rows);
+  rows.forEach((row) => {
+    const cells = Array.from(row.cells);
+    cells.forEach((td) => {
+      if (isAdding) {
+        td.addEventListener('mouseover', mouseHandler);
+        td.addEventListener('mouseleave', mouseHandler);
+      } else {
+        td.removeEventListener('mouseover', mouseHandler);
+        td.removeEventListener('mouseleave', mouseHandler);
+      }
+    });
+  });
+};
+
+let activeShip = null;
+
+const setActiveShip = (ship) => {
+  activeShip = ship;
+};
+
+const getActiveShip = () => activeShip;
+
+const clearActiveShip = () => {
+  activeShip = null;
+};
+
+const mouseHandler = (event) => {
+  event.stopPropagation();
+  const ship = getActiveShip();
+  const shipDir = ship.body.init.isHorizontal;
+  const targetX = parseInt(event.target.dataset.x);
+  const targetY = parseInt(event.target.dataset.y);
+
+  if (document.querySelector(`[data-x='${targetX}'][data-y='${targetY}']`)) {
+    const range = Array.from({ length: ship.body.init.len }, (_, i) => i);
+    range.forEach((cell) => {
+      const cellX = shipDir ? targetX : targetX + cell;
+      const cellY = shipDir ? targetY + cell : targetY;
+      const td = document.querySelector(
+        `[data-x='${cellX}'][data-y='${cellY}']`
+      );
+      if (td) {
+        if (
+          event.type === 'mouseover' &&
+          !td.classList.contains('ship-placed')
+        ) {
+          td.classList.add('ship-shadow');
+        }
+
+        if (event.type === 'mouseleave') {
+          td.classList.remove('ship-shadow');
+        }
+      }
+    });
+  }
+};
+
 /**
  * Add click listener to cpu board.
  * @param {HTMLElement} table
@@ -108,7 +168,10 @@ const eventListeners = () => ({
   playGameRemove: (btn) => playGameRemove(btn),
   quitBtn: (btn) => quitGame(btn),
   btnRotate: (btn, ship) => btnRotate(btn, ship),
-  addClicks: (body, isPlayerBoard) => addClicks(body, isPlayerBoard)
+  addClicks: (body, isPlayerBoard) => addClicks(body, isPlayerBoard),
+  setActiveShip: (ship) => setActiveShip(ship),
+  clearActiveShip: () => clearActiveShip(),
+  mouseListener: (table, isAdding) => mouseListener(table, isAdding)
 });
 
 export default eventListeners;

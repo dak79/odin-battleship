@@ -193,6 +193,10 @@ body {
   background-color: var(--slate700);
 }
 
+.ship-shadow {
+  background-color: var(--slate200);
+}
+
 .rival-board {
   grid-area: rival-board;
 }

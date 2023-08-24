@@ -23,6 +23,9 @@ const renderPlayerShips = (board, table) => {
     cells.forEach((td, colIndex) => {
       const cell = board[rowIndex][colIndex];
       if (cell !== null) {
+        if (td.classList.contains('ship-shadow')) {
+          td.classList.remove('ship-shadow');
+        }
         td.classList.add('ship-placed');
       }
     });
@@ -79,12 +82,6 @@ const removeShipsSummary = (parent) => {
   elements.forEach((element) => element.remove());
 };
 
-/**
- * Render placement on boards
- * @param {Object} attacker
- * @param {Object} opponent
- * @param {Boolean} isPlayerOne
- */
 const renderPlacement = async (ships, gameboard) => {
   const events = eventListeners();
   const body = document.querySelector('#hook');
@@ -97,12 +94,15 @@ const renderPlacement = async (ships, gameboard) => {
 
   clearTxtContent(name);
   renderBtnRotate(name);
+
   const btnRotate = name.querySelector('#btn-rotate');
   const arrShips = Object.values(ships);
+  events.mouseListener(tablePlayer, true);
   for (const shipType of arrShips) {
     for (const ship of shipType) {
       let validPlacement = false;
       events.btnRotate(btnRotate, ship);
+      events.setActiveShip(ship);
       while (!validPlacement) {
         const coord = await events.addClicks(body, true);
         const [row, col] = coord;
@@ -116,14 +116,16 @@ const renderPlacement = async (ships, gameboard) => {
       }
       renderPlayerShips(gameboard.board, tablePlayer);
       renderShipIcons(iconContainer, ship);
+      events.clearActiveShip();
     }
   }
+  events.mouseListener(tablePlayer, false);
 };
 
 /*
  * PL1:
- *   - Add ship shadow on hover
- *   - Shadow veritcal and horizonatal
+ *   - Shadow is gray but if the future placement is considered invalid became
+ *   red;
  *   - Add move with drag and drop
  *   - Fix the message for player 1
  * PL2:
@@ -131,6 +133,7 @@ const renderPlacement = async (ships, gameboard) => {
  *   - Render icons container
  *   - Render icons
  * Pass to game.loop:
+ *  -  delete 'Play'
  *  -  Check button quit
  */
 
