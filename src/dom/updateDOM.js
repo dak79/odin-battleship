@@ -1,5 +1,10 @@
 import eventListeners from './eventListeners';
-const removeElement = (element) => element.remove();
+const removeElement = (element) => {
+  if (element) {
+    element.remove();
+  }
+};
+
 /**
  * Set a message in the message field
  * @param {String} message
