@@ -16,6 +16,7 @@ const getCoord = (row, col, length, direction) => {
 
   return [rowCoord, colCoord];
 };
+
 /**
  * Check if ship coordinates are inside the board.
  * @param {Object} ship - The ship object.
