@@ -71,7 +71,7 @@ const renderBoard = (parent, board) => {
  * @param {Node} parent
  * @param {*} game
  */
-const renderGameContent = (parent, game) => {
+const renderBoards = (parent, game) => {
   const boardPlayer = renderBoardPlayer(parent);
   renderBoard(boardPlayer, game.playerOneGameboard.board);
 
@@ -79,7 +79,7 @@ const renderGameContent = (parent, game) => {
   renderBoard(boardRival, game.playerTwoGameboard.board);
 };
 
-const removeGameContent = (parent) => {
+const removeBoards = (parent) => {
   const elements = [
     parent.querySelector('#board-player'),
     parent.querySelector('#board-rival')
@@ -88,4 +88,4 @@ const removeGameContent = (parent) => {
   elements.forEach((element) => element.remove());
 };
 
-export { renderGameContent, removeGameContent };
+export { renderBoards, removeBoards };
