@@ -1,7 +1,7 @@
 import renderHeaderContent from './renders/header';
 import createStructureBody from './renders/body';
 import renderControllersContent from './renders/controllers';
-import { renderGameContent, removeGameContent } from './renders/gameContent';
+import { renderBoards, removeBoards } from './renders/gameContent';
 import renderFooterContent from './renders/footer';
 
 /**
@@ -16,7 +16,7 @@ const renderPage = (hook, game) => {
   renderHeaderContent(body.header);
 
   renderControllersContent(body.main, game);
-  renderGameContent(body.main, game);
+  renderBoards(body.main, game);
 
   renderFooterContent(body.footer);
 
@@ -28,8 +28,8 @@ const renderPage = (hook, game) => {
  */
 const DOM = () => ({
   render: (hook, game) => renderPage(hook, game),
-  renderGameContent: (parent, game) => renderGameContent(parent, game),
-  removeGameContent: (parent) => removeGameContent(parent)
+  renderBoards: (parent, game) => renderBoards(parent, game),
+  removeBoards: (parent) => removeBoards(parent)
 });
 
 export default DOM;
