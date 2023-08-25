@@ -6,7 +6,7 @@ const MAX_LENGTH = 5;
 /**
  * Check if the length is between 1 and 4.
  * @param {Number|false} input - length
- * @returns {Number|false}
+ * @returns {Number|false} Length or false if is invalid.
  */
 const validateShipLength = (input) =>
   input > MAX_LENGTH || input < MIN_LENGTH ? false : input;
@@ -14,14 +14,14 @@ const validateShipLength = (input) =>
 /**
  * Add an hit.
  * @param {Object} obj
- * @returns {Object} With hits updated.
+ * @returns {Object} init hits updated.
  */
 const addHit = (obj) => ({ ...obj, hits: obj.hits + 1 });
 
 /**
  * Set sunked property
  * @param {Object} obj
- * @returns {Object} with sunked updated.
+ * @returns {Object} init sunked updated.
  */
 const setSunk = (obj) => ({
   ...obj,
@@ -41,20 +41,21 @@ const Ship = (len) => {
   /**
    * Hit the ship.
    * @param {Object} obj
+   * @returns {Object} Update ship object
    */
   const hit = (obj = init) => pipe(addHit, setSunk)(obj);
 
   /**
    * Get the length of ship init.
    * @param {Object} obj
-   * @returns
+   * @returns {Number} Ship length
    */
   const getLength = (obj = init) => obj.len;
 
   /**
    * Get sunked from ship init.
    * @param {Object} obj
-   * @returns
+   * @returns {Boolean} Ship sunked?
    */
   const isSunk = (obj = init) => obj.sunked;
 
