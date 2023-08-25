@@ -3,7 +3,7 @@ import Ship from '../components/ships';
 
 const gameboard = Gameboard();
 
-describe('GameBoard', () => {
+describe('Gameboard', () => {
   it('has board propriety', () => {
     expect(gameboard).toHaveProperty('board');
   });
@@ -34,7 +34,7 @@ describe('The board', () => {
   });
 });
 
-describe('The method gameBoard.placeShip()', () => {
+describe('The method gameboard.placeShip()', () => {
   it('place a ship of length 5 horizontally in [7, 2][7, 3][7, 4][7, 5][7, 6]', () => {
     const ship = Ship(5);
     const length = ship.getLength();
