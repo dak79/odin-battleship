@@ -1,4 +1,9 @@
 import eventListeners from './eventListeners';
+
+/**
+ * Remove element from DOM
+ * @param {Node} element
+ */
 const removeElement = (element) => {
   if (element) {
     element.remove();
@@ -40,6 +45,18 @@ const ATTACK_DELAY = 1000;
  */
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
+const addShotClasses = (cell, isHit) => {
+  const hitClass = isHit ? 'ship-hit' : 'missed-hit';
+  const otherClass = isHit ? 'missed-hit' : 'ship-hit';
+
+  if (!cell.classList.contains(hitClass)) {
+    cell.classList.add(hitClass);
+  }
+
+  if (cell.classList.contains(otherClass)) {
+    cell.classList.remove(otherClass);
+  }
+};
 /**
  * Render attack result on boards
  * @param {Node} table
@@ -55,15 +72,7 @@ const renderShot = (table, x, y, isHit) => {
     );
 
     if (td) {
-      if (!td.classList.contains('.ship-hit') && isHit === true) {
-        td.classList.add('ship-hit');
-        return;
-      }
-
-      if (!td.classList.contains('missed-hit') && isHit === false) {
-        td.classList.add('missed-hit');
-        return;
-      }
+      addShotClasses(td, isHit);
     }
   });
 };
@@ -118,10 +127,9 @@ const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
   let validAttack = false;
 
   while (!validAttack) {
-    const coord = isPlayerOne
+    const [row, col] = isPlayerOne
       ? await events.addClicks(body, false)
       : attacker.generateRandomCoordinates();
-    const [row, col] = coord;
     validAttack = opponent.receiveAttack(opponent.board, row, col);
 
     if (validAttack) {
