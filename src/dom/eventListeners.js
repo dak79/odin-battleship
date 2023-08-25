@@ -3,65 +3,116 @@ import DOM from './DOM';
 import updateDOM from './updateDOM';
 import placementDOM from './placementDOM';
 
+/**
+ * Add listener to button start for starting placement
+ * @param {Node} body
+ */
 const startGame = (body) => {
   const btnStart = body.querySelector('#body-main #controllers #button-start');
   btnStart.addEventListener('click', startPlacement);
 };
 
+/**
+ * Remove listener for starting placement.
+ * @param {Node} btn
+ * @returns
+ */
 const startPlacementRemove = (btn) =>
   btn.removeEventListener('click', startPlacement);
 
+/**
+ * Start placement fase.
+ * @param {Event} event
+ */
 const startPlacement = async (event) => {
   const body = document.querySelector('#hook');
   const name = body.querySelector('#body-main #player-one-name');
   const btn = name.querySelector('#btn-rotate');
+
   updateDOM().setMessage('Place your ships');
   updateDOM().setTextContent(event.target, 'Quit');
+
   startPlacementRemove(event.target);
   quitGame(event.target);
+
   const newGame = game.init();
   await game.placement(newGame);
+
   updateDOM().removeElement(btn);
   updateDOM().setTextContent(name, 'Player 1');
+
   game.playGame(newGame);
 };
 
+/**
+ * Add listener for quit game.
+ * @param {Node} btn
+ */
 const quitGame = (btn) => {
   btn.addEventListener('click', quitGameLoop);
 };
 
+/**
+ * Quit game and reset.
+ * @param {Event} event
+ */
 const quitGameLoop = (event) => {
   const body = document.querySelector('#hook');
   const name = body.querySelector('#body-main #player-one-name');
   const btn = name.querySelector('#btn-rotate');
+
   const newGameInit = game.init();
 
   removeQuitGame(event.target);
   updateDOM().setTextContent(event.target, 'Start');
+
   const main = body.querySelector('#body-main');
 
   DOM().removeBoards(main);
+
   placementDOM().removeShipsSummary(main);
+
   updateDOM().removeElement(btn);
   updateDOM().setTextContent(name, 'Player 1');
 
   DOM().renderBoards(main, newGameInit);
+
   startGame(body);
   updateDOM().setMessage('Welcome! Press start to play');
 };
 
+/**
+ * Remove listener from quit button.
+ * @param {Node} btn
+ */
 const removeQuitGame = (btn) => {
   btn.removeEventListener('click', quitGameLoop);
 };
 
+/**
+ * Add listener to Rotate button.
+ * @param {Node} btn
+ * @param {Object} ship
+ * @returns
+ */
 const btnRotate = (btn, ship) =>
   btn.addEventListener('click', rotateShip.bind(null, ship));
 
+/**
+ * Handle rotate
+ * @param {Object} ship
+ * @returns
+ */
 const rotateShip = (ship) =>
   ship.body.init.isHorizontal
     ? ship.body.setDirection(false)
     : ship.body.setDirection(true);
 
+/**
+ * Add listener for mouse to player board
+ * @param {Node} table
+ * @param {Boolean} isAdding
+ */
 const mouseListener = (table, isAdding) => {
   const rows = Array.from(table.rows);
   rows.forEach((row) => {
@@ -80,21 +131,45 @@ const mouseListener = (table, isAdding) => {
 
 let activeShip = null;
 
+/**
+ * Set ship active
+ * @param {Object} ship
+ */
 const setActiveShip = (ship) => {
   activeShip = ship;
 };
 
+/**
+ * Get the active ship
+ * @returns Ship object
+ */
 const getActiveShip = () => activeShip;
 
+/**
+ * Clear activeShip variable
+ */
 const clearActiveShip = () => {
   activeShip = null;
 };
 
+/**
+ * Get ship coordinates
+ * @param {Number} row
+ * @param {Number} col
+ * @param {Boolean} direction
+ * @param {Number} value
+ * @returns
+ */
 const getCoord = (row, col, direction, value) => [
   direction ? row : row + value,
   direction ? col + value : col
 ];
 
+/**
+ * Check if all ship is inside board
+ * @param {Object} ship
+ * @returns {Boolean}
+ */
 const validateCells = (ship) =>
   ship.map((coords) => {
     const [row, col] = coords;
@@ -112,6 +187,10 @@ const validateCells = (ship) =>
     return true;
   });
 
+/**
+ * Handle mouse event on player board.
+ * @param {Event} event
+ */
 const mouseHandler = (event) => {
   event.stopPropagation();
   const ship = getActiveShip();
@@ -153,6 +232,7 @@ const mouseHandler = (event) => {
 /**
  * Add click listener to cpu board.
  * @param {HTMLElement} table
+ * @param {Boolean} isPlayerBoard
  * @returns
  */
 const addClicks = (body, isPlayerBoard) => {
