@@ -1,6 +1,11 @@
 import eventListeners from './eventListeners';
 import createAndRenderElement from './domUtil';
 
+/**
+ * Render button rotate on DOM
+ * @param {Node} parent
+ * @returns
+ */
 const renderBtnRotate = (parent) =>
   createAndRenderElement(
     'button',
@@ -9,11 +14,17 @@ const renderBtnRotate = (parent) =>
     parent
   );
 
+/**
+ * Change text comment of an element.
+ * @param {HTMLElement} element
+ * @returns
+ */
 const clearTxtContent = (element) => (element.textContent = '');
 
 /**
  * Render the ship on board
  * @param {Array[]} board
+ * @param {Node} table
  */
 const renderPlayerShips = (board, table) => {
   const rows = Array.from(table.rows);
@@ -76,6 +87,12 @@ const renderShipIcons = (section, ship) => {
     div
   );
 };
+
+/**
+ * Render icon for cpu ships
+ * @param {Node} section
+ * @param {Object} ships
+ */
 const renderShipIconsRival = (section, ships) => {
   for (const ship in ships) {
     ships[ship].forEach((ship) => {
@@ -83,11 +100,21 @@ const renderShipIconsRival = (section, ships) => {
     });
   }
 };
+
+/**
+ * Render container and icons for cpu
+ * @param {Node} main
+ * @param {Object} ships
+ */
 const renderShipsSummaryRival = (main, ships) => {
   const shipsContainerRival = renderShipsRivalContainer(main);
   renderShipIconsRival(shipsContainerRival, ships.playerTwoShips);
 };
 
+/**
+ * Remove icons and icon containers
+ * @param {Node} parent
+ */
 const removeShipsSummary = (parent) => {
   const elements = [
     parent.querySelector('#ships-player'),
@@ -101,6 +128,12 @@ const removeShipsSummary = (parent) => {
   });
 };
 
+/**
+ * Render placement.
+ * @param {Object} ships
+ * @param {Object} gameboard
+ * @returns
+ */
 const renderPlacement = async (ships, gameboard) => {
   const events = eventListeners();
   const body = document.querySelector('#hook');
@@ -108,14 +141,14 @@ const renderPlacement = async (ships, gameboard) => {
   const tablePlayer = body.querySelector(
     '#body-main #board-player #board-player-table'
   );
-
   const name = body.querySelector('#body-main #player-one-name');
+  const btnRotate = name.querySelector('#btn-rotate');
 
   clearTxtContent(name);
   renderBtnRotate(name);
 
-  const btnRotate = name.querySelector('#btn-rotate');
   const arrShips = Object.values(ships);
+
   events.mouseListener(tablePlayer, true);
   for (const shipType of arrShips) {
     for (const ship of shipType) {
@@ -133,15 +166,21 @@ const renderPlacement = async (ships, gameboard) => {
           ship.body.init.isHorizontal
         );
       }
+
       renderPlayerShips(gameboard.board, tablePlayer);
       renderShipIcons(iconContainer, ship);
+
       events.clearActiveShip();
     }
   }
+
   events.mouseListener(tablePlayer, false);
   return gameboard;
 };
 
+/**
+ * Export placementDOM methods
+ */
 const placementDOM = () => ({
   renderShipsSummaryRival: (main, ships) =>
     renderShipsSummaryRival(main, ships),
