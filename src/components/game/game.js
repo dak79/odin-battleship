@@ -18,7 +18,9 @@ const init = () => {
 const placement = async (init) => {
   const main = document.querySelector('#body-main');
   const ships = createPlayersShips();
+
   placementDOM().renderShipsPlayerContainer(main);
+
   await placementDOM().renderPlacement(
     ships.playerOneShips,
     init.playerOneGameboard
