@@ -10,9 +10,9 @@ const Player = () => {
 
   const getIsHuman = () => init.isHuman;
 
-  const setPlayerName = (value) =>
+  const setPlayerName = (value = '') =>
     getIsHuman()
-      ? Object.assign(init, { name: `${value === undefined ? '' : value}` })
+      ? Object.assign(init, { name: `${value}` })
       : Object.assign(init, { name: 'Cpu' });
 
   const getPlayerName = () => init.name;
