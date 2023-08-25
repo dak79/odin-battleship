@@ -1,40 +1,35 @@
 import Player from '../components/players';
 
 describe('Player', () => {
+  const player = Player();
   it('has setIsHuman() method', () => {
-    const player = Player();
     expect(player).toHaveProperty('setIsHuman');
   });
 
   it('has setPlayerName() method', () => {
-    const player = Player();
     expect(player).toHaveProperty('setPlayerName');
   });
 
   it('has getPlayerName() method', () => {
-    const player = Player();
     expect(player).toHaveProperty('getPlayerName');
   });
 
   it('has setPlayerTurn() method', () => {
-    const player = Player();
     expect(player).toHaveProperty('setPlayerTurn');
   });
 
   it('has the property generateRandomCoordinates()', () => {
-    const player = Player();
     expect(player).toHaveProperty('generateRandomCoordinates');
   });
 });
 
 describe('The method setIsHuman()', () => {
+  const player = Player();
   it('does not accept empty argument', () => {
-    const player = Player();
     expect(player.setIsHuman()).toBe('Invalid setting');
   });
 
   it('accept only true or false has parameter', () => {
-    const player = Player();
     const values = [
       'true',
       'false',
@@ -57,8 +52,8 @@ describe('The method setIsHuman()', () => {
 });
 
 describe('The method setPlayerName()', () => {
+  const player = Player();
   it('set a string as player one name', () => {
-    const player = Player();
     const values = [
       'David',
       true,
@@ -79,21 +74,18 @@ describe('The method setPlayerName()', () => {
   });
 
   it('set an empty name if the value is an empty string', () => {
-    const player = Player();
     player.setIsHuman(true);
     player.setPlayerName('');
     expect(player.getPlayerName()).toBe('');
   });
 
   it('set an empty string if the value is undefined', () => {
-    const player = Player();
     player.setIsHuman(true);
     player.setPlayerName();
     expect(player.getPlayerName()).toBe('');
   });
 
   it(`set 'cpu' as player two name`, () => {
-    const player = Player();
     player.setIsHuman(false);
     player.setPlayerName();
     expect(player.getPlayerName()).toBe('Cpu');
@@ -119,15 +111,14 @@ describe('The method setPlayerName()', () => {
 });
 
 describe('The method getPlayerName()', () => {
+  const player = Player();
   it('get the name of player one', () => {
-    const player = Player();
     player.setIsHuman(true);
     player.setPlayerName('Smith');
     expect(player.getPlayerName()).toBe('Smith');
   });
 
   it(`get 'cpu' as the name of player two`, () => {
-    const player = Player();
     player.setIsHuman(false);
     player.setPlayerName('Smith');
     expect(player.getPlayerName()).toBe('Cpu');
@@ -135,13 +126,12 @@ describe('The method getPlayerName()', () => {
 });
 
 describe('The method setPlayerTurn()', () => {
+  const player = Player();
   it('does not accept empty argument', () => {
-    const player = Player();
     expect(player.setPlayerTurn()).toBe('Invalid setting');
   });
 
   it('accept only true or false has parameter', () => {
-    const player = Player();
     const values = [
       'true',
       'false',
@@ -164,8 +154,8 @@ describe('The method setPlayerTurn()', () => {
 });
 
 describe('The method generateRandomCoordinates()', () => {
+  const player = Player();
   it('generate coordinates with x and y inside 0 - 9 range', () => {
-    const player = Player();
     for (let i = 0; i < 100; i++) {
       let [x, y] = player.generateRandomCoordinates();
       expect(parseInt(x)).toBeGreaterThanOrEqual(0);
