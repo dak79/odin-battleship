@@ -142,10 +142,11 @@ const renderPlacement = async (ships, gameboard) => {
     '#body-main #board-player #board-player-table'
   );
   const name = body.querySelector('#body-main #player-one-name');
-  const btnRotate = name.querySelector('#btn-rotate');
 
   clearTxtContent(name);
   renderBtnRotate(name);
+
+  const btnRotate = name.querySelector('#btn-rotate');
 
   const arrShips = Object.values(ships);
 
