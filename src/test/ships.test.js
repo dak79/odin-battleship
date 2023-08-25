@@ -16,6 +16,10 @@ describe('Ship', () => {
   it('has property init', () => {
     expect(Ship(4)).toHaveProperty('init');
   });
+
+  it('has method setDirection()', () => {
+    expect(Ship(4)).toHaveProperty('setDirection');
+  });
 });
 
 describe('The ship object', () => {
@@ -49,6 +53,14 @@ describe('The ship object', () => {
     range.map((len) => {
       let ship = Ship(len);
       expect(ship.init.sunked).toBe(false);
+    });
+  });
+
+  it('initializes isHorizontal to true', () => {
+    const range = Array.from({ length: 4 }, (_, i) => i + 2);
+    range.map((len) => {
+      let ship = Ship(len);
+      expect(ship.init.isHorizontal).toBe(true);
     });
   });
 });
@@ -112,5 +124,20 @@ describe('The method .isSunk()', () => {
     const thirdHit = ship.hit(secondHit);
     const fourthHit = ship.hit(thirdHit);
     expect(ship.isSunk(fourthHit)).toBe(true);
+  });
+});
+
+describe('The method .setDirection()', () => {
+  it('set direction of ship vertical (false)', () => {
+    const ship = Ship(3);
+    ship.setDirection(true);
+    expect(ship.init.isHorizontal).toBe(true);
+  });
+
+  it('set direction to ship back to horizontal (false)', () => {
+    const ship = Ship(2);
+    ship.setDirection(true);
+    ship.setDirection(false);
+    expect(ship.init.isHorizontal).toBe(false);
   });
 });
