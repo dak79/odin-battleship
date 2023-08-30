@@ -28,7 +28,7 @@ const setSunk = (obj) => ({
   sunked: obj.len === obj.hits
 });
 
-const Ship = (len) => {
+const Ship = (len, id) => {
   /**
    * Set the length of ship.
    */
@@ -62,6 +62,7 @@ const Ship = (len) => {
   const setDirection = (value) => (init.isHorizontal = value);
 
   const init = {
+    id: id,
     len: setLength(),
     isHorizontal: true,
     type:

@@ -10,8 +10,8 @@ import iconDestroyer from '../../assets/icons/destroyer.svg';
  * @returns An Object with ships
  */
 const createShips = (type) =>
-  Array.from({ length: type.number }, () => ({
-    body: Ship(type.size),
+  Array.from({ length: type.number }, (_, i) => ({
+    body: Ship(type.size, type.id[i]),
     size: type.size,
     icon: type.icon
   }));
@@ -20,10 +20,10 @@ const createShips = (type) =>
  * Describe ships
  */
 const shipTypes = {
-  carrier: { number: 1, size: 5, icon: iconCarrier },
-  battleships: { number: 2, size: 4, icon: iconBattleship },
-  submarines: { number: 3, size: 3, icon: iconSubmarine },
-  destroyers: { number: 4, size: 2, icon: iconDestroyer }
+  carrier: { number: 1, size: 5, id: [0], icon: iconCarrier },
+  battleships: { number: 2, size: 4, id: [1, 2], icon: iconBattleship },
+  submarines: { number: 3, size: 3, id: [3, 4, 5], icon: iconSubmarine },
+  destroyers: { number: 4, size: 2, id: [6, 7, 8, 9], icon: iconDestroyer }
 };
 
 /**
