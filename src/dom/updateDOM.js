@@ -129,13 +129,16 @@ const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
   while (!validAttack) {
     const [row, col] = isPlayerOne
       ? await events.addClicks(body, false)
-      : attacker.generateRandomCoordinates();
+      : attacker.cpuAttack();
     validAttack = opponent.receiveAttack(opponent.board, row, col);
 
     if (validAttack) {
       if (!isPlayerOne) await timer(ATTACK_DELAY);
 
       if (opponent.board[row][col]) {
+        if (!isPlayerOne) {
+          attacker.setShipsHits(row, col, opponent.board[row][col]);
+        }
         renderShot(table, row, col, true);
         const ship = opponent.board[row][col];
         if (ship.init.sunked) {
