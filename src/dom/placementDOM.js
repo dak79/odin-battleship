@@ -14,6 +14,8 @@ const renderBtnRotate = (parent) =>
     parent
   );
 
+const removeBtn = (btn) => btn.remove();
+
 /**
  * Change text comment of an element.
  * @param {HTMLElement} element
@@ -144,9 +146,6 @@ const renderPlacement = async (ships, gameboard) => {
   const name = body.querySelector('#body-main #player-one-name');
 
   clearTxtContent(name);
-  renderBtnRotate(name);
-
-  const btnRotate = name.querySelector('#btn-rotate');
 
   const arrShips = Object.values(ships);
 
@@ -154,6 +153,7 @@ const renderPlacement = async (ships, gameboard) => {
   for (const shipType of arrShips) {
     for (const ship of shipType) {
       let validPlacement = false;
+      const btnRotate = renderBtnRotate(name);
       events.btnRotate(btnRotate, ship);
       events.setActiveShip(ship);
       while (!validPlacement) {
@@ -170,7 +170,7 @@ const renderPlacement = async (ships, gameboard) => {
 
       renderPlayerShips(gameboard.board, tablePlayer);
       renderShipIcons(iconContainer, ship);
-
+      removeBtn(btnRotate);
       events.clearActiveShip();
     }
   }
