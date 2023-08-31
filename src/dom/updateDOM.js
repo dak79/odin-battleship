@@ -155,55 +155,52 @@ const setShipsHits = (row, col, shipHit) => {
   const foundShip = shipsHits.find(
     (ship) => ship.stats.init.id === shipHit.init.id
   );
+
+  const parsedRow = parseInt(row);
+  const parsedCol = parseInt(col);
   if (!foundShip) {
     shipsHits.push({
       stats: shipHit,
-      hit: [[parseInt(row), parseInt(col)]],
+      hit: [[parsedRow, parsedCol]],
       adjacentSlot: [
-        [parseInt(row) + 1, parseInt(col)],
-        [parseInt(row) - 1, parseInt(col)],
-        [parseInt(row), parseInt(col) + 1],
-        [parseInt(row), parseInt(col) - 1]
+        [parsedRow + 1, parsedCol],
+        [parsedRow - 1, parsedCol],
+        [parsedRow, parsedCol + 1],
+        [parsedRow, parsedCol - 1]
       ]
     });
   } else {
     const index = shipsHits.indexOf(foundShip);
     if (!shipsHits[index].stats.init.sunked) {
-      shipsHits[index].hit.push([parseInt(row), parseInt(col)]);
-      const isH = shipsHits[index].stats.init.isHorizontal;
-      updateAdjacences(isH, index);
+      shipsHits[index].hit.push([parsedRow, parsedCol]);
+      updateAdjacences(shipsHits[index].stats.init.isHorizontal, index);
     } else {
       clearShipsHits();
     }
   }
 };
 
-/**
- * Update adjacent slots array after the first hit on a ship
- * @param {Boolean} isHorizontal
- * @param {Number} index
- */
 const updateAdjacences = (isHorizontal, index) => {
-  shipsHits[index].adjacentSlot.length = 0;
-  const newAttemps = [];
-  shipsHits[index].hit.forEach((coord) => {
+  const hits = shipsHits[index].hit;
+  shipsHits[index].adjacentSlot = hits.flatMap((coord) => {
     const [row, col] = coord;
-    const newCoords1 = isHorizontal
-      ? [parseInt(row), parseInt(col) + 1]
-      : [parseInt(row) + 1, parseInt(col)];
-    const newCoords2 = isHorizontal
-      ? [parseInt(row), parseInt(col) - 1]
-      : [parseInt(row) - 1, parseInt(col)];
-
-    newAttemps.push(newCoords1, newCoords2);
+    const newCoords = isHorizontal
+      ? [
+          [row, col + 1],
+          [row, col - 1]
+        ]
+      : [
+          [row + 1, col],
+          [row - 1, col]
+        ];
+    return newCoords.filter(
+      (newCoord) =>
+        !hits.some(
+          (hitCoord) =>
+            hitCoord[0] === newCoord[0] && hitCoord[1] === newCoord[1]
+        )
+    );
   });
-
-  shipsHits[index].adjacentSlot = newAttemps.filter(
-    (slot) =>
-      !shipsHits[index].hit.some(
-        (hitSlot) => hitSlot[0] === slot[0] && hitSlot[1] === slot[1]
-      )
-  );
 };
 
 /**
@@ -212,7 +209,7 @@ const updateAdjacences = (isHorizontal, index) => {
  * @param {Object} opponent
  * @param {Boolean} isPlayerOne
  */
-const renderPlayerAttack = async (attacker, opponent, isPlayerOne) => {
+const renderPlayerAttack = async (opponent, isPlayerOne) => {
   const events = eventListeners();
   const body = document.querySelector('#hook');
   const tableSelector = getTableSelector(isPlayerOne);
@@ -273,9 +270,3 @@ const updateDOM = () => ({
 });
 
 export default updateDOM;
-
-/*
- * TODO:
- * - code review
- * - functional style review
- * */

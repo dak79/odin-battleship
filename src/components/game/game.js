@@ -38,17 +38,9 @@ const gameLoop = async (data) => {
     !data.playerTwoGameboard.allShipSunked()
   ) {
     if (!data.playerOneGameboard.allShipSunked())
-      await updateDOM().renderPlayerAttack(
-        data.playerOne,
-        data.playerTwoGameboard,
-        true
-      );
+      await updateDOM().renderPlayerAttack(data.playerTwoGameboard, true);
     if (!data.playerTwoGameboard.allShipSunked())
-      await updateDOM().renderPlayerAttack(
-        data.playerTwo,
-        data.playerOneGameboard,
-        false
-      );
+      await updateDOM().renderPlayerAttack(data.playerOneGameboard, false);
   }
 
   updateDOM().renderWinningState(data.playerTwoGameboard.allShipSunked());
