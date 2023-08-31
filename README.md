@@ -1,15 +1,13 @@
-# odin-battleship
-
-# Weather App
+# Battleship
 
 ## Live Preview
 
-[Weather](https://dak79.github.io/odin-weather/)
+[Battleship](https://dak79.github.io/odin-battleship/)
 
 ## Description
 
-This project is part of The Odin Project - Full Stack JavaScript Path. The main goals is to implement a maintainable web app, exploring promises and API usage.
-Weather informations are provided by [OpenWeather](https://openweathermap.org/).
+This project is part of The Odin Project - Full Stack JavaScript Path. The main
+goals is to implement a maintainable web app, expolring Unit Test.
 
 ## Technologies
 
@@ -22,32 +20,50 @@ Weather informations are provided by [OpenWeather](https://openweathermap.org/).
 
 ## Assignment
 
-- Set up a blank HTML document with the appropriate links to your JavaScript and CSS files.
-- Write the functions that hit the API. You’re going to want functions that can take a location and return the weather data for that location. For now, just `console.log()` the information.
-- Write the functions that process the JSON data you’re getting from the API and return an object with only the data you require for your app.
-- Set up a simple form that will let users input their location and will fetch the weather info (still just `console.log()` it).
-- Display the information on your webpage!
-- Add any styling you like!
-- Optional: add a ‘loading’ component that displays from the time the form is submitted until the information comes back from the API.
-- Push that baby to GitHub and share your solution below!
+- Begin your app by creating the Ship class/factory (your choice).
 
-## Credit
+  - Your ‘ships’ will be objects that include their length, the number of times
+    they’ve been hit and whether or not they’ve been sunk.
+  - Ships should have a hit() function that increases the number of ‘hits’ in
+    your ship.
+  - isSunk() should be a function that calculates it based on their length and
+    the number of ‘hits’.
 
-Background pictures:
+- Create Gameboard class/factory.
 
-- Thunderstorm photo by <a href="https://unsplash.com/@michellem18?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Michelle McEwen</a> on <a href="https://unsplash.com/images/nature/thunderstorm?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Drizzle photo by <a href="https://unsplash.com/@thommilkovic?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Thom Milkovic</a> on <a href="https://unsplash.com/photos/UsYOap7yIMg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Rain photo by <a href="https://unsplash.com/@wackeltin_meem?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Valentin Müller</a> on <a href="https://unsplash.com/photos/bWtd1ZyEy6w?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Snow photo by <a href="https://unsplash.com/@aaronburden?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Aaron Burden</a> on <a href="https://unsplash.com/wallpapers/nature/snow?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Mist photo by <a href="https://unsplash.com/@asoggetti?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Alessio Soggetti</a> on <a href="https://unsplash.com/photos/cfKC0UOZHJo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Smoke photo by <a href="https://unsplash.com/@dayday95?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Damon Lam</a> on <a href="https://unsplash.com/backgrounds/art/smoke?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Haze photo by <a href="https://unsplash.com/@jaleel_akbash?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Jaleel Akbash</a> on <a href="https://unsplash.com/photos/Slh0Tx1MRNA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Dust photo by <a href="https://unsplash.com/@artinbakhan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Artin Bakhan</a> on <a href="https://unsplash.com/photos/juTtCtAczUo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Fog photo by <a href="https://unsplash.com/@goanne?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Anna Goncharova</a> on <a href="https://unsplash.com/photos/E0e1NmVclRo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Sand photo by <a href="https://unsplash.com/@wolfgang_hasselmann?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Wolfgang Hasselmann</a> on <a href="https://unsplash.com/photos/Fd01B6nNPbo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Ash photo by <a href="https://unsplash.com/@yoshginsu?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Yosh Ginsu</a> on <a href="https://unsplash.com/photos/qexZLgMcbPc?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Squall photo by <a href="https://unsplash.com/@jannerboy62?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nick Fewings</a> on <a href="https://unsplash.com/photos/OowKAQM1_sE?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Tornado photo by <a href="https://unsplash.com/@noaa?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">NOAA</a> on <a href="https://unsplash.com/photos/Zus94oboIsM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Clear photo by <a href="https://unsplash.com/@jaybgt?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Joakim Berglund</a> on <a href="https://unsplash.com/photos/W0sH-QaDA_o?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- Clouds photo by <a href="https://unsplash.com/@lukaszlada?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Łukasz Łada</a> on <a href="https://unsplash.com/images/nature/cloud?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-- General photo by <a href="https://unsplash.com/@nasa?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">NASA</a> on <a href="https://unsplash.com/photos/i9w4Uy1pU-s?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+  - Gameboards should be able to place ships at specific coordinates by calling
+    the ship factory function.
+  - Gameboards should have a receiveAttack function that takes a pair of
+    coordinates, determines whether or not the attack hit a ship and then
+    sends the ‘hit’ function to the correct ship, or records the coordinates
+    of the missed shot.
+  - Gameboards should keep track of missed attacks so they can display them
+    properly.
+  - Gameboards should be able to report whether or not all of their ships have
+    been sunk.
+
+- Create Player.
+
+  - Players can take turns playing the game by attacking the enemy Gameboard.
+  - The game is played against the computer, so make the ‘computer’ capable of
+    making random plays. The AI does not have to be smart, but it should know
+    whether or not a given move is legal (i.e. it shouldn’t shoot the same
+    coordinate twice).
+
+- Create the main game loop and a module for DOM interaction.
+
+  - The game loop should set up a new game by creating Players and Gameboards.
+  - We’ll leave the HTML implementation up to you for now, but you should display
+    both the player’s boards and render them using information from the Gameboard
+    class/factory.
+  - You need methods to render the gameboards and to take user input for attacking.
+    For attacks, let the user click on a coordinate in the enemy Gameboard.
+  - The game loop should step through the game turn by turn using only methods from
+    other objects.
+  - Create conditions so that the game ends once one player’s ships have all been
+    sunk. This function is appropriate for the Game module.
+
+- Finish it up
+  - There are several options available for letting users place their ships.
+  - You can polish the intelligence of the computer player by having it try
+    adjacent slots after getting a ‘hit’.
