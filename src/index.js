@@ -1,6 +1,6 @@
 import './style/style.css';
-import game from './components/game/game';
 import DOM from './dom/DOM';
+import game from './components/game/game';
 import eventListeners from './dom/eventListeners';
 
 const hook = document.querySelector('#hook');
