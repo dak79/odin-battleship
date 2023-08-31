@@ -111,17 +111,25 @@ const ATTACK_DELAY = 1000;
  */
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
+// Store ship hit by cpu
 let shipsHits = [];
 
+// Delete the ship in the array
 const clearShipsHits = () => {
   shipsHits.splice(0, 1);
 };
 
+// Random coordinate for cpu attack
 const generateRandomCoordinates = () => [
   Math.floor(Math.random() * 10).toString(),
   Math.floor(Math.random() * 10).toString()
 ];
 
+/**
+ * Generate coordinate for attack. If cpu hit a ship will stick around that
+ * until is sunked.
+ * @returns {Array} Coordinate for attack
+ */
 const cpuAttack = () => {
   if (shipsHits.length) {
     const coord =
@@ -137,6 +145,12 @@ const cpuAttack = () => {
   return generateRandomCoordinates();
 };
 
+/**
+ * Store the ship in the array with adjacent slot to try to hit
+ * @param {String} row
+ * @param {String} col
+ * @param {Object} shipHit
+ */
 const setShipsHits = (row, col, shipHit) => {
   const foundShip = shipsHits.find(
     (ship) => ship.stats.init.id === shipHit.init.id
@@ -164,6 +178,11 @@ const setShipsHits = (row, col, shipHit) => {
   }
 };
 
+/**
+ * Update adjacent slots array after the first hit on a ship
+ * @param {Boolean} isHorizontal
+ * @param {Number} index
+ */
 const updateAdjacences = (isHorizontal, index) => {
   shipsHits[index].adjacentSlot.length = 0;
   const newAttemps = [];
@@ -254,3 +273,9 @@ const updateDOM = () => ({
 });
 
 export default updateDOM;
+
+/*
+ * TODO:
+ * - code review
+ * - functional style review
+ * */
